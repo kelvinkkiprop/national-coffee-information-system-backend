@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
+use App\Models\Others\RoleType;
 use App\Models\Settings\Role;
 
 class RoleController extends Controller
@@ -14,7 +15,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return Role::orderBy('created_at', 'desc')->paginate(10);
+        return Role::with('type')->orderBy('created_at', 'desc')->paginate(10);
     }
 
     /**
@@ -25,11 +26,13 @@ class RoleController extends Controller
         $fields = $request->validate([
             'id' => 'required|integer',
             'name' => 'required|string|unique:roles',
+            'type_id' => 'required|integer',
         ]);
 
         $item = Role::create([
             'id' => $fields['id'],
             'name' => $fields['name'],
+            'type_id' => $fields['type_id'],
         ]);
 
         $response = [
@@ -45,7 +48,7 @@ class RoleController extends Controller
      */
     public function show(string $id)
     {
-        return Role::find($id);
+        return Role::with('type')->find($id);
     }
 
     /**
@@ -56,11 +59,13 @@ class RoleController extends Controller
         $fields = $request->validate([
             'id' => 'required|integer',
             'name' => 'required|string|unique:roles,name,'.$id,
+            'type_id' => 'required|integer',
         ]);
 
         $item = Role::where('id', $id)->update([
             'id' => $fields['id'],
             'name' => $fields['name'],
+            'type_id' => $fields['type_id'],
         ]);
 
         $response = [
@@ -99,15 +104,15 @@ class RoleController extends Controller
         ]);
 
         $term = $fields['search_term'];
-        $items = Role::where(function($query) use($term){
+        $items = Role::with('type')->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('alias','LIKE','%'.$term.'%');
-            // $query->orWhereHas('status', function($q) use ($term) {
-            //     $q->where(function($q) use ($term) {
-            //         $q->where('name', 'LIKE', '%' . $term . '%');
-            //         $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-            //     });
-            // });
+            $query->orWhereHas('type', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
+                });
+            });
         })->get();
 
         $response = [
@@ -124,15 +129,15 @@ class RoleController extends Controller
      */
     public function unpaginatedItems()
     {
-        // $venue_statuses = VenueStatus::orderBy('id', 'asc')->get();
+        $role_types = RoleType::orderBy('id', 'asc')->get();
 
-        // $response =[
-        //     'status' => 'success',
-        //     'message' => 'Data retrieved successfully',
-        //     'data' => [
-        //         'venue_statuses' => $venue_statuses,
-        //     ]
-        // ];
-        // return response($response, 200);
+        $response =[
+            'status' => 'success',
+            'message' => 'Data retrieved successfully',
+            'data' => [
+                'role_types' => $role_types,
+            ]
+        ];
+        return response($response, 200);
     }
 }

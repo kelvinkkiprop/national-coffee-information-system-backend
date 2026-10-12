@@ -5,11 +5,11 @@ namespace App\Models\Settings;
 use Illuminate\Database\Eloquent\Model;
 // Add
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Others\RoleType;
 
 class Role extends Model
 {
     use SoftDeletes;
-
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +19,15 @@ class Role extends Model
     protected $fillable = [
         'id',
         'name',
+        'alias'
     ];
+
+
+    /**
+     * type
+     */
+    public function type(){
+        return $this->hasOne(RoleType::class, 'id', 'type_id');
+    }
 
 }

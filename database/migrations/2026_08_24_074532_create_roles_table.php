@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('type_id')->nullable();
             $table->string('name')->unique();
             $table->string('alias')->nullable();
             $table->timestamps();

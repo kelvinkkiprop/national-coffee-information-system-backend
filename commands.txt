@@ -10,6 +10,7 @@ php artisan install:api
 php artisan make:seeder UserSeeder
 php artisan make:seeder UserStatusSeeder
 php artisan make:seeder RoleSeeder
+php artisan make:seeder RoleTypeSeeder
 php artisan make:seeder ProfessionalBodySeeder
 php artisan make:seeder ConstructionPermitTypeSeeder
 php artisan make:seeder ConstructionPermitStatusSeeder
@@ -34,6 +35,7 @@ php artisan make:controller Other/DownloadController
 php artisan make:model Main/ConstructionPermit -m
 php artisan make:model Settings/Role -m
 php artisan make:model Settings/UserStatus -m
+php artisan make:model Others/RoleType -m
 php artisan make:model FromParcelAllocation/Investor
 php artisan make:model FromParcelAllocation/ParcelLandUseGroup
 
