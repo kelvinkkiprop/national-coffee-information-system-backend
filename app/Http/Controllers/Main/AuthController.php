@@ -34,6 +34,26 @@ class AuthController extends Controller
 
        }
 
+        // OTP
+        $code = rand(100000, 999999);
+        $item = User::where('id', $user->id)->update([
+            'otp_code' => $code,
+            'otp_expires_at' => now()->addMinutes(5),
+            'otp_used' => false,
+            'otp_verified' => false,
+        ]);
+        $message = "Your OTP is {$code}";
+        $data = array(
+            'name' => $user->name,
+            'subject' => "Verify OTP",
+            'url' => config('app.url').'/auth/verify-otp',
+            'btn-text' => 'Verify',
+            'message' => "<div>{$message}</div>",
+            'file' => null,
+            'file_name' => null
+        );
+        Mail::to($user->email)->send(new AlertMail($data));
+
        // token
        $token = $user->createToken('token')->plainTextToken;
        $data = [
@@ -43,7 +63,8 @@ class AuthController extends Controller
 
        return response([
            'status' => 'success',
-           'message' => 'Login successful',
+        //    'message' => 'Login successful',
+           'message' => 'An OTP has been sent to '.$user->email,
            'data' => $data
        ],201);
     }
@@ -60,25 +81,27 @@ class AuthController extends Controller
            'password' => 'required|string|confirmed'
        ]);
 
-       $verification_code = rand(1000,9999);
+       $verification_code = rand(10000,99999);
+       $otp_code = rand(10000,99999);
        $user = User::create([
            'name' => $fields['name'],
            'email' => $fields['email'],
            'password' => Hash::make($fields['password']),
            'remember_token' => Str::random(50),
            'verification_code' => $verification_code,
+           'otp_code' => $otp_code,
        ]);
 
         // Email
         $email = $user->email;
         $message = "<div>
-            <p>Your new account verification code is: {$verification_code}</p>
+            <p>Your new account verification code is {$verification_code} and {$otp_code}</p>
             <p>Click the button below to verify your email address.</p>
         </div>";
         $data = array(
             'name' => $user->name,
             'subject' => "Account Registration",
-            'url' => '/#/auth/login',
+            'url' => '/auth/login',
             'btn-text' => 'Login',
             'message' => $message,
             'file' => null,
@@ -216,5 +239,185 @@ class AuthController extends Controller
             'message' => 'Password updated successfully'
         ],200);
     }
+
+
+
+   /**
+    * verifyEmail
+    */
+   public function verifyEmail(Request $request)
+   {
+       $fields = $request->validate([
+           'verification_code' => 'required|integer',
+       ]);
+
+       $user = auth()->user();
+       $token = $user->createToken('token')->plainTextToken;
+       $verification_code = $fields['verification_code'];
+
+       if($verification_code!=$user->verification_code){
+            return response([
+                'status' => 'failed',
+                'message' => 'Incorrect verification code'
+            ],201);
+
+       }else{
+            $item = User::with('role')->find($user->id);
+            $item->verification_code = $verification_code;
+            $item->email_verified_at = date('Y-m-d H:i:s');
+            $item->save();
+
+            $data = [
+                'user' => $item,
+                'token' => $token,
+            ];
+
+            return response([
+                'status' => 'success',
+                'message' => 'Verification successful',
+                'data' => $data
+            ],201);
+
+       }
+
+   }
+
+    /**
+    * resendVerificationCode
+    */
+    public function resendVerificationCode()
+    {
+        $user = auth()->user();
+        $verification_code = rand(100000, 999999);
+
+        $item = User::find($user->id);
+        $item->verification_code = $verification_code;
+            //Email
+            $email = $user->email;
+            $message = "<div>
+                <p>Your  verification code is: {$verification_code}</p>
+                <p>Click the button below to verify your email address.</p>
+            </div>";
+
+            // Email
+            $data = array(
+                'name' => $user->name,
+                'subject' => "Verification Code",
+                // 'url' => '/#/account/verify-email',
+                'url' => config('app.url').'/#/account/verify-email',
+                'btn-text' => 'Verify',
+                'message' => $message,
+                'file' => null,
+                'file_name' => null
+            );
+            Mail::to($email)->send(new AlertMail($data));
+
+        $item->save();
+
+        //token
+        $token = $user->createToken('token')->plainTextToken;
+        $data = [
+            'user' => $item,
+            'token' => $token,
+        ];
+        return response([
+            'status' => 'success',
+            'message' => 'Code resent successfully',
+            'data' => $data
+        ], 201);
+
+    }
+
+
+
+
+    /**
+     * verifyOtp
+     */
+    public function verifyOtp(Request $request)
+    {
+        $fields = $request->validate([
+            'otp_code' => 'required|integer',
+        ]);
+
+        $otp_code = $fields['otp_code'];
+        $mCurrentUser = auth()->user();
+
+        $item = User::where('id', $mCurrentUser->id)->where('otp_code', $otp_code)->where('otp_used', false)->where('otp_expires_at', '>', now())->first();
+        if(!$item){
+            return response([
+                'status' => 'failed',
+                'message' => 'Invalid OTP'
+            ],201);
+        }
+
+        $item->update([
+            'otp_verified' => true,
+            'otp_used' => true,
+        ]);
+
+        // token
+       $mUser = User::with(['role', 'status'])->find($mCurrentUser->id);
+       $token = $mUser->createToken('token')->plainTextToken;
+       $data = [
+           'user' => $mUser,
+           'token' => $token,
+       ];
+       return response([
+           'status' => 'success',
+            'message' => 'OTP verified successfully',
+           'data' => $data
+       ],201);
+
+    }
+
+    /**
+    * resendOTP
+    */
+    public function resendOTP()
+    {
+        $user = auth()->user();
+        $otp_code = rand(100000, 999999);
+
+        $item = User::find($user->id);
+        $item->otp_code = $otp_code;
+         $item->otp_expires_at = now()->addMinutes(5);
+         $item->otp_used = false;
+         $item->otp_verified = false;
+            //Email
+            $email = $user->email;
+            $message = "<div>
+                <p>Your new OTP is: {$otp_code}</p>
+                <p>Click the button below to verify your email address.</p>
+            </div>";
+
+            // Email
+            $data = array(
+                'name' => $user->name,
+                'subject' => "Resent OTP",
+                'url' => config('app.url').'/account/verify-otp',
+                'btn-text' => 'Verify',
+                'message' => $message,
+                'file' => null,
+                'file_name' => null
+            );
+            Mail::to($email)->send(new AlertMail($data));
+
+        $item->save();
+
+        //token
+        $token = $user->createToken('token')->plainTextToken;
+        $data = [
+            'user' => $item,
+            'token' => $token,
+        ];
+        return response([
+            'status' => 'success',
+            'message' => 'OTP resent successfully',
+            'data' => $data
+        ], 201);
+
+    }
+
 
 }

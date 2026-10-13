@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('change-password', [AuthController::class, 'changePassword']);
     Route::post('verify-email', [AuthController::class, 'verifyEmail']);
     Route::get('resend-verification-code', [AuthController::class, 'resendVerificationCode']);
+    Route::get('resend-otp', [AuthController::class, 'resendOTP']);
+    Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 });
 
 

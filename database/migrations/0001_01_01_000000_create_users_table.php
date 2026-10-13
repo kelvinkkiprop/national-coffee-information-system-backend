@@ -22,6 +22,13 @@ return new class extends Migration
             $table->rememberToken();
             $table->unsignedBigInteger('status_id')->default(1);
             $table->unsignedBigInteger('verification_code')->nullable();
+
+            // OTP
+            $table->string('otp_code')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
+            $table->boolean('otp_verified')->default(false);
+            $table->boolean('otp_used')->default(false);
+
             $table->timestamps();
             $table->softDeletes();
         });

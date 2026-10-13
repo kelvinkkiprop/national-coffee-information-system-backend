@@ -48,7 +48,13 @@ class User extends Authenticatable
         'role_id',
         'status_id',
         'remember_token',
-        'verification_code'
+        'verification_code',
+
+
+        'otp_code',
+        'otp_expires_at',
+        'otp_verified',
+        'otp_used',
     ];
 
     /**
