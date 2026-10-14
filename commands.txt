@@ -11,8 +11,9 @@ php artisan make:seeder UserSeeder
 php artisan make:seeder UserStatusSeeder
 php artisan make:seeder RoleSeeder
 php artisan make:seeder RoleTypeSeeder
-php artisan make:seeder ProfessionalBodySeeder
-php artisan make:seeder ConstructionPermitTypeSeeder
+php artisan make:seeder CountySeeder
+php artisan make:seeder ConstituencySeeder
+php artisan make:seeder WardSeeder
 php artisan make:seeder ConstructionPermitStatusSeeder
 php artisan make:seeder GreenCertificationSeeder
 php artisan make:seeder ConstructionPermitVariationStatusSeeder
@@ -36,6 +37,12 @@ php artisan make:model Main/ConstructionPermit -m
 php artisan make:model Settings/Role -m
 php artisan make:model Settings/UserStatus -m
 php artisan make:model Others/RoleType -m
+php artisan make:model Others/Country -m
+php artisan make:model Others/County -m
+php artisan make:model Others/SubCounty -m
+php artisan make:model Others/Constituency -m
+php artisan make:model Others/Ward -m
+
 php artisan make:model FromParcelAllocation/Investor
 php artisan make:model FromParcelAllocation/ParcelLandUseGroup
 

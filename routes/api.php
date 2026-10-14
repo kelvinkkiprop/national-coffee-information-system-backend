@@ -11,6 +11,7 @@ use App\Http\Controllers\Main\DetailedDesignController;
 use App\Http\Controllers\Main\ParcelAllocationWorksheetController;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
+use App\Http\Controllers\Settings\ProfileController;
 // Other
 use App\Http\Controllers\Other\DownloadController;
 use App\Http\Controllers\Other\ProcessMasterplanController;
@@ -72,6 +73,17 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::resource('roles', RoleController::class);
     Route::post('search-roles', [RoleController::class, 'searchItems']);
-    Route::post('roles-search', [RoleController::class, 'professionalSearch']);
     Route::get('unpaginated-items-roles', [RoleController::class, 'unpaginatedItems']);
+});
+
+
+/*
+|======================================================================
+| ProfileController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('profile', ProfileController::class);
+    Route::post('search-profile', [ProfileController::class, 'searchItems']);
+    Route::get('unpaginated-items-profile', [ProfileController::class, 'unpaginatedItems']);
 });

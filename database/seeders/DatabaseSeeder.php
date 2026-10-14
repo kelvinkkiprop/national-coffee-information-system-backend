@@ -26,6 +26,10 @@ class DatabaseSeeder extends Seeder
             UserStatusSeeder::class,
             RoleSeeder::class,
             RoleTypeSeeder::class,
+            CountrySeeder::class,
+            CountySeeder::class,
+            SubCountySeeder::class,
+            WardSeeder::class,
         ]);
 
     }

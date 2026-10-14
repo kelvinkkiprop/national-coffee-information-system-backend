@@ -16,8 +16,8 @@ class RoleTypeSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Internal' ,'created_at'=>now()],
-            ['id'=>2, 'name'=>'External' ,'created_at'=>now()],
+            ["id"=>1, "name"=>"Internal" ,"created_at"=>now()],
+            ["id"=>2, "name"=>"External" ,"created_at"=>now()],
         ];
         RoleType::insert($items);
     }

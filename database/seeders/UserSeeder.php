@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
     {
         //Default
         $items = [
-            ['id'=>Str::uuid(), 'name'=>'System Admin','email'=>'admin1@konza.go.ke','password'=>Hash::make('Incorrect'),'role_id'=>1, 'email_verified_at'=>now(),'remember_token'=>Str::random(50),'created_at'=>now()]
+            ["id"=>Str::uuid(), "name"=>"System Admin","email"=>"admin1@konza.go.ke","password"=>Hash::make("Incorrect"),"role_id"=>1, "email_verified_at"=>now(),"remember_token"=>Str::random(50),"created_at"=>now()]
 
         ];
         User::insert($items);
