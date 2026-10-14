@@ -14,10 +14,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 // Add
 use App\Models\Settings\Role;
+use App\Models\Settings\Profile;
 use App\Models\Settings\UserStatus;
 
 class User extends Authenticatable
 {
+
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
 
@@ -94,6 +96,13 @@ class User extends Authenticatable
      */
     public function status(){
         return $this->hasOne(UserStatus::class, 'id', 'status_id');
+    }
+
+    /**
+     * profile
+     */
+    public function profile(){
+        return $this->hasOne(Profile::class, 'user_id', 'id');
     }
 
 }

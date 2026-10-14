@@ -25,7 +25,7 @@ class AuthController extends Controller
            'password' => 'required|string'
        ]);
 
-       $user = User::with(['role','status'])->where('email', $fields['email'])->first();
+       $user = User::with(['role','status','profile'])->where('email', $fields['email'])->first();
        if(!$user || !Hash::check($fields['password'], $user->password)){
            return response([
                'status' => 'failed',

@@ -86,4 +86,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::resource('profile', ProfileController::class);
     Route::post('search-profile', [ProfileController::class, 'searchItems']);
     Route::get('unpaginated-items-profile', [ProfileController::class, 'unpaginatedItems']);
+
+    Route::get('filter-sub-counties/{id}', [ProfileController::class, 'filterSubCounties']);
+    Route::get('filter-wards/{id}', [ProfileController::class, 'filterWards']);
 });
