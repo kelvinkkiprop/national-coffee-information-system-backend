@@ -15,16 +15,30 @@ return new class extends Migration
             // $table->id();
             $table->uuid('id')->primary();
             $table->uuid('user_id')->unique();
+            // Basic
+            $table->unsignedBigInteger('role_id')->nullable();
             $table->string('id_number')->nullable();
+            $table->string('country_code')->nullable();
             $table->string('phone_number')->nullable();
-
-            // Location
             $table->unsignedBigInteger('country_id')->nullable();
+            // General
+            $table->unsignedBigInteger('legal_status_id')->nullable();
+            $table->string('company_registration_number')->nullable();
+            $table->date('company_establishment_date')->nullable();
+            $table->string('kra_pin')->nullable();
+            $table->string('postal_address')->nullable();
+            $table->string('physical_address')->nullable();
+            // Location
             $table->unsignedBigInteger('county_id')->nullable();
             $table->unsignedBigInteger('sub_county_id')->nullable();
             $table->unsignedBigInteger('ward_id')->nullable();
-            $table->string('postal_address')->nullable();
-            $table->string('physical_address')->nullable();
+            $table->string('location')->nullable();
+            $table->string('sub_location')->nullable();
+            $table->string('village')->nullable();
+            $table->string('town')->nullable();
+            $table->string('street_name')->nullable();
+            $table->string('building_name')->nullable();
+            $table->string('plot_number')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

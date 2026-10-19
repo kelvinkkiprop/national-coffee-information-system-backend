@@ -41,15 +41,30 @@ class Profile extends Model
     protected $fillable = [
         'id',
         'user_id',
+        // Basic
+        'role_id',
         'id_number',
+        'country_code',
         'phone_number',
-
         'country_id',
+        // General
+        'legal_status_id',
+        'company_registration_number',
+        'company_establishment_date',
+        'kra_pin',
+        'postal_address',
+        'physical_address',
+        // Location
         'county_id',
         'sub_county_id',
         'ward_id',
-        'postal_address',
-        'physical_address',
+        'location',
+        'sub_location',
+        'village',
+        'town',
+        'street_name',
+        'building_name',
+        'plot_number',
 
         'created_at',
         'updated_at',

@@ -12,6 +12,7 @@ use App\Models\Others\Country;
 use App\Models\Others\County;
 use App\Models\Others\SubCounty;
 use App\Models\Others\Ward;
+use App\Models\Others\LegalStatus;
 
 class ProfileController extends Controller
 {
@@ -29,29 +30,60 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
+            // Basic
             'role_id' => 'required|integer',
             'id_number' => 'required|string',
+            'country_code' => 'required|string',
             'phone_number' => 'required|string',
-
             'country_id' => 'required|integer',
-            'county_id' => 'required|integer',
-            'sub_county_id' => 'required|integer',
-            'ward_id' => 'required|integer',
+            // General
+            'legal_status_id' => 'required|integer',
+            'company_registration_number' => 'nullable|string',
+            'company_establishment_date' => 'nullable|date|before_or_equal:today',
+            'kra_pin' => 'nullable|string',
             'postal_address' => 'required|string',
             'physical_address' => 'required|string',
+            // Location
+            'county_id' => 'nullable|integer',
+            'sub_county_id' => 'nullable|integer',
+            'ward_id' => 'nullable|integer',
+            'location' => 'nullable|string',
+            'sub_location' => 'nullable|string',
+            'village' => 'nullable|string',
+            'town' => 'nullable|string',
+            'street_name' => 'nullable|string',
+            'building_name' => 'nullable|string',
+            'plot_number' => 'nullable|string',
         ]);
 
         $mCurrentUser = auth()->user();
         // $item = Profile::create([
         $item = Profile::updateOrCreate(['user_id' => $mCurrentUser->id],[
+            'user_id' => $mCurrentUser->id,
+            // Basic
+            'role_id' => $fields['role_id'],
             'id_number' => $fields['id_number'],
+            'country_code' => $fields['country_code'],
             'phone_number' => $fields['phone_number'],
             'country_id' => $fields['country_id'],
+            // General
+            'legal_status_id' => $fields['legal_status_id'],
+            'company_registration_number' => $fields['company_registration_number'],
+            'company_establishment_date' => $fields['company_establishment_date'],
+            'kra_pin' => $fields['kra_pin'],
+            'postal_address' => $fields['postal_address'],
+            'physical_address' => $fields['physical_address'],
+            // Location
             'county_id' => $fields['county_id'],
             'sub_county_id' => $fields['sub_county_id'],
             'ward_id' => $fields['ward_id'],
-            'postal_address' => $fields['postal_address'],
-            'physical_address' => $fields['physical_address'],
+            'location' => $fields['location'],
+            'sub_location' => $fields['sub_location'],
+            'village' => $fields['village'],
+            'town' => $fields['town'],
+            'street_name' => $fields['street_name'],
+            'building_name' => $fields['building_name'],
+            'plot_number' => $fields['plot_number'],
         ]);
 
         $item = User::findOrFail($mCurrentUser->id);
@@ -80,28 +112,64 @@ class ProfileController extends Controller
     public function update(Request $request, string $id)
     {
         $fields = $request->validate([
+            // Basic
             'role_id' => 'required|integer',
             'id_number' => 'required|string',
+            'country_code' => 'required|string',
             'phone_number' => 'required|string',
-
             'country_id' => 'required|integer',
-            'county_id' => 'required|integer',
-            'sub_county_id' => 'required|integer',
-            'ward_id' => 'required|integer',
+            // General
+            'legal_status_id' => 'required|integer',
+            'company_registration_number' => 'nullable|string',
+            'company_establishment_date' => 'nullable|date|before_or_equal:today',
+            'kra_pin' => 'nullable|string',
             'postal_address' => 'required|string',
             'physical_address' => 'required|string',
+            // Location
+            'county_id' => 'nullable|integer',
+            'sub_county_id' => 'nullable|integer',
+            'ward_id' => 'nullable|integer',
+            'location' => 'nullable|string',
+            'sub_location' => 'nullable|string',
+            'village' => 'nullable|string',
+            'town' => 'nullable|string',
+            'street_name' => 'nullable|string',
+            'building_name' => 'nullable|string',
+            'plot_number' => 'nullable|string',
         ]);
 
         $item = Profile::where('id', $id)->update([
+            // Basic
+            'role_id' => $fields['role_id'],
             'id_number' => $fields['id_number'],
+            'country_code' => $fields['country_code'],
             'phone_number' => $fields['phone_number'],
             'country_id' => $fields['country_id'],
+            // General
+            'legal_status_id' => $fields['legal_status_id'],
+            'company_registration_number' => $fields['company_registration_number'],
+            'company_establishment_date' => $fields['company_establishment_date'],
+            'kra_pin' => $fields['kra_pin'],
+            'postal_address' => $fields['postal_address'],
+            'physical_address' => $fields['physical_address'],
+            // Location
             'county_id' => $fields['county_id'],
             'sub_county_id' => $fields['sub_county_id'],
             'ward_id' => $fields['ward_id'],
-            'postal_address' => $fields['postal_address'],
-            'physical_address' => $fields['physical_address'],
+            'location' => $fields['location'],
+            'sub_location' => $fields['sub_location'],
+            'village' => $fields['village'],
+            'town' => $fields['town'],
+            'street_name' => $fields['street_name'],
+            'building_name' => $fields['building_name'],
+            'plot_number' => $fields['plot_number'],
         ]);
+
+        // $mCurrentUser = auth()->user();
+        // $item = User::findOrFail($mCurrentUser->id);
+        // $item = User::findOrFail($mCurrentUser->id);
+        // $item->role_id = $fields['role_id'];
+        // $item->save();
 
         $response = [
             'status' => 'success',
@@ -119,7 +187,7 @@ class ProfileController extends Controller
         $item = Profile::find($id);
         $item->delete();
 
-        $response =[
+        $response = [
             'message' => 'Profile removed successfully',
             'data' => $item
         ];
@@ -168,15 +236,17 @@ class ProfileController extends Controller
         $counties = County::orderBy('id', 'asc')->get();
         $sub_counties = SubCounty::orderBy('id', 'asc')->get();
         $wards = Ward::orderBy('id', 'asc')->get();
+        $legal_statuses = LegalStatus::orderBy('id', 'asc')->get();
         $roles = Role::where('type_id', 2)->orderBy('id', 'asc')->get();
 
-        $response =[
+        $response = [
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [
                 'countries' => $countries,
                 'counties' => $counties,
                 'sub_counties' => $sub_counties,
+                'legal_statuses' => $legal_statuses,
                 'wards' => $wards,
                 'roles' => $roles,
             ]

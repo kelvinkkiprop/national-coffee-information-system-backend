@@ -79,7 +79,7 @@ class UserController extends Controller
         $item = User::find($id);
         $item->delete();
 
-        $response =[
+        $response = [
             'message' => 'User removed successfully',
             'data' => $item
         ];
@@ -126,7 +126,7 @@ class UserController extends Controller
     {
         $statuses = UserStatus::orderBy('id', 'asc')->get();
 
-        $response =[
+        $response = [
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [

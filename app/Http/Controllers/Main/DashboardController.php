@@ -30,7 +30,7 @@ class DashboardController extends Controller
             'my_recent_licenses' => User::orderBy('id', 'desc')->limit(5)->get(),
         ];
 
-        $response =[
+        $response = [
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data

@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             CountySeeder::class,
             SubCountySeeder::class,
             WardSeeder::class,
+            LegalStatusSeeder::class,
         ]);
 
     }

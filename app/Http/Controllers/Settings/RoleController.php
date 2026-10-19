@@ -84,7 +84,7 @@ class RoleController extends Controller
         $item = Role::find($id);
         $item->delete();
 
-        $response =[
+        $response = [
             'message' => 'Role removed successfully',
             'data' => $item
         ];
@@ -131,7 +131,7 @@ class RoleController extends Controller
     {
         $role_types = RoleType::orderBy('id', 'asc')->get();
 
-        $response =[
+        $response = [
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [

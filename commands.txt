@@ -19,6 +19,7 @@ php artisan make:seeder GreenCertificationSeeder
 php artisan make:seeder ConstructionPermitVariationStatusSeeder
 php artisan make:seeder ConstructionPermitDetailedPlanStatusSeeder
 php artisan make:seeder ProfessionalsReviewStatusSeeder
+php artisan make:seeder LegalStatusSeeder
 
 
 4. Controllers
@@ -41,6 +42,7 @@ php artisan make:model Others/County -m
 php artisan make:model Others/SubCounty -m
 php artisan make:model Others/Constituency -m
 php artisan make:model Others/Ward -m
+php artisan make:model Others/LegalStatus -m
 
 php artisan make:model FromParcelAllocation/Investor
 php artisan make:model FromParcelAllocation/ParcelLandUseGroup
