@@ -14,28 +14,33 @@ php artisan make:seeder RoleTypeSeeder
 php artisan make:seeder CountySeeder
 php artisan make:seeder ConstituencySeeder
 php artisan make:seeder WardSeeder
-php artisan make:seeder ConstructionPermitStatusSeeder
-php artisan make:seeder GreenCertificationSeeder
-php artisan make:seeder ConstructionPermitVariationStatusSeeder
-php artisan make:seeder ConstructionPermitDetailedPlanStatusSeeder
-php artisan make:seeder ProfessionalsReviewStatusSeeder
 php artisan make:seeder LegalStatusSeeder
+php artisan make:seeder PaymentStatusSeeder
+php artisan make:seeder PermitStatusSeeder
+php artisan make:seeder PermitTypeSeeder
+php artisan make:seeder CoffeeSpeciesSeeder
+php artisan make:seeder CoffeeFormSeeder
 
 
 4. Controllers
 php artisan make:controller Main/DashboardController
 php artisan make:controller Main/AuthController
 php artisan make:controller Main/UserController --api --resource
+php artisan make:controller Main/PermitController --api --resource
 php artisan make:controller Settings/RoleController --api --resource
 php artisan make:controller Settings/ProfileController --api --resource
-php artisan make:controller Other/DownloadController
+php artisan make:controller Others/ProcessPermitController
 
 
 5.Models
-php artisan make:model Main/ConstructionPermit -m
+php artisan make:model Main/Permit -m
+php artisan make:model Main/Payment -m
 php artisan make:model Settings/Role -m
-php artisan make:model Settings/UserStatus -m
 php artisan make:model Settings/Profile -m
+php artisan make:model Settings/PermitType -m
+php artisan make:model Settings/CoffeeForm -m
+php artisan make:model Settings/CoffeeSpecies -m
+php artisan make:model Others/UserStatus -m
 php artisan make:model Others/RoleType -m
 php artisan make:model Others/Country -m
 php artisan make:model Others/County -m
@@ -43,6 +48,7 @@ php artisan make:model Others/SubCounty -m
 php artisan make:model Others/Constituency -m
 php artisan make:model Others/Ward -m
 php artisan make:model Others/LegalStatus -m
+php artisan make:model Others/PermitStatus -m
 
 php artisan make:model FromParcelAllocation/Investor
 php artisan make:model FromParcelAllocation/ParcelLandUseGroup
@@ -224,8 +230,6 @@ https://laravel.com/docs/6.x/queues#supervisor-configuration
 ===================================./supervisor===================================
 
 
-
-
 ===================================DOM-PDF===================================
 1.Install dompdf Package
 $ composer require barryvdh/laravel-dompdf
@@ -329,6 +333,52 @@ ii. Reference
 https://stackoverflow.com/questions/70709193/unable-to-add-header-footer-on-every-page-of-pdf-using-dompdf
 ===================================./DOM-PDF===================================
 
+
+
+===================================QR-CODE===================================
+1.Install Package
+composer require simplesoftwareio/simple-qrcode
+
+
+2. Generate the QR
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+public function generatePermit($id)
+{
+    $item = ConstructionPermit::findOrFail($id);
+
+    $verificationUrl = url('/verify-permit/' . $item->application_number);
+
+    $qrCode = base64_encode(
+        QrCode::format('svg')
+            ->size(150)
+            ->margin(1)
+            ->generate($verificationUrl)
+    );
+
+    $pdf = Pdf::loadView('permits.pdf', compact(
+        'item',
+        'qrCode'
+    ));
+
+    return $pdf->stream(
+        $item->application_number . '-Permit.pdf'
+    );
+}
+
+3. Display the QR code
+<div class="qr-code">
+    <img
+        src="data:image/svg+xml;base64,{{ $qrCode }}"
+        alt="Permit QR Code"
+        width="100"
+        height="100"
+    >
+
+    <p>Scan to verify this permit</p>
+</div>
+===================================./QR-CODE===================================
 
 
 

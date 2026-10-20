@@ -6,16 +6,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Main\DashboardController;
 use App\Http\Controllers\Main\AuthController;
 use App\Http\Controllers\Main\UserController;
-use App\Http\Controllers\Main\ConstructionPermitController;
-use App\Http\Controllers\Main\DetailedDesignController;
-use App\Http\Controllers\Main\ParcelAllocationWorksheetController;
+use App\Http\Controllers\Main\PermitController;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\ProfileController;
-// Other
-use App\Http\Controllers\Other\DownloadController;
-use App\Http\Controllers\Other\ProcessMasterplanController;
-use App\Http\Controllers\Other\ProcessDetailedDesignController;
+// Others
+use App\Http\Controllers\Others\ProcessPermitController;
 
 
 Route::get('/user', function (Request $request) {
@@ -51,6 +47,33 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('resend-otp', [AuthController::class, 'resendOTP']);
     Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 });
+
+
+/*
+|======================================================================
+| PermitController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('permits', PermitController::class);
+    Route::post('search-permits', [PermitController::class, 'searchItems']);
+    Route::get('unpaginated-items-permits', [PermitController::class, 'unpaginatedItems']);
+    Route::get('permits-pdf/{id}', [PermitController::class, 'generatePermitPdf']);
+});
+// Route::get('permits-pdf/{id}', [PermitController::class, 'generatePermitPdf']);
+Route::get('verify-permit/{id}', [PermitController::class, 'verifyPermit']);
+
+/*
+|======================================================================
+| ProcessPermitController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::get('next-previous-status-process-permits/{id}', [ProcessPermitController::class, 'nextPreviousItems']);
+    Route::post('review-process-permits/{id}', [ProcessPermitController::class, 'reviewApplicationItem']);
+    Route::post('approve-process-permits/{id}', [ProcessPermitController::class, 'approveApplicationItem']);
+});
+
 
 
 /*

@@ -5,7 +5,14 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Settings\Role;
+use App\Models\Others\UserStatus;
+// Notifications
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AlertMail;
 
 class UserController extends Controller
 {
@@ -23,14 +30,50 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'id' => 'required|integer',
-            'name' => 'required|string|unique:roles',
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'role_id' => 'required|integer',
+            'password' => 'required|string|min:8',
         ]);
 
+        // OTP
+        $verification_code = rand(1000,9999);
+        $otp_code = rand(100000, 999999);
+        $mPassword = $fields['password'];
         $item = User::create([
-            'id' => $fields['id'],
             'name' => $fields['name'],
+            'email' => $fields['email'],
+            'role_id' => $fields['role_id'],
+            'password' => Hash::make($mPassword),
+            'verification_code' => $verification_code,
+            'otp_code' => $otp_code,
+            'otp_expires_at' => now()->addMinutes(5),
+            'remember_token' => Str::random(50),
         ]);
+
+        // Notification
+        $email = $fields['email'];
+        $subject = 'Account Registration and Login Details';
+        $message = "<div>
+            <p>Your account has been created successfully.</p>
+            <p>
+                <strong>Email:</strong> {$email} <br>
+                <strong>Verification Code:</strong> {$verification_code} <br>
+                <strong>OTP:</strong> {$otp_code} <br>
+                <strong>Default Password:</strong> {$mPassword} <br>
+            </p>
+            <p>Please log in and change your default password immediately.</p>
+        </div>";
+        $data = array(
+            'name' =>  $fields['name'],
+            'subject' => $subject,
+            'url' => config('app.url').'/auth/login',
+            'btn-text' => 'Login',
+            'message' => $message,
+            'file' => null,
+            'file_name' => null
+        );
+        Mail::to($email)->send(new AlertMail($data));
 
         $response = [
             'status' => 'success',
@@ -45,7 +88,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return User::find($id);
+        return User::with(['role','status'])->find($id);
     }
 
     /**
@@ -54,14 +97,49 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $fields = $request->validate([
-            'id' => 'required|integer',
-            'name' => 'required|string|unique:roles,name,'.$id,
+            'name' => 'required|string',
+            'email' => 'required|string|unique:users,email,'.$id,
+            'role_id' => 'required|integer',
+            'status_id' => 'required|integer',
+            'password' => 'required_if:reset_password,true|nullable|string|min:8',
+            'reset_password' => 'required|boolean',
         ]);
 
         $item = User::where('id', $id)->update([
-            'id' => $fields['id'],
             'name' => $fields['name'],
+            'email' => $fields['email'],
+            'role_id' => $fields['role_id'],
+            'status_id' => $fields['status_id'],
         ]);
+
+        $resetPassword = $fields['reset_password'];
+        if($resetPassword==true){
+            $mPassword = $fields['password'];
+            $item = User::find($id);
+            $item->password = Hash::make($mPassword);
+            $item->save();
+            // Notification
+            $email = $fields['email'];
+            $subject = 'Updated Account Details';
+            $message = "<div>
+                <p>Your account has been updated successfully.</p>
+                <p>
+                    <strong>Email:</strong> {$email} <br>
+                    <strong>Updated Password:</strong> {$mPassword} <br>
+                </p>
+                <p>Please log in using your updated credentials.</p>
+            </div>";
+            $data = array(
+                'name' =>  $fields['name'],
+                'subject' => $subject,
+                'url' => config('app.url').'/auth/login',
+                'btn-text' => 'Login',
+                'message' => $message,
+                'file' => null,
+                'file_name' => null
+            );
+            Mail::to($email)->send(new AlertMail($data));
+        }
 
         $response = [
             'status' => 'success',
@@ -102,6 +180,12 @@ class UserController extends Controller
         $items = User::with(['role','status'])->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('email','LIKE','%'.$term.'%');
+            $query->orWhereHas('role', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
+                });
+            });
             $query->orWhereHas('status', function($q) use ($term) {
                 $q->where(function($q) use ($term) {
                     $q->where('name', 'LIKE', '%' . $term . '%');
@@ -124,13 +208,15 @@ class UserController extends Controller
      */
     public function unpaginatedItems()
     {
-        $statuses = UserStatus::orderBy('id', 'asc')->get();
+        $roles = Role::orderBy('id', 'asc')->get();
+        $user_statuses = UserStatus::orderBy('id', 'asc')->get();
 
         $response = [
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [
-                'statuses' => $statuses,
+                'roles' => $roles,
+                'user_statuses' => $user_statuses,
             ]
         ];
         return response($response, 200);

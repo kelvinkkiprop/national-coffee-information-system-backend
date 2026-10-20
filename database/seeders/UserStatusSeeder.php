@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 // Add
-use App\Models\Settings\UserStatus;
+use App\Models\Others\UserStatus;
 
 class UserStatusSeeder extends Seeder
 {

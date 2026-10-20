@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-// Alerts
+// Notifications
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AlertMail;
 

@@ -15,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 // Add
 use App\Models\Settings\Role;
 use App\Models\Settings\Profile;
-use App\Models\Settings\UserStatus;
+use App\Models\Others\UserStatus;
 
 class User extends Authenticatable
 {
@@ -45,6 +45,9 @@ class User extends Authenticatable
     protected $fillable = [
         'id',
         'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'email',
         'password',
         'role_id',

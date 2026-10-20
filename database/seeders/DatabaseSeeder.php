@@ -31,6 +31,11 @@ class DatabaseSeeder extends Seeder
             SubCountySeeder::class,
             WardSeeder::class,
             LegalStatusSeeder::class,
+            PaymentStatusSeeder::class,
+            PermitStatusSeeder::class,
+            PermitTypeSeeder::class,
+            CoffeeSpeciesSeeder::class,
+            CoffeeFormSeeder::class,
         ]);
 
     }

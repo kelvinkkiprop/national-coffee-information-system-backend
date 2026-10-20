@@ -85,7 +85,7 @@
                                                                         <tr>
                                                                             <td
                                                                                 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
-                                                                                <a href="{{ config('app.url') }}{{ $data['url'] }}"
+                                                                                <a href="{{ $data['url'] }}"
                                                                                     class="button button-primary"
                                                                                     target="_blank"
                                                                                     style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-radius: 3px; box-shadow:

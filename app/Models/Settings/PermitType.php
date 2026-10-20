@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Others;
+namespace App\Models\Settings;
 
 use Illuminate\Database\Eloquent\Model;
 // Add
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RoleType extends Model
+class PermitType extends Model
 {
     use SoftDeletes;
 
@@ -18,6 +18,7 @@ class RoleType extends Model
     protected $fillable = [
         'id',
         'name',
+        'alias'
     ];
 
 }

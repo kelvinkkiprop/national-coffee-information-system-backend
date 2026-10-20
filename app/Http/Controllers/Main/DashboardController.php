@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
 use App\Models\User;
-use App\Models\Main\ParcelAllocationWorksheet;
+use App\Models\Main\Permit;
+use App\Models\Main\Payment;
 use App\Models\Settings\Profile;
 
 class DashboardController extends Controller
@@ -21,13 +22,13 @@ class DashboardController extends Controller
             // Admin
             'users' => User::count(),
             'licenses' => User::count(),
-            'permits' => User::count(),
-            'revenues' => User::sum('status_id'),
+            'permits' => Permit::count(),
+            'revenues' => Payment::sum('amount'),
             'recent_users' => User::with(['role','status'])->orderBy('id', 'desc')->limit(5)->get(),
             // Other
             'my_licenses' => User::count(),
-            'my_permits' => User::count(),
-            'my_recent_licenses' => User::orderBy('id', 'desc')->limit(5)->get(),
+            'my_permits' => Permit::where('user_id', $mCurrentUser->id)->count(),
+            'my_recent_permits' => Permit::with('status')->where('user_id', $mCurrentUser->id)->orderBy('id', 'desc')->limit(5)->get(),
         ];
 
         $response = [

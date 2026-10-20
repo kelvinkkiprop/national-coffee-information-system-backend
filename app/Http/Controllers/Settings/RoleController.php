@@ -93,7 +93,6 @@ class RoleController extends Controller
 
 
 
-
     /**
      * searchItems
      */
@@ -140,4 +139,5 @@ class RoleController extends Controller
         ];
         return response($response, 200);
     }
+
 }

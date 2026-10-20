@@ -5,7 +5,7 @@ namespace App\Models\Settings;
 use Illuminate\Database\Eloquent\Model;
 // Add
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Others\RoleType;
+use App\Models\Settings\RoleType;
 
 class Role extends Model
 {

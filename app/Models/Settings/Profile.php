@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\Others\Country;
 use App\Models\Others\County;
+use App\Models\Others\SubCounty;
 use App\Models\Others\Ward;
 
 class Profile extends Model
@@ -91,6 +92,14 @@ class Profile extends Model
     public function county(){
         return $this->hasOne(County::class, 'id', 'county_id');
     }
+
+    /**
+     * subCounty
+     */
+    public function subCounty(){
+        return $this->hasOne(SubCounty::class, 'id', 'sub_county_id');
+    }
+
 
     /**
      * ward

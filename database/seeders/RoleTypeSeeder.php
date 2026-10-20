@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 // Add
-use App\Models\Others\RoleType;
+use App\Models\Settings\RoleType;
 
 class RoleTypeSeeder extends Seeder
 {
