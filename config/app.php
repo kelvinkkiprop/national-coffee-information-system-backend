@@ -123,4 +123,22 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+
+
+
+    /*
+    |===========================================================================
+    | PESAFLOW
+    |===========================================================================
+    */
+    'PESAFLOW' => [
+        'key' => env('PESAFLOW_KEY', 'QrfH7T7Y6r0fTSlb'),
+        'secret' => env('PESAFLOW_SECRET', 'HOVVvKaN+IG8nFvWWfwu6ePtOhDBogkq'),
+        'api_client_id' => env('PESAFLOW_API_CLIENT_ID', 202),
+        'service_id' => env('PESAFLOW_SERVICE_ID', 5548595), //Other_Income
+        'url' => env('PESAFLOW_URL', 'https://payments.ecitizen.go.ke/PaymentAPI/iframev2.1.php'),
+        'base_url' => env('PESAFLOW_BASE_URL', 'https://payments.ecitizen.go.ke'),
+    ],
+
 ];

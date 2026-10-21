@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 // Add
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Main\Permit;
+use App\Models\Main\Payment;
+use App\Models\Settings\Tariff;
 use App\Models\Settings\CoffeeSpecies;
 use App\Models\Settings\CoffeeForm;
 use App\Models\Settings\PermitType;
@@ -29,9 +32,9 @@ class PermitController extends Controller
         $mCurrentUser?->load('role');
         // return $mCurrentUser->role?->type_id;
         if($mCurrentUser->role?->type_id==2){
-            return Permit::with(['user','type','status','paymentStatus'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
+            return Permit::with(['user','type','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
         }else{
-            return Permit::with(['user','type','status','paymentStatus'])->orderBy('created_at', 'desc')->paginate(10);
+            return Permit::with(['user','type','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
         }
     }
 
@@ -58,6 +61,7 @@ class PermitController extends Controller
         // WithSoftDelete
         $nextNumber = Permit::withTrashed()->count()+1;
         $mApplicationNumber = 'PM/'.date('Y').'/'.$nextNumber;
+        $paymentId = (string)Str::uuid();
         $mCurrentUser= auth()->user();
         $item = Permit::create([
             'user_id' => $mCurrentUser->id,
@@ -74,12 +78,20 @@ class PermitController extends Controller
             'driver_name' => $fields['driver_name'],
             'driver_id_number' => $fields['driver_id_number'],
             'warehouse_receipt_number' => $fields['warehouse_receipt_number'],
+            'payment_id' => $paymentId,
         ]);
 
-        $payment = Payment::updateOrCreate(['booking_id' => $item->id],[
-            'user_id' => $fields['user_id'],
-            'amount' => $fields['amount'],
+        $nextNumber = Payment::withTrashed()->count()+1;
+        $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
+        $mTariffId = 1;
+        $payment = Payment::updateOrCreate(['id' => $paymentId],[
+            'id' => $paymentId,
+            'invoice_number' => $mInvoiceNumber,
+            'user_id' => $mCurrentUser->id,
+            'amount' => Tariff::find($mTariffId)->amount,
             'format' => 'json',
+            'service_id' => 1,
+            'tariff_id' => $mTariffId,
         ]);
 
         $mType = PermitType::find($fields['type_id']);
@@ -128,7 +140,10 @@ class PermitController extends Controller
         $response = [
             'status' => 'success',
             'message' => 'Application submitted successfully',
-            'data' => $item
+            'data' => [
+                'item' => $item,
+                'payment' => $payment,
+            ],
         ];
         return response($response, 200);
     }
@@ -138,7 +153,7 @@ class PermitController extends Controller
      */
     public function show(string $id)
     {
-        return Permit::with(['user','type','status','paymentStatus'])->find($id);
+        return Permit::with(['user','type','status','payment.status'])->find($id);
     }
 
     /**
@@ -179,10 +194,19 @@ class PermitController extends Controller
             'status_id' => 3,//UnderReview
         ]);
 
+        $mCurrentUser= auth()->user();
         $item = Permit::find($id);
+        $mTariffId = 1;
+        $payment = Payment::updateOrCreate(['id' => $item->payment_id],[
+            'user_id' => $mCurrentUser->id,
+            'amount' => Tariff::find($mTariffId)->amount,
+            'format' => 'json',
+            'service_id' => 1,
+            'tariff_id' => $mTariffId,
+        ]);
+
         $mType = PermitType::find($fields['type_id']);
         // Notification
-        $mCurrentUser= auth()->user();
         $email = $mCurrentUser->email;
         $subject = 'Permit Re-submitted Application - Acknowledgement';
         $message = "<div>
@@ -227,7 +251,10 @@ class PermitController extends Controller
         $response = [
             'status' => 'success',
             'message' => 'Application re-submitted successfully',
-            'data' => $item
+            'data' => [
+                'item' => $item,
+                'payment' => $payment,
+            ],
         ];
         return response($response, 200);
     }
@@ -263,7 +290,7 @@ class PermitController extends Controller
         $term = $fields['search_term'];
         $items = null;
         if($mCurrentUser->role?->type_id==2){
-            $items = Permit::with(['user','type','status','paymentStatus'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
+            $items = Permit::with(['user','type','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
@@ -279,7 +306,7 @@ class PermitController extends Controller
                 });
             })->orderBy('created_at', 'desc')->get();
          }else{
-            $items = Permit::with(['user','type','status','paymentStatus'])->where(function($query) use($term){
+            $items = Permit::with(['user','type','status','payment.status'])->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');

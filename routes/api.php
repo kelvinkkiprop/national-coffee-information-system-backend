@@ -7,6 +7,7 @@ use App\Http\Controllers\Main\DashboardController;
 use App\Http\Controllers\Main\AuthController;
 use App\Http\Controllers\Main\UserController;
 use App\Http\Controllers\Main\PermitController;
+use App\Http\Controllers\Main\PaymentController;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -74,6 +75,22 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('approve-process-permits/{id}', [ProcessPermitController::class, 'approveApplicationItem']);
 });
 
+
+/*
+|======================================================================
+| PaymentController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('payments', PaymentController::class);
+    Route::post('search-payments', [PaymentController::class, 'searchItems']);
+    Route::get('unpaginated-items-payments', [PaymentController::class, 'unpaginatedItems']);
+
+    Route::get('generate-invoice-payments/{id}', [PaymentController::class, 'invoiceItem']);
+    Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
+    Route::get('settled-payments/{id}', [PaymentController::class, 'settledItem']);
+});
+// Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
 
 
 /*

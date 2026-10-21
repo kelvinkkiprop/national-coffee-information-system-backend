@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             // $table->id();
             $table->uuid('id')->primary();
+            $table->string('invoice_number')->nullable();
             $table->uuid('user_id')->nullable();
-            $table->uuid('booking_id')->nullable();
+            $table->unsignedInteger('service_id')->nullable();
+            $table->unsignedInteger('tariff_id')->nullable();
             $table->string('amount')->nullable();
             $table->string('convenience_fee')->nullable();
             $table->string('currency')->default('KES');
@@ -27,7 +29,7 @@ return new class extends Migration
 
             $table->string('secure_hash')->nullable();
             $table->string('api_client_id')->nullable();
-            $table->string('service_id')->nullable();
+            $table->string('pesaflow_service_id')->nullable();
             $table->string('picture_url')->nullable();
             $table->string('notification_url')->nullable();
             $table->string('callback_url_on_success')->nullable();

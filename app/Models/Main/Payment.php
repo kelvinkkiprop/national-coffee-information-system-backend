@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use App\Models\Other\PaymentStatus;
+use App\Models\Settings\Service;
+use App\Models\Settings\Tariff;
+use App\Models\Others\PaymentStatus;
 
 class Payment extends Model
 {
@@ -19,8 +21,10 @@ class Payment extends Model
     */
     protected $fillable = [
         'id',
+        'invoice_number',
         'user_id',
-        'booking_id',
+        'service_id',
+        'tariff_id',
         'amount',
         'convenience_fee',
         'currency',
@@ -31,7 +35,7 @@ class Payment extends Model
         'status_id',
 
         'secure_hash',
-        'service_id',
+        'pesaflow_service_id',
         'picture_url',
         'notification_url',
         'callback_url_on_success',
@@ -66,6 +70,20 @@ class Payment extends Model
      */
     public function user(){
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    /**
+     * service
+     */
+    public function service(){
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+
+    /**
+     * tariff
+     */
+    public function tariff(){
+        return $this->hasOne(Tariff::class, 'id', 'tariff_id');
     }
 
     /**

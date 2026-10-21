@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
             PermitTypeSeeder::class,
             CoffeeSpeciesSeeder::class,
             CoffeeFormSeeder::class,
+            ServiceSeeder::class,
+            TariffSeeder::class,
         ]);
 
     }

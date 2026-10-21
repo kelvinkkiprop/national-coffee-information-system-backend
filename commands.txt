@@ -20,6 +20,8 @@ php artisan make:seeder PermitStatusSeeder
 php artisan make:seeder PermitTypeSeeder
 php artisan make:seeder CoffeeSpeciesSeeder
 php artisan make:seeder CoffeeFormSeeder
+php artisan make:seeder ServiceSeeder
+php artisan make:seeder TariffSeeder
 
 
 4. Controllers
@@ -27,6 +29,7 @@ php artisan make:controller Main/DashboardController
 php artisan make:controller Main/AuthController
 php artisan make:controller Main/UserController --api --resource
 php artisan make:controller Main/PermitController --api --resource
+php artisan make:controller Main/PaymentController --api --resource
 php artisan make:controller Settings/RoleController --api --resource
 php artisan make:controller Settings/ProfileController --api --resource
 php artisan make:controller Others/ProcessPermitController
@@ -35,6 +38,8 @@ php artisan make:controller Others/ProcessPermitController
 5.Models
 php artisan make:model Main/Permit -m
 php artisan make:model Main/Payment -m
+php artisan make:model Main/Service -m
+php artisan make:model Main/Tariff -m
 php artisan make:model Settings/Role -m
 php artisan make:model Settings/Profile -m
 php artisan make:model Settings/PermitType -m

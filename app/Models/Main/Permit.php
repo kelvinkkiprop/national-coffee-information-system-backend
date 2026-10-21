@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // Add
 use App\Models\User;
+use App\Models\Main\Payment;
 use App\Models\Settings\PermitType;
 use App\Models\Settings\CoffeeSpecies;
 use App\Models\Settings\CoffeeForm;
@@ -99,6 +100,14 @@ class Permit extends Model
      */
     public function coffeeForm(){
         return $this->hasOne(CoffeeForm::class, 'id', 'coffee_form_id');
+    }
+
+
+    /**
+     * payment
+     */
+    public function payment(){
+        return $this->hasOne(Payment::class, 'id', 'payment_id');
     }
 
     /**

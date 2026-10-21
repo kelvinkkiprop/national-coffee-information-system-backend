@@ -23,7 +23,7 @@ class DashboardController extends Controller
             'users' => User::count(),
             'licenses' => User::count(),
             'permits' => Permit::count(),
-            'revenues' => Payment::sum('amount'),
+            'revenues' => Payment::where('status_id',2)->sum('amount'),
             'recent_users' => User::with(['role','status'])->orderBy('id', 'desc')->limit(5)->get(),
             // Other
             'my_licenses' => User::count(),
