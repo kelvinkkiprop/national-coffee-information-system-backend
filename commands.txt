@@ -87,7 +87,8 @@ Under app/Services/ create
 VideoCipherService.php
 
 9. Commands
-php artisan make:command GetVideoStatus
+php artisan make:command SendReminders
+php artisan make:command UpdatePermitStatus
 
 10. Common Commands
 php artisan config:cache

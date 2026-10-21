@@ -145,7 +145,7 @@ class ProcessPermitController extends Controller
                 'name' => $mUser->name,
                 'subject' => 'Permit Application',
                 'url' => config('app.url').'/permits/show/'.$item->id,
-                'btn-text' => 'Submit Detailed Design',
+                'btn-text' => 'View',
                 'message' => $message,
                 'file' => null,
                 'file_name' => null
