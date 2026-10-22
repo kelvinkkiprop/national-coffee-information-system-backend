@@ -108,7 +108,8 @@ class ProcessPermitController extends Controller
     {
         $fields = $request->validate([
             'status_id' => 'required|string',
-            'date_of_issue' => 'required_if:status_id,5|nullable|date',
+            // 'date_of_issue' => 'required_if:status_id,5|nullable|date',
+            'date_of_issue' => 'required_if:status_id,5|nullable|date|before_or_equal:effective_date',
             'effective_date' => 'required_if:status_id,5|nullable|date',
             'expiry_date' => 'nullable|date',
             'remarks' => 'string|nullable',

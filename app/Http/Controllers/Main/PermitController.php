@@ -32,9 +32,9 @@ class PermitController extends Controller
         $mCurrentUser?->load('role');
         // return $mCurrentUser->role?->type_id;
         if($mCurrentUser->role?->type_id==2){
-            return Permit::with(['user','type','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
+            return Permit::with(['user','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
         }else{
-            return Permit::with(['user','type','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
+            return Permit::with(['user','type','coffeeSpecies','coffeeForm','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
         }
     }
 
@@ -153,7 +153,7 @@ class PermitController extends Controller
      */
     public function show(string $id)
     {
-        return Permit::with(['user','type','status','payment.status'])->find($id);
+        return Permit::with(['user','type','status','coffeeSpecies','coffeeForm','payment.status'])->find($id);
     }
 
     /**
@@ -290,7 +290,7 @@ class PermitController extends Controller
         $term = $fields['search_term'];
         $items = null;
         if($mCurrentUser->role?->type_id==2){
-            $items = Permit::with(['user','type','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
+            $items = Permit::with(['user','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
@@ -306,7 +306,7 @@ class PermitController extends Controller
                 });
             })->orderBy('created_at', 'desc')->get();
          }else{
-            $items = Permit::with(['user','type','status','payment.status'])->where(function($query) use($term){
+            $items = Permit::with(['user','type','status','coffeeSpecies','coffeeForm','payment.status'])->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');

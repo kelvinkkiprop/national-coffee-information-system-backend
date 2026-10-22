@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
-use App\Models\Others\RoleType;
+use App\Models\Settings\RoleType;
 use App\Models\Settings\Role;
 
 class RoleController extends Controller

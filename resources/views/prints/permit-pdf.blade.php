@@ -121,27 +121,25 @@
                 <div class="my-2">
                     <p class="text-justify">
                         The Coffee Board of Kenya hereby authorizes <b><u>@if($item->user){{ $item->user?->name }}@endif</u></b>
-                        Address @if($item->user){{ $item->user?->profile?->postal_address }} {{ $item->user?->profile?->physical_address }}@endif
-                        Permit No: <b><u>{{ $item->application_number }}</u></b> to move {{ $item->number_of_bags }} bags of from {{ $item->origin }}
-                        to {{ $item->destination }} by Road/Rail for a distance of {{ $item->distance }}KM, Name of the Driver {{ $item->driver_name }}
-                        and ID Number {{ $item->driver_id_number }} starting from {{ Carbon\Carbon::parse($item->effective_date)->format('dS F Y') }}.
+                        @if($item->user?->profile)Address {{ $item->user?->profile?->postal_address }} {{ $item->user?->profile?->physical_address }}
+                        County:<b><u>&nbsp;{{$item->user?->profile?->county?->name}}&nbsp;</u></b> Sub County:<b><u>&nbsp;{{$item->user?->profile?->subCounty?->name}}&nbsp;</u></b>
+                        Ward:<b><u>&nbsp;{{$item->user?->profile?->ward?->name}}&nbsp;</u></b>Street Name:<b><u>&nbsp;{{$item->user?->profile?->street_name}}&nbsp;</u></b>
+                        Plot Number:<b><u>&nbsp;{{$item->user?->profile?->plot_number}}&nbsp;</u></b>@endif
+                        Permit No: <b><u>{{ $item->application_number }}</u></b> to move {{ $item->number_of_bags }} bags of {{ $item->coffeeSpecies?->name }}
+                        {{ $item->coffeeForm?->alias }} from <b><u>{{ $item->origin }}</u></b> to <b><u>{{ $item->destination }}</u></b> by Road/Rail
+                        for a distance of {{ $item->distance }}KM, Name of the Driver(s): <b><u>{{ $item->driver_name }}</u></b> and ID Number(s):
+                        <b><u>{{ $item->driver_id_number }}</u></b> starting from {{ Carbon\Carbon::parse($item->effective_date)->format('dS F Y') }}.
                     </p>
                     <div class="my-2">
                         <div class="row">
                             <div class="col-md-6">
-                                {{-- <p>Date of Issue:<b><u>&nbsp;{{ Carbon\Carbon::parse($item->date_of_issue)->format('dS F Y') }}&nbsp;</u></b></p> --}}
-                                <p>Valid From:<b><u>&nbsp;{{ Carbon\Carbon::parse($item->effective_date)->format('dS F Y') }}&nbsp;</u></b></p>
+                                <p>Effective Date:<b><u>&nbsp;{{ Carbon\Carbon::parse($item->effective_date)->format('dS F Y') }}&nbsp;</u></b></p>
                                 <p>Expiry Date:<b><u>&nbsp;{{ Carbon\Carbon::parse($item->expiry_date)->format('dS F Y') }}&nbsp;</u></b></p>
-                                <p>County:<b><u>&nbsp;{{$item->user?->profile?->county?->name}}&nbsp;</u></b></p>
-                                <p>Ward:<b><u>&nbsp;{{$item->user?->profile?->ward?->name}}&nbsp;</u></b></p>
-                                <p>Street Name:<b><u>&nbsp;{{$item->user?->profile?->street_name}}&nbsp;</u></b></p>
                             </div>
                             <div class="col-md-6">
                                 {{-- <p>Nature of Permit:<b><u>&nbsp;{{$item->type?->name}}&nbsp;</u></b></p> --}}
-                                <p>Validity:<b><u>&nbsp;{{$item->duration}} Days&nbsp;</u></b></p>
+                                <p>Valid For:<b><u>&nbsp;{{$item->duration}} Days&nbsp;</u></b></p>
                                 <p>Mark:<b><u>&nbsp;{{ $item->mark }}&nbsp;</u></b></p>
-                                <p>Sub County:<b><u>&nbsp;{{$item->user?->profile?->subCounty?->name}}&nbsp;</u></b></p>
-                                <p>Plot Number:<b><u>&nbsp;{{$item->user?->profile?->plot_number}}&nbsp;</u></b></p>
                             </div>
                         </div>
                     </div>
@@ -154,7 +152,7 @@
                     <div class="row py-2 my-4">
                         <div class="col-md-6">
                             <div>
-                                <br><br>
+                                <br><br><br>
                                 <span><b>Date Printed:</b></span> <br>
                                 <span><b>{{ Carbon\Carbon::parse($date_printed)->format('dS-M-Y') }}</b></span>
                             </div>
