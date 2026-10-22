@@ -28,6 +28,8 @@ class DashboardController extends Controller
             // Other
             'my_licenses' => User::count(),
             'my_permits' => Permit::where('user_id', $mCurrentUser->id)->count(),
+            'my_payments' => Payment::where('user_id', $mCurrentUser->id)->where('status_id',2)->sum('amount'),
+            'my_exams' => Permit::where('user_id', $mCurrentUser->id)->count(),
             'my_recent_permits' => Permit::with('status')->where('user_id', $mCurrentUser->id)->orderBy('id', 'desc')->limit(5)->get(),
         ];
 
