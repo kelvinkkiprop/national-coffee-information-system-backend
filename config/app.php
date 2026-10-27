@@ -52,7 +52,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost:4200'),
+    // 'url' => env('APP_URL', 'http://localhost:4200'),
+    'url' => env('APP_URL', 'https://ncis.konza.go.ke'),
 
     /*
     |--------------------------------------------------------------------------
