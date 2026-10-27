@@ -80,7 +80,7 @@ class PaymentController extends Controller
         $secret = config('app.PESAFLOW.secret');
         $key = config('app.PESAFLOW.key');
         $serviceID = config('app.PESAFLOW.service_id');
-        return $apiClientID;
+        // return $apiClientID;
 
         // Inputed
         $amountExpected = $item->amount; //+$item->convenience_fee;
