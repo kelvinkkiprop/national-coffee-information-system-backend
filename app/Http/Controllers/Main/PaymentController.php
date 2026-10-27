@@ -89,7 +89,7 @@ class PaymentController extends Controller
         $billDesc = $item->title;
         $clientName = $item->user->name;
 
-        //createDataString
+        // createDataString
         $data_string = $apiClientID.$amountExpected.$serviceID.$clientIDNumber.$currency.$billRefNumber.$billDesc.$clientName.$secret;
         $hash = hash_hmac('sha256', $data_string, $key);
         $secureHash = base64_encode($hash);
