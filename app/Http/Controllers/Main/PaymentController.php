@@ -148,7 +148,6 @@ class PaymentController extends Controller
             $response = [
                 'status' => 'failed',
                 'message' => $mResult->message,
-                'data' => json_decode($result)
             ];
             return response($response, 201);
         }else{
