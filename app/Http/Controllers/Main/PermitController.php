@@ -82,7 +82,8 @@ class PermitController extends Controller
         ]);
 
         $nextNumber = Payment::withTrashed()->count()+1;
-        $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
+        // $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
+        $mInvoiceNumber = 'IN/_/'.date('Y').'/_/'.$nextNumber;
         $mTariffId = 1;
         $payment = Payment::updateOrCreate(['id' => $paymentId],[
             'id' => $paymentId,
