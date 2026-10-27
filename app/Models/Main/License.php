@@ -39,15 +39,16 @@ class License extends Model
         'id',
         'user_id',
         'application_number',
-        'type_id',
         'category_id',
+        'type_id',
+        'financial_year',
+        'expiry_date',
         'coffee_tasting_expert_certificate',
         'commitment_declaration',
         'date_of_gazettement_intent',
         'date_of_issue',
         'effective_date',
         // 'duration',
-        'expiry_date',
         'payment_id',
         'payment_status_id',
         'status_id',
@@ -56,7 +57,12 @@ class License extends Model
         'updated_at',
     ];
 
-     /**
+
+    protected $casts = [
+        'commitment_declaration' => 'boolean',
+    ];
+
+    /**
     * appends
     */
     protected $appends = [

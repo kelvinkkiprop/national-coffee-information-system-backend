@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 // Add
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
@@ -43,12 +45,20 @@ class LicenseController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'type_id' => 'required|integer',
             'category_id' => 'required|integer',
-            'coffee_tasting_expert_certificate' => 'nullable|string',
+            'type_id' => 'required|integer',
+            'financial_year' => 'required|string',
+            'expiry_date' => 'required|date',
+            'coffee_tasting_expert_certificate' => 'nullable|required_if:type_id,5|file|mimes:pdf|max:40960',
+            'commitment_declaration' => 'required|string',
         ]);
 
+        $path_uploads = config('app.paths.file_upload');
         $mCoffeeTastingExpertCertificate=null;
+        if ($request->hasFile('coffee_tasting_expert_certificate')){
+            $mCoffeeTastingExpertCertificate = time().uniqid().'.'.$request->coffee_tasting_expert_certificate->extension();
+            $request->coffee_tasting_expert_certificate->storeAs($path_uploads, $mCoffeeTastingExpertCertificate, 'public');
+        }
 
         // WithSoftDelete
         $nextNumber = License::withTrashed()->count()+1;
@@ -58,9 +68,12 @@ class LicenseController extends Controller
         $item = License::create([
             'user_id' => $mCurrentUser->id,
             'application_number' => $mApplicationNumber,
-            'type_id' => $fields['type_id'],
             'category_id' => $fields['category_id'],
+            'type_id' => $fields['type_id'],
+            'financial_year' => $fields['financial_year'],
+            'expiry_date' => $fields['expiry_date'],
             'coffee_tasting_expert_certificate' => $mCoffeeTastingExpertCertificate,
+            'commitment_declaration' => filter_var($fields['commitment_declaration'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'payment_id' => $paymentId,
         ]);
 
@@ -146,37 +159,46 @@ class LicenseController extends Controller
     public function update(Request $request, string $id)
     {
         $fields = $request->validate([
-            'type_id' => 'required|integer',
             'category_id' => 'required|integer',
-            'coffee_tasting_expert_certificate' => 'nullable|string',
+            'type_id' => 'required|integer',
+            'financial_year' => 'required|string',
+            'expiry_date' => 'required|date',
+            'coffee_tasting_expert_certificate' => 'nullable|required_if:type_id,5|file|mimes:pdf|max:40960',
+            'commitment_declaration' => 'required|string',
         ]);
 
+        // DeleteOld
+        $path_downloads = config('app.paths.file_download');
+        $item = License::find($id);
+        $file_url = public_path($path_downloads.$item->coffee_tasting_expert_certificate);
+        if(File::exists($file_url)){File::delete($file_url);}
+
+        $path_uploads = config('app.paths.file_upload');
+        $mCoffeeTastingExpertCertificate=null;
+        if ($request->hasFile('coffee_tasting_expert_certificate')){
+            $mCoffeeTastingExpertCertificate = time().uniqid().'.'.$request->coffee_tasting_expert_certificate->extension();
+            $request->coffee_tasting_expert_certificate->storeAs($path_uploads, $mCoffeeTastingExpertCertificate, 'public');
+        }
         $item = License::where('id', $id)->update([
             // 'user_id' => $mCurrentUser->id,
             // 'application_number' => $mApplicationNumber,
+            'category_id' => $fields['category_id'],
             'type_id' => $fields['type_id'],
-            'mark' => $fields['mark'],
-            'coffee_species_id' => $fields['coffee_species_id'],
-            'coffee_form_id' => $fields['coffee_form_id'],
-            'number_of_bags' => $fields['number_of_bags'],
-            'origin' => $fields['origin'],
-            'destination' => $fields['destination'],
-            'distance' => $fields['distance'],
-            'vehicle_registration_number' => $fields['vehicle_registration_number'],
-            'driver_name' => $fields['driver_name'],
-            'driver_id_number' => $fields['driver_id_number'],
-            'warehouse_receipt_number' => $fields['warehouse_receipt_number'],
+            'financial_year' => $fields['financial_year'],
+            'expiry_date' => $fields['expiry_date'],
+            'coffee_tasting_expert_certificate' => $mCoffeeTastingExpertCertificate,
+            'commitment_declaration' => filter_var($fields['commitment_declaration'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
             'status_id' => 3,//UnderReview
         ]);
 
         $mCurrentUser= auth()->user();
         $item = License::find($id);
-        $mTariffId = 1;
+        $mTariffId = 2;
         $payment = Payment::updateOrCreate(['id' => $item->payment_id],[
             'user_id' => $mCurrentUser->id,
             'amount' => Tariff::find($mTariffId)->amount,
             'format' => 'json',
-            'service_id' => 1,
+            'service_id' => 2,
             'tariff_id' => $mTariffId,
         ]);
 
@@ -202,7 +224,7 @@ class LicenseController extends Controller
         );
         Mail::to($email)->send(new AlertMail($data));
 
-        $users = User::whereIn('role_id', [2,4])->get();//Compliance/Marketing
+        $users = User::whereIn('role_id', [2])->get();//Compliance
         foreach ($users as $key => $mUser) {
             $message = "<div>
                 <p>You have an re-submitted application to act on.</p>
@@ -240,6 +262,8 @@ class LicenseController extends Controller
     public function destroy(string $id)
     {
         $item = License::find($id);
+            $path_downloads = config('app.paths.file_download');
+            $file_url = public_path($path_downloads.$item->coffee_tasting_expert_certificate);
         $item->delete();
 
         $response = [

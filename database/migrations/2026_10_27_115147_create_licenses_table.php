@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('application_number')->unique();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
+            $table->string('financial_year')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->string('coffee_tasting_expert_certificate')->nullable();
             $table->boolean('commitment_declaration')->default(true);
             $table->date('date_of_gazettement_intent')->nullable();
             $table->date('date_of_issue')->nullable();
             $table->date('effective_date')->nullable();
-            // $table->unsignedInteger('duration')->nullable();
-            $table->date('expiry_date')->nullable();
             $table->uuid('payment_id')->nullable();
             $table->unsignedBigInteger('payment_status_id')->default(1);
             $table->unsignedBigInteger('status_id')->default(3);
