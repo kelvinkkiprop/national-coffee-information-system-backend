@@ -144,13 +144,7 @@ class PaymentController extends Controller
         $result = $response->body();
         $mResult = json_decode($result);
         // return $mResult;
-        if($mResult->status==422){
-            $response = [
-                'status' => 'failed',
-                'message' => $mResult->message,
-            ];
-            return response($response, 201);
-        }else{
+        if (($mResult?->status ?? null)===null) {
             $item->update([
                 'pesaflow_invoice_number' => $mResult->invoice_number,
                 'pesaflow_invoice_link'   => $mResult->invoice_link,
@@ -159,6 +153,12 @@ class PaymentController extends Controller
                 'status' => 'success',
                 'message' => 'Invoice generated successfully',
                 'data' => json_decode($result)
+            ];
+            return response($response, 201);
+        }elseif($mResult->status==422) {
+            $response = [
+                'status' => 'failed',
+                'message' => $mResult->message,
             ];
             return response($response, 201);
         }
