@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable();
             $table->string('application_number')->unique();
+
             $table->unsignedBigInteger('type_id')->nullable();
             $table->string('mark')->nullable();
             $table->unsignedBigInteger('coffee_species_id')->nullable();
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->string('driver_name')->nullable();
             $table->string('driver_id_number')->nullable();
             $table->string('warehouse_receipt_number')->nullable();
+
             $table->date('date_of_issue')->nullable();
             $table->date('effective_date')->nullable();
             $table->unsignedInteger('duration')->nullable();

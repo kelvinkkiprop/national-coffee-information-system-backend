@@ -22,12 +22,16 @@ php artisan make:seeder CoffeeSpeciesSeeder
 php artisan make:seeder CoffeeFormSeeder
 php artisan make:seeder ServiceSeeder
 php artisan make:seeder TariffSeeder
+php artisan make:seeder LicenseTypeSeeder
+php artisan make:seeder LicenseCategorySeeder
+php artisan make:seeder LicenseStatusSeeder
 
 
 4. Controllers
 php artisan make:controller Main/DashboardController
 php artisan make:controller Main/AuthController
 php artisan make:controller Main/UserController --api --resource
+php artisan make:controller Main/LicenseController --api --resource
 php artisan make:controller Main/PermitController --api --resource
 php artisan make:controller Main/PaymentController --api --resource
 php artisan make:controller Settings/RoleController --api --resource
@@ -36,6 +40,7 @@ php artisan make:controller Others/ProcessPermitController
 
 
 5.Models
+php artisan make:model Main/License -m
 php artisan make:model Main/Permit -m
 php artisan make:model Main/Payment -m
 php artisan make:model Main/Service -m
@@ -45,6 +50,8 @@ php artisan make:model Settings/Profile -m
 php artisan make:model Settings/PermitType -m
 php artisan make:model Settings/CoffeeForm -m
 php artisan make:model Settings/CoffeeSpecies -m
+php artisan make:model Settings/LicenseType -m
+php artisan make:model Settings/LicenseCategory -m
 php artisan make:model Others/UserStatus -m
 php artisan make:model Others/RoleType -m
 php artisan make:model Others/Country -m
@@ -54,6 +61,7 @@ php artisan make:model Others/Constituency -m
 php artisan make:model Others/Ward -m
 php artisan make:model Others/LegalStatus -m
 php artisan make:model Others/PermitStatus -m
+php artisan make:model Others/LicenseStatus -m
 
 php artisan make:model FromParcelAllocation/Investor
 php artisan make:model FromParcelAllocation/ParcelLandUseGroup

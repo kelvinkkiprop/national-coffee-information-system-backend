@@ -38,6 +38,9 @@ class DatabaseSeeder extends Seeder
             CoffeeFormSeeder::class,
             ServiceSeeder::class,
             TariffSeeder::class,
+            LicenseTypeSeeder::class,
+            LicenseCategorySeeder::class,
+            LicenseStatusSeeder::class,
         ]);
 
     }

@@ -8,11 +8,13 @@ use App\Http\Controllers\Main\AuthController;
 use App\Http\Controllers\Main\UserController;
 use App\Http\Controllers\Main\PermitController;
 use App\Http\Controllers\Main\PaymentController;
+use App\Http\Controllers\Main\LicenseController;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\ProfileController;
 // Others
 use App\Http\Controllers\Others\ProcessPermitController;
+use App\Http\Controllers\Others\ProcessLicenseController;
 
 
 Route::get('/user', function (Request $request) {
@@ -73,6 +75,32 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('next-previous-status-process-permits/{id}', [ProcessPermitController::class, 'nextPreviousItems']);
     Route::post('review-process-permits/{id}', [ProcessPermitController::class, 'reviewApplicationItem']);
     Route::post('approve-process-permits/{id}', [ProcessPermitController::class, 'approveApplicationItem']);
+});
+
+
+/*
+|======================================================================
+| LicenseController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('licenses', LicenseController::class);
+    Route::post('search-licenses', [LicenseController::class, 'searchItems']);
+    Route::get('unpaginated-items-licenses', [LicenseController::class, 'unpaginatedItems']);
+    // Route::get('licenses-pdf/{id}', [LicenseController::class, 'generateLicensePdf']);
+});
+Route::get('licenses-pdf/{id}', [LicenseController::class, 'generateLicensePdf']);
+Route::get('verify-license/{id}', [LicenseController::class, 'verifyLicense']);
+
+/*
+|======================================================================
+| ProcessLicenseController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::get('next-previous-status-process-licenses/{id}', [ProcessLicenseController::class, 'nextPreviousItems']);
+    Route::post('review-process-licenses/{id}', [ProcessLicenseController::class, 'reviewApplicationItem']);
+    Route::post('approve-process-licenses/{id}', [ProcessLicenseController::class, 'approveApplicationItem']);
 });
 
 

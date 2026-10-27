@@ -110,7 +110,7 @@ class PermitController extends Controller
             'name' => $mCurrentUser->name,
             'subject' => $subject,
             'url' => config('app.url').'/permits/show/'.$item->id,
-            'btn-text' => 'Login',
+            'btn-text' => 'View',
             'message' => $message,
             'file' => null,
             'file_name' => null
@@ -221,7 +221,7 @@ class PermitController extends Controller
             'name' => $mCurrentUser->name,
             'subject' => $subject,
             'url' => config('app.url').'/permits/show/'.$item->id,
-            'btn-text' => 'Login',
+            'btn-text' => 'View',
             'message' => $message,
             'file' => null,
             'file_name' => null
@@ -362,7 +362,7 @@ class PermitController extends Controller
     {
         $item = Permit::with(['user','type','status','coffeeSpecies','coffeeForm'])->find($id);
         // return $item;
-        // return view('prints.permit-pdf')->with('item', $item);
+        // return view('prints.permits.permit-pdf')->with('item', $item);
 
         $verificationUrl = url(config('app.asset_url').'/api/verify-permit/' . $item->id);
         $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->backgroundColor(244, 235, 225)->generate($verificationUrl));
@@ -374,7 +374,7 @@ class PermitController extends Controller
             'date_printed' => $datePrinted,
         ];
         // return $data;
-        $dompdf = PDF::loadView('prints.permit-pdf', $data)->setPaper('a4', 'potrait');
+        $dompdf = PDF::loadView('prints.permits.permit-pdf', $data)->setPaper('a4', 'potrait');
         $name = preg_replace('/[^A-Za-z0-9_-]/','-',$item->application_number).'- Permit';
 
         $dompdf->output();

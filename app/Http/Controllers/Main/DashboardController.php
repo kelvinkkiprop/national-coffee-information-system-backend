@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // Add
 use App\Models\User;
 use App\Models\Main\Permit;
+use App\Models\Main\License;
 use App\Models\Main\Payment;
 use App\Models\Settings\Profile;
 
@@ -21,12 +22,12 @@ class DashboardController extends Controller
         $data = [
             // Admin
             'users' => User::count(),
-            'licenses' => User::count(),
+            'licenses' => License::count(),
             'permits' => Permit::count(),
             'revenues' => Payment::where('status_id',2)->sum('amount'),
             'recent_users' => User::with(['role','status'])->orderBy('id', 'desc')->limit(5)->get(),
             // Other
-            'my_licenses' => User::count(),
+            'my_licenses' => License::where('user_id', $mCurrentUser->id)->count(),
             'my_permits' => Permit::where('user_id', $mCurrentUser->id)->count(),
             'my_payments' => Payment::where('user_id', $mCurrentUser->id)->where('status_id',2)->sum('amount'),
             'my_exams' => Permit::where('user_id', $mCurrentUser->id)->count(),

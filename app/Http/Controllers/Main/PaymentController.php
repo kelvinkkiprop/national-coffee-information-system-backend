@@ -179,7 +179,7 @@ class PaymentController extends Controller
             'item' => $item,
         ];
         // return $data;
-        $dompdf = PDF::loadView('prints.receipt-pdf', $data)->setPaper('a4', 'potrait');
+        $dompdf = PDF::loadView('prints.payments.receipt-pdf', $data)->setPaper('a4', 'potrait');
         $name = preg_replace('/[^A-Za-z0-9_-]/','-',$item->invoice_number).'- Receipt';
 
         $dompdf->output();
