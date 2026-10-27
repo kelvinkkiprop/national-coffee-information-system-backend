@@ -143,12 +143,13 @@ class PaymentController extends Controller
 
         $result = $response->body();
         $mResult = json_decode($result);
+        return $mResult;
         $item->update([
             'pesaflow_invoice_number' => $mResult->invoice_number,
             'pesaflow_invoice_link'   => $mResult->invoice_link,
         ]);
 
-        $response =[
+        $response = [
             'status' => 'success',
             'message' => 'Invoice generated successfully',
             'data' => json_decode($result)
@@ -189,7 +190,7 @@ class PaymentController extends Controller
             'settled_at' => now(),
         ]);
 
-        $response =[
+        $response = [
             'status' => 'success',
             'message' => 'Status updated successfully',
             'data' => $item
