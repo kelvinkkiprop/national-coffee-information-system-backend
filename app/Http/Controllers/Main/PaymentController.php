@@ -73,13 +73,14 @@ class PaymentController extends Controller
     public function invoiceItem(string $id)
     {
         $item = Payment::with(['user','status','service','tariff'])->find($id);
-        return $item;
+        // return $item;
 
         // Static
         $apiClientID = config('app.PESAFLOW.api_client_id');
         $secret = config('app.PESAFLOW.secret');
         $key = config('app.PESAFLOW.key');
         $serviceID = config('app.PESAFLOW.service_id');
+        return $apiClientID;
 
         // Inputed
         $amountExpected = $item->amount; //+$item->convenience_fee;
