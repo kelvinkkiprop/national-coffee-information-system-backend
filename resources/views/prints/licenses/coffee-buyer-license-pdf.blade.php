@@ -141,7 +141,7 @@
                                 <p>Valid From:<b><u>&nbsp;{{ Carbon\Carbon::parse($item->effective_date)->format('dS F Y') }}&nbsp;</u></b></p>
                                 <p>Email:<b><u>&nbsp;{{ $item->user?->email }}&nbsp;</u></b></p>
                                  @if($item->user && $item->user->profile)
-                                    <p>Postal Address: <b><u>&nbsp;{{ optional($item->user->profile)->postal_address }}&nbsp;</u></b></p>
+                                    {{-- <p>Postal Address: <b><u>&nbsp;{{ optional($item->user->profile)->postal_address }}&nbsp;</u></b></p> --}}
                                     <p>Street/road: <b><u>&nbsp;{{optional( $item->user->profile)->street_name }}&nbsp;</u></b></p>
                                     <p>County: <b><u>&nbsp;{{ optional(($item->user->profile)->county)->name }}&nbsp;</u></b></p>
                                     <p>Ward: <b><u>&nbsp;{{ optional(($item->user->profile)->ward)->name }}&nbsp;</u></b></p>
@@ -152,7 +152,7 @@
                                 <p>To:<b><u>&nbsp;{{ Carbon\Carbon::parse($item->expiry_date)->format('dS F Y') }}&nbsp;</u></b></p>
                                 <p>Mobile Number:<b><u>&nbsp;{{ $item->user?->phone }}&nbsp;</u></b></p>
                                  @if($item->user && $item->user->profile)
-                                    <p>Physical Address: <b><u>&nbsp;{{ $item->user->profile->physical_address }}&nbsp;</u></b></p>
+                                    {{-- <p>Physical Address: <b><u>&nbsp;{{ $item->user->profile->physical_address }}&nbsp;</u></b></p> --}}
                                     <p>L.R.No./Plot No: <b><u>&nbsp;{{ $item->user->profile->plot_number }}&nbsp;</u></b></p>
                                     <p>Sub County: <b><u>&nbsp;{{ optional($item->user->profile->subCounty)->name }}&nbsp;</u></b></p>
                                 @endif
