@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-// use Barryvdh\DomPDF\Facade\PDF;
 use PDF;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
