@@ -67,7 +67,7 @@ class UserController extends Controller
         $data = array(
             'name' =>  $fields['name'],
             'subject' => $subject,
-            'url' => config('app.url').'/auth/login',
+            'url' => config('app.url').'/#/auth/login',
             'btn-text' => 'Login',
             'message' => $message,
             'file' => null,
@@ -132,7 +132,7 @@ class UserController extends Controller
             $data = array(
                 'name' =>  $fields['name'],
                 'subject' => $subject,
-                'url' => config('app.url').'/auth/login',
+                'url' => config('app.url').'/#/auth/login',
                 'btn-text' => 'Login',
                 'message' => $message,
                 'file' => null,

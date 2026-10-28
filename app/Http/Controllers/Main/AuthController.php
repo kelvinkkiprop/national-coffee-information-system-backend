@@ -46,7 +46,7 @@ class AuthController extends Controller
         $data = array(
             'name' => $user->name,
             'subject' => "Verify OTP",
-            'url' => config('app.url').'/auth/verify-otp',
+            'url' => config('app.url').'/#/auth/verify-otp',
             'btn-text' => 'Verify',
             'message' => "<div>{$message}</div>",
             'file' => null,
@@ -101,7 +101,7 @@ class AuthController extends Controller
         $data = array(
             'name' => $user->name,
             'subject' => "Account Registration",
-            'url' => '/auth/login',
+            'url' => '/#/auth/login',
             'btn-text' => 'Login',
             'message' => $message,
             'file' => null,

@@ -98,8 +98,8 @@ class PaymentController extends Controller
         // Add
         $apiClientID = $apiClientID;
         $pictureURL = asset('images/logo_main.png');
-        $notificationURL = config('app.url').'/payments/settled/'.$id;
-        $callBackURLOnSuccess = config('app.url').'/payments/settled/'.$id;
+        $notificationURL = config('app.url').'/#/payments/settled/'.$id;
+        $callBackURLOnSuccess = config('app.url').'/#/payments/settled/'.$id;
         $format = 'json'; #"html";
         $accountNumber = null;
 

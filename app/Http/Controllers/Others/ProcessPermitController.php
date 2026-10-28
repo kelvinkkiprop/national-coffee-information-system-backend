@@ -61,7 +61,7 @@ class ProcessPermitController extends Controller
             $data = array(
                 'name' => $mUser->name,
                 'subject' => 'Permit Application',
-                'url' => config('app.url').'/permits/show/'.$item->id,
+                'url' => config('app.url').'/#/permits/show/'.$item->id,
                 'btn-text' => 'View',
                 'message' => $message,
                 'file' => null,
@@ -82,7 +82,7 @@ class ProcessPermitController extends Controller
                 $data = array(
                     'name' => $mUser->name,
                     'subject' => 'Permit Application',
-                    'url' => config('app.url').'/permits/show/'.$item->id,
+                    'url' => config('app.url').'/#/permits/show/'.$item->id,
                     'btn-text' => 'View',
                     'message' => $message,
                     'file' => null,
@@ -145,7 +145,7 @@ class ProcessPermitController extends Controller
             $data = array(
                 'name' => $mUser->name,
                 'subject' => 'Permit Application',
-                'url' => config('app.url').'/permits/show/'.$item->id,
+                'url' => config('app.url').'/#/permits/show/'.$item->id,
                 'btn-text' => 'View',
                 'message' => $message,
                 'file' => null,
@@ -166,7 +166,7 @@ class ProcessPermitController extends Controller
                 $data = array(
                     'name' => $mUser->name,
                     'subject' => 'Permit Application',
-                    'url' => config('app.url').'/permits/show/'.$item->id,
+                    'url' => config('app.url').'/#/permits/show/'.$item->id,
                     'btn-text' => 'View',
                     'message' => $message,
                     'file' => null,

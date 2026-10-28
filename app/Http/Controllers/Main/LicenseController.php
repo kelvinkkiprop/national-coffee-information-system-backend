@@ -105,7 +105,7 @@ class LicenseController extends Controller
         $data = array(
             'name' => $mCurrentUser->name,
             'subject' => $subject,
-            'url' => config('app.url').'/permits/show/'.$item->id,
+            'url' => config('app.url').'/#/permits/show/'.$item->id,
             'btn-text' => 'View',
             'message' => $message,
             'file' => null,
@@ -125,7 +125,7 @@ class LicenseController extends Controller
             $data = array(
                 'name' => $mUser->name,
                 'subject' => 'License Application - New',
-                'url' => config('app.url').'/permits/process/'.$item->id,
+                'url' => config('app.url').'/#/permits/process/'.$item->id,
                 'btn-text' => 'View',
                 'message' => $message,
                 'file' => null,
@@ -216,7 +216,7 @@ class LicenseController extends Controller
         $data = array(
             'name' => $mCurrentUser->name,
             'subject' => $subject,
-            'url' => config('app.url').'/permits/show/'.$item->id,
+            'url' => config('app.url').'/#/permits/show/'.$item->id,
             'btn-text' => 'View',
             'message' => $message,
             'file' => null,
@@ -236,7 +236,7 @@ class LicenseController extends Controller
             $data = array(
                 'name' => $mUser->name,
                 'subject' => 'License Application - Re-submitted',
-                'url' => config('app.url').'/permits/process/'.$item->id,
+                'url' => config('app.url').'/#/permits/process/'.$item->id,
                 'btn-text' => 'View',
                 'message' => $message,
                 'file' => null,
