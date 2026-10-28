@@ -159,7 +159,7 @@
                             of the Coffee (General) Regulations, 2019 currently in force and the Rules made thereunder and to such conditions as
                             are stipulated herein.The Agent shall maintain professionalism at all times.</small>
                     </p>
-                    <div class="row py-2 my-4">
+                    <div class="row py-2 my-2">
                         <div class="col-md-6">
                             <div>
                                 <br><br>

@@ -165,7 +165,7 @@
                         <small><b>Notice:</b> This license does not exempt the holder from complying with the Crops Act, the Coffee (General) Regulations,
                             and other applicable Kenyan laws and regulations governing coffee production, processing, and trade.</small>
                     </p>
-                    <div class="row py-2 my-4">
+                    <div class="row py-2 my-2">
                         <div class="col-md-6">
                             <div>
                                 <br><br>
