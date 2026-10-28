@@ -95,7 +95,7 @@ class AuthController extends Controller
         // Email
         $email = $user->email;
         $message = "<div>
-            <p>Your new account Verification Code is {$verification_code} and OTP: {$otp_code}</p>
+            <p>Your new account Verification Code: {$verification_code} and OTP: {$otp_code}</p>
             <p>Click the button below to verify your email address.</p>
         </div>";
         $data = array(
