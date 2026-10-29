@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Settings\Profile;
 use App\Models\Settings\Role;
 use App\Models\Others\Country;
+use App\Models\Others\Region;
 use App\Models\Others\County;
 use App\Models\Others\SubCounty;
 use App\Models\Others\Ward;
@@ -44,6 +45,7 @@ class ProfileController extends Controller
             'postal_address' => 'required|string',
             'physical_address' => 'required|string',
             // Location
+            'region_id' => 'nullable|integer',
             'county_id' => 'nullable|integer',
             'sub_county_id' => 'nullable|integer',
             'ward_id' => 'nullable|integer',
@@ -74,6 +76,7 @@ class ProfileController extends Controller
             'postal_address' => $fields['postal_address'],
             'physical_address' => $fields['physical_address'],
             // Location
+            'region_id' => $fields['region_id'],
             'county_id' => $fields['county_id'],
             'sub_county_id' => $fields['sub_county_id'],
             'ward_id' => $fields['ward_id'],
@@ -126,6 +129,7 @@ class ProfileController extends Controller
             'postal_address' => 'required|string',
             'physical_address' => 'required|string',
             // Location
+            'region_id' => 'nullable|integer',
             'county_id' => 'nullable|integer',
             'sub_county_id' => 'nullable|integer',
             'ward_id' => 'nullable|integer',
@@ -153,6 +157,7 @@ class ProfileController extends Controller
             'postal_address' => $fields['postal_address'],
             'physical_address' => $fields['physical_address'],
             // Location
+            'region_id' => $fields['region_id'],
             'county_id' => $fields['county_id'],
             'sub_county_id' => $fields['sub_county_id'],
             'ward_id' => $fields['ward_id'],
@@ -233,6 +238,7 @@ class ProfileController extends Controller
     public function unpaginatedItems()
     {
         $countries = Country::orderBy('id', 'asc')->get();
+        $regions = Region::orderBy('id', 'asc')->get();
         $counties = County::orderBy('id', 'asc')->get();
         $sub_counties = SubCounty::orderBy('id', 'asc')->get();
         $wards = Ward::orderBy('id', 'asc')->get();
@@ -245,6 +251,7 @@ class ProfileController extends Controller
             'data' => [
                 'countries' => $countries,
                 'counties' => $counties,
+                'regions' => $regions,
                 'sub_counties' => $sub_counties,
                 'legal_statuses' => $legal_statuses,
                 'wards' => $wards,
@@ -257,6 +264,14 @@ class ProfileController extends Controller
 
 
 
+
+    /**
+     * filterCounties
+     */
+    public function filterCounties($region_id)
+    {
+        return County::where('region_id', $region_id)->orderBy('name', 'asc')->get();
+    }
 
     /**
      * filterSubCounties

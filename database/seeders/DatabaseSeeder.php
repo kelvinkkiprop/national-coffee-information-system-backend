@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             RoleTypeSeeder::class,
             CountrySeeder::class,
+            RegionSeeder::class,
             CountySeeder::class,
             SubCountySeeder::class,
             WardSeeder::class,

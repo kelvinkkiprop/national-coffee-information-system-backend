@@ -56,6 +56,7 @@ class Profile extends Model
         'postal_address',
         'physical_address',
         // Location
+        'region_id',
         'county_id',
         'sub_county_id',
         'ward_id',

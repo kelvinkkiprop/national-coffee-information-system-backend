@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('counties', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('region_id')->nullable();
             $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();

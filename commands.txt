@@ -55,6 +55,7 @@ php artisan make:model Settings/LicenseCategory -m
 php artisan make:model Others/UserStatus -m
 php artisan make:model Others/RoleType -m
 php artisan make:model Others/Country -m
+php artisan make:model Others/Region -m
 php artisan make:model Others/County -m
 php artisan make:model Others/SubCounty -m
 php artisan make:model Others/Constituency -m

@@ -16,12 +16,12 @@ class LegalStatusSeeder extends Seeder
     {
         // Default
         $items = [
-            ["id"=>1, "name"=>"Private Firm" ,"created_at"=>now()],
-            ["id"=>2, "name"=>"Partnerships" ,"created_at"=>now()],
-            ["id"=>3, "name"=>"Co-operative society" ,"created_at"=>now()],
-            ["id"=>4, "name"=>"Public Company" ,"created_at"=>now()],
-            ["id"=>5, "name"=>"Parastatal" ,"created_at"=>now()],
-            ["id"=>6, "name"=>"Individual" ,"created_at"=>now()],
+            ["id"=>1, "name"=>"Individual" ,"created_at"=>now()],
+            ["id"=>2, "name"=>"Private Firm" ,"created_at"=>now()],
+            ["id"=>3, "name"=>"Public Company" ,"created_at"=>now()],
+            ["id"=>4, "name"=>"Partnerships" ,"created_at"=>now()],
+            ["id"=>5, "name"=>"Co-operative society" ,"created_at"=>now()],
+            ["id"=>6, "name"=>"Parastatal" ,"created_at"=>now()],
             ["id"=>7, "name"=>"Relief Agency" ,"created_at"=>now()],
         ];
         LegalStatus::insert($items);

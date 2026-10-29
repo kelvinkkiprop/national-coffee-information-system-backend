@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('postal_address')->nullable();
             $table->string('physical_address')->nullable();
             // Location
+            $table->unsignedBigInteger('region_id')->nullable();
             $table->unsignedBigInteger('county_id')->nullable();
             $table->unsignedBigInteger('sub_county_id')->nullable();
             $table->unsignedBigInteger('ward_id')->nullable();

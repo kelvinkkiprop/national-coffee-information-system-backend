@@ -55,7 +55,6 @@ class User extends Authenticatable
         'remember_token',
         'verification_code',
 
-
         'otp_code',
         'otp_expires_at',
         'otp_verified',

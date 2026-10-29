@@ -78,7 +78,8 @@ class AuthController extends Controller
        $fields = $request->validate([
            'name' => 'required|string',
            'email' => 'required|string|email',
-           'password' => 'required|string|confirmed'
+           'password' => 'required|string|confirmed',
+           'accept_terms_and_conditions' => 'required|boolean',
        ]);
 
        $verification_code = rand(10000,99999);
@@ -95,7 +96,7 @@ class AuthController extends Controller
         // Email
         $email = $user->email;
         $message = "<div>
-            <p>Your new account Verification Code: {$verification_code} and OTP: {$otp_code}</p>
+            <p>Your new account Verification Code: {$verification_code}.</p>
             <p>Click the button below to verify your email address.</p>
         </div>";
         $data = array(
