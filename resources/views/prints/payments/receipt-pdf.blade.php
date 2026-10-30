@@ -437,7 +437,7 @@
                             </div>
                         </td>
                         <td align="right">
-                            <div class="text-right">
+                            <div class="text-right my-3">
                                 <img src="data:image/svg+xml;base64,{{ $qr_code ?? '' }}" alt="QR Code" width="100" height="100">
                             </div>
                         </td>
