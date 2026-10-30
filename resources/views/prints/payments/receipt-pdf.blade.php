@@ -366,7 +366,7 @@
                             <div class="text-muted">
                                 <p class="m-0 p-0">@if($item->status){{ $item->status->alias }}@endif No: @if($item->invoice_number){{ $item->invoice_number }}@endif</p>
                                 <p class="m-0 p-0">@if($item->created_at){{ $item->created_at->format('F d, Y') }}@endif</p>
-                                <p class="m-0 p-0">Reference No: @if($item->pesaflow_ref_no){{ $item->pesaflow_ref_no }}@endif</p>
+                                <p class="m-0 p-0">Reference No: @if($item->pesaflow_invoice_number){{ $item->pesaflow_invoice_number }}@endif</p>
                             </div>
                         </td>
                     </tr>
@@ -433,7 +433,7 @@
                             <div>
                                 <p class="m-0 p-0">eCitizen:<strong> eCitizen Payments</strong></p>
                                 <p class="m-0 p-0">M-Pesa Paybill:<strong> 222222</strong></p>
-                                <p class="m-0 p-0">Account No:<strong> @if($item->pesaflow_ref_no){{ $item->pesaflow_ref_no }}@endif</strong></p>
+                                <p class="m-0 p-0">Account No:<strong> @if($item->pesaflow_invoice_number){{ $item->pesaflow_invoice_number }}@endif</strong></p>
                             </div>
                         </td>
                         <td align="right">
