@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use NumberFormatter;
 use PDF;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
@@ -177,9 +178,19 @@ class PaymentController extends Controller
 
         $verificationUrl = url(config('app.asset_url').'/api/verify-receipt/' . $item->id);
         $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->generate($verificationUrl));
+
+        // $number = 12500;
+        $formatter = new NumberFormatter('en', NumberFormatter::SPELLOUT);
+        $formatted_amount_in_words = ucfirst($formatter->format($item->amount));
+        $ksh_or_usd = $item->currency=='KES' ? 'Kenya Shillings' : 'US Dollars';
+        $amount_in_words = $ksh_or_usd.' '.$formatted_amount_in_words.' Only';
+        // return $amount_in_words;
+
+
         $data = [
             'title' => $item->invoice_number,
             'item' => $item,
+            'amount_in_words' => $amount_in_words,
             'qr_code' => $qrCode,
         ];
         // return $data;

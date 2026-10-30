@@ -169,6 +169,55 @@
         .my-4 { margin-top: 1.5rem !important; margin-bottom: 1.5rem !important; }
         .my-5 { margin-top: 3rem !important; margin-bottom: 3rem !important; }
 
+        .p-0  { padding: 0 !important; }
+        .p-1  { padding: 0.25rem !important; }
+        .p-2  { padding: 0.5rem !important; }
+        .p-3  { padding: 1rem !important; }
+        .p-4  { padding: 1.5rem !important; }
+        .p-5  { padding: 3rem !important; }
+
+        .pt-0 { padding-top: 0 !important; }
+        .pt-1 { padding-top: 0.25rem !important; }
+        .pt-2 { padding-top: 0.5rem !important; }
+        .pt-3 { padding-top: 1rem !important; }
+        .pt-4 { padding-top: 1.5rem !important; }
+        .pt-5 { padding-top: 3rem !important; }
+
+        .pb-0 { padding-bottom: 0 !important; }
+        .pb-1 { padding-bottom: 0.25rem !important; }
+        .pb-2 { padding-bottom: 0.5rem !important; }
+        .pb-3 { padding-bottom: 1rem !important; }
+        .pb-4 { padding-bottom: 1.5rem !important; }
+        .pb-5 { padding-bottom: 3rem !important; }
+
+        .ps-0 { padding-left: 0 !important; }
+        .ps-1 { padding-left: 0.25rem !important; }
+        .ps-2 { padding-left: 0.5rem !important; }
+        .ps-3 { padding-left: 1rem !important; }
+        .ps-4 { padding-left: 1.5rem !important; }
+        .ps-5 { padding-left: 3rem !important; }
+
+        .pe-0 { padding-right: 0 !important; }
+        .pe-1 { padding-right: 0.25rem !important; }
+        .pe-2 { padding-right: 0.5rem !important; }
+        .pe-3 { padding-right: 1rem !important; }
+        .pe-4 { padding-right: 1.5rem !important; }
+        .pe-5 { padding-right: 3rem !important; }
+
+        .px-0 { padding-left: 0 !important; padding-right: 0 !important; }
+        .px-1 { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+        .px-2 { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+        .px-3 { padding-left: 1rem !important; padding-right: 1rem !important; }
+        .px-4 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+        .px-5 { padding-left: 3rem !important; padding-right: 3rem !important; }
+
+        .py-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
+        .py-1 { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+        .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+        .py-3 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+        .py-4 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+        .py-5 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+
         .w-100 {
             width: 100%
         }
@@ -413,10 +462,18 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="text-right">
+                    <p class="p-0 m-0 text-muted text-sm"><i>{{ $amount_in_words }}</i></p>
+                    <p class="p-0 m-0 text-danger" style="font-size: 24px; font-weight: 400; letter-spacing: 6px; opacity: 0.3;">
+                        @if($item->status_id==1) UNPAID  @else PAID @endif
+                    </p>
+                </div>
             </div>
         </div>
         <div class="my-2">
-            <p><h3>Thank you!</h3></p>
+            <p class="p-0 m-0">
+                <h3 class="p-0 m-0">Thank you!</h3>
+            </p>
         </div>
         <div class="my-2">
             <hr style="border-top: 0.2px solid; opacity: 0.1;">
