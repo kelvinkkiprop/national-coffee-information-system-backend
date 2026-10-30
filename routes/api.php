@@ -115,10 +115,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('unpaginated-items-payments', [PaymentController::class, 'unpaginatedItems']);
 
     Route::get('generate-invoice-payments/{id}', [PaymentController::class, 'invoiceItem']);
-    Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
+    // Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
     Route::get('settled-payments/{id}', [PaymentController::class, 'settledItem']);
 });
-// Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
+Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
 
 
 /*

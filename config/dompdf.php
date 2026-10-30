@@ -298,4 +298,22 @@ return [
         'enable_html5_parser' => true,
     ],
 
+
+
+    /**
+     * Add_font_family
+    */
+    'font_dir' => storage_path('fonts/'),
+    'font_cache' => storage_path('fonts/'),
+    'default_font' => 'DM_Sans',
+    'font_family_cache' => [
+        'DM_Sans' => [
+            'R'  => 'DM_Sans-Medium.ttf',     // Medium
+            'B'  => 'DM_Sans-Bold.ttf',       // Bold
+            'I'  => 'DM_Sans-Italic.ttf',     // Italic
+            'BI' => 'DM_Sans-BoldItalic.ttf', // Bold Italic
+        ],
+    ],
+
+
 ];

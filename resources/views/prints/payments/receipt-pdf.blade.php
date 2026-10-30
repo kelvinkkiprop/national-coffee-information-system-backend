@@ -5,22 +5,36 @@
     <title>KonzaOSS | Receipt</title>
     <style>
         @page {
-            margin-top: 102px;
-            margin-bottom: 21px;
+            margin-top: 86px;
+            margin-bottom: 24px;
         }
 
         @font-face {
-            font-family: 'Tw Cen MT';
+            font-family: 'DM_Sans';
             /* src: url('{{ public_path('fonts/tw-cen-mt/TwCenMT-Regular.ttf') }}') format('truetype'); */
-            src: url('{{ public_path('fonts/tw-cen-mt/TwCenMTStd.otf') }}') format('truetype');
+            src: url('{{ public_path('fonts/DM_Sans/DMSans-Medium.ttf') }}') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
 
         body {
-            font-family: 'Tw Cen MT', sans-serif;
+            font-family: 'DM_Sans', sans-serif;
             text-align: justify;
             text-justify: inter-word;       /* Standard */
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: url('./images/coffee_board_logo.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.08;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         footer {
@@ -92,53 +106,68 @@
             float: left;
         }
 
-        .left {
+        .text-left {
             text-align: left;
         }
 
-        .center {
+        .text-center {
             text-align: center;
         }
 
-        .right {
+        .text-right {
             /* text-align: right; */
             /* float: right; */
             text-align: right;
         }
 
-        .m-1 {
-            margin: 0.25rem;
-        }
+        .m-0  { margin: 0 !important; }
+        .m-1  { margin: 0.25rem !important; }
+        .m-2  { margin: 0.5rem !important; }
+        .m-3  { margin: 1rem !important; }
+        .m-4  { margin: 1.5rem !important; }
+        .m-5  { margin: 3rem !important; }
 
-        .my-1 {
-            margin: 0.5rem 0 0.5rem 0;
-        }
+        .mt-0 { margin-top: 0 !important; }
+        .mt-1 { margin-top: 0.25rem !important; }
+        .mt-2 { margin-top: 0.5rem !important; }
+        .mt-3 { margin-top: 1rem !important; }
+        .mt-4 { margin-top: 1.5rem !important; }
+        .mt-5 { margin-top: 3rem !important; }
 
-        .my-2 {
-            margin: 1.5rem 0 1.5rem 0 !important;
-        }
+        .mb-0 { margin-bottom: 0 !important; }
+        .mb-1 { margin-bottom: 0.25rem !important; }
+        .mb-2 { margin-bottom: 0.5rem !important; }
+        .mb-3 { margin-bottom: 1rem !important; }
+        .mb-4 { margin-bottom: 1.5rem !important; }
+        .mb-5 { margin-bottom: 3rem !important; }
 
-        .mb-1 {
-            margin-bottom: 0.25rem;
-        }
-        .py-4 {
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-        }
+        .ms-0 { margin-left: 0 !important; }
+        .ms-1 { margin-left: 0.25rem !important; }
+        .ms-2 { margin-left: 0.5rem !important; }
+        .ms-3 { margin-left: 1rem !important; }
+        .ms-4 { margin-left: 1.5rem !important; }
+        .ms-5 { margin-left: 3rem !important; }
 
-        .p-1 {
-            padding: 0.25rem;
-        }
+        .me-0 { margin-right: 0 !important; }
+        .me-1 { margin-right: 0.25rem !important; }
+        .me-2 { margin-right: 0.5rem !important; }
+        .me-3 { margin-right: 1rem !important; }
+        .me-4 { margin-right: 1.5rem !important; }
+        .me-5 { margin-right: 3rem !important; }
 
-        .px-2 {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
+        .mx-0 { margin-left: 0 !important; margin-right: 0 !important; }
+        .mx-1 { margin-left: 0.25rem !important; margin-right: 0.25rem !important; }
+        .mx-2 { margin-left: 0.5rem !important; margin-right: 0.5rem !important; }
+        .mx-3 { margin-left: 1rem !important; margin-right: 1rem !important; }
+        .mx-4 { margin-left: 1.5rem !important; margin-right: 1.5rem !important; }
+        .mx-5 { margin-left: 3rem !important; margin-right: 3rem !important; }
 
-        .py-1 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
+        .my-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+        .my-1 { margin-top: 0.25rem !important; margin-bottom: 0.25rem !important; }
+        .my-2 { margin-top: 0.5rem !important; margin-bottom: 0.5rem !important; }
+        .my-3 { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+        .my-4 { margin-top: 1.5rem !important; margin-bottom: 1.5rem !important; }
+        .my-5 { margin-top: 3rem !important; margin-bottom: 3rem !important; }
 
         .w-100 {
             width: 100%
@@ -179,6 +208,29 @@
 
         .hidden-table-border2 {
             border: 1px !important;
+        }
+
+        .borderless-table,
+        .borderless-table th,
+        .borderless-table td {
+            border: none !important;
+            border-top: 1px solid #000 !important;
+            border-left: none !important;
+            border-right: none !important;
+            border-bottom: none !important;
+            outline: none;
+            box-shadow: none;
+            padding: 8px;
+        }
+        .borderless-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .totals-row td {
+            border: none !important;
+        }
+        .totals-row td:nth-child(n+3) {
+            border-top: 1px solid #000 !important;
         }
 
         .right {
@@ -229,7 +281,12 @@
         .text-black {
             color: #000000;
         }
-
+        .text-danger{
+            color: #E2251D !important;
+        }
+        .text-muted {
+            color: #6c757d !important;
+        }
         .text-uppercase {
             text-transform: uppercase;
         }
@@ -253,7 +310,13 @@
         }
 
         .text-sm {
-            font-size: 13px;
+            font-size: 12px;
+        }
+        .text-xs {
+            font-size: 10px;
+        }
+        .text-xxs {
+            font-size: 8px;
         }
     </style>
 </head>
@@ -261,45 +324,51 @@
 <body>
 
     <header>
-        <div class="my-1">
+        <div class="my-2">
+            <div class="row">
+                <div class="col-print-2">
+                    <img id="logo" src="./images/coffee_board_logo.png" width="102" alt="Logo">
+                </div>
+                <div class="col-print-10">
+                    <div class="my-3">
+                        <h2 class="p-0 m-0">Coffee Board of Kenya</h2>
+                        <div class="p-0 m-0 text-muted">
+                            P.O. Box 30566 - 00100, Nairobi <br>
+                            Tel: 0718 770000 / 0100 55000
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-4">
+            <br><br><br><br><br>
+            <div class="text-center">
+                @if($item->status)
+                    <h1 class="text-uppercase">{{ $item->status->alias }}</h1>
+                @endif
+            </div>
+        </div>
+        <div class="my-4">
             <table class="w-100 mb-4 hidden-table-border">
                 <thead>
-                    <tr class="mb-4">
-                        <th width="50%" align="left"><img id="logo" src="./images/logo_main.png" width="72" alt="Logo"></th>
-                        <th width="50%" align="right">
-                            Coffee Board of Kenya<br>
-                            Tea House, Off Naivasha Road<br>
-                            P.O. Box 37962-00100, Nairobi, Kenya<br>
-                            EMAIL: info@coffeeboard.go.ke
-                        </th>
-                    </tr>
                     <tr>
-                        <th class="py-4" colspan="2" align="center">
-                            @if($item->status)
-                                <span>{{ $item->status->alias }}</span>
-                                @if($item->status_id==1)
-                                    <small class="badge-danger">{{ $item->status->name }}</small>
-                                @else
-                                    <small class="badge-success">{{ $item->status->name }}</small>
-                                @endif
-                            @endif
-                        </th>
-                    </tr>
-                    <tr>
-                        <th width="90%" align="left">
-                            CLIENT INFORMATION<br>
+                        <td width="50%" align="left">
+                            <p><strong>BILLED TO:</strong></p>
                             @if($item->user)
-                            {{ $item->user?->name }}<br>
-                            {{ $item->user?->profile?->postal_address }}<br>
-                            {{ $item->user?->profile?->physical_address }}<br>
-                            {{ $item->user?->email }}<br>
+                            <div class="text-muted">
+                                <p class="m-0 p-0 text-uppercase">{{ $item->user?->name }}</p>
+                                <p class="m-0 p-0">{{ $item->user?->email }}</p>
+                                <p class="m-0 p-0">{{ $item->user?->profile?->phone_number }}</p>
+                            </div>
                             @endif
-                        </th>
-                        <th width="10%" align="right">
-                            Receipt No: @if($item->invoice_number){{ $item->invoice_number }}@endif<br>
-                            Issued On: @if($item->created_at){{ $item->created_at->format('d/m/Y') }}<br>@endif
-                            Settled At: @if($item->settled_at){{ Carbon\Carbon::parse($item->settled_at)->format('d/m/Y') }} @endif
-                        </th>
+                        </td>
+                        <td width="50%" align="right">
+                            <div class="text-muted">
+                                <p class="m-0 p-0">@if($item->status){{ $item->status->alias }}@endif No: @if($item->invoice_number){{ $item->invoice_number }}@endif</p>
+                                <p class="m-0 p-0">@if($item->created_at){{ $item->created_at->format('F d, Y') }}@endif</p>
+                                <p class="m-0 p-0">Reference No: @if($item->pesaflow_ref_no){{ $item->pesaflow_ref_no }}@endif</p>
+                            </div>
+                        </td>
                     </tr>
                 </thead>
             </table>
@@ -309,48 +378,72 @@
 
     <main>
         <div class="my-2">
-
             <div class="mb-4">
-                <table class="w-100">
-                    <thead class="bg-brown-100">
+                <table class="borderless-table w-100">
+                    <thead>
                         <tr>
-                            <th class="text-uppercase">Item</th>
-                            <th class="text-uppercase">Description</th>
-                            <th class="text-uppercase">Qty</th>
-                            <th class="text-uppercase">Price</th>
-                            <th class="text-uppercase">Total</th>
+                            <td><strong>Item</strong></td>
+                            <td><strong>Quantity</strong></td>
+                            <td><strong>Unit Price</strong></td>
+                            <td><strong>Total</strong></td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>{{ $item->service?->name }}</th>
-                            <td>{{ $item->tariff?->name }}</td>
+                            <td>{{ $item->service?->name }} ({{ $item->tariff?->name }})</td>
                             <td>1</td>
-                            <td>{{ number_format($item->amount,0) }} x 1</td>
-                            <td>{{ number_format($item->amount,0) }}</td>
+                            <td>{{ $item->currency}}&nbsp;{{ number_format($item->amount,2) }}</td>
+                            <td>{{ $item->currency}}&nbsp;{{ number_format($item->amount,2) }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Subtotal</strong></td>
+                            <td>
+                                <strong>{{ $item->currency }}&nbsp;{{ number_format($item->amount, 2) }}</strong>
+                            </td>
+                        </tr>
+                        <tr class="totals-row">
+                            <td></td>
+                            <td></td>
+                            <td><h3>Total</h3></td>
+                            <td>
+                                <h3>{{ $item->currency }}&nbsp;{{ number_format($item->amount, 2) }}</h3>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="my-2">
-                <table class="table hidden-table-border" align="right">
-                    <tbody>
-                        <tr>
-                            <td class="left"><strong>Subtotal</strong></td>
-                            <td class="right">{{ $item->currency }}&nbsp;{{ number_format($item->amount,2) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="left"><strong>Convenience Fee</strong></td>
-                            <td class="right">{{ $item->currency }}&nbsp;{{ number_format($item->convenience_fee,2) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="left"><strong>Total</strong></td>
-                            <td class="right"><strong>{{ $item->currency }}&nbsp;{{ number_format($item->grand_total,2) }}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
+        </div>
+        <div class="my-2">
+            <p><h3>Thank you!</h3></p>
+        </div>
+        <div class="my-2">
+            <hr style="border-top: 0.2px solid; opacity: 0.1;">
+            <p class="text-muted p-0 m-0">
+                <small class="text-xs">This document is computer generated and therefore not signed. It is a valid document issued under the authority of the Coffee Board of Kenya.</small>
+            </p>
+        </div>
+        <div class="my-2">
+            <table class="w-100 mb-4 hidden-table-border">
+                <thead>
+                    <tr>
+                        <td align="left">
+                            <p class="m-0 p-0"><strong>PAYMENT INFORMATION</strong></p>
+                            <div>
+                                <p class="m-0 p-0">eCitizen:<strong> eCitizen Payments</strong></p>
+                                <p class="m-0 p-0">M-Pesa Paybill:<strong> 222222</strong></p>
+                                <p class="m-0 p-0">Account No:<strong> @if($item->pesaflow_ref_no){{ $item->pesaflow_ref_no }}@endif</strong></p>
+                            </div>
+                        </td>
+                        <td align="right">
+                            <div class="text-right">
+                                <img src="data:image/svg+xml;base64,{{ $qr_code ?? '' }}" alt="QR Code" width="100" height="100">
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </main>
 

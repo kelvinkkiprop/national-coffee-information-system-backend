@@ -173,10 +173,14 @@ class PaymentController extends Controller
     {
         $item = Payment::with(['user','service','tariff','status'])->find($id);
         // return $item;
-        // return view('prints.receipt-pdf')->with('item', $item);
+        // return view('prints.payments.receipt-pdf')->with('item', $item);
 
+        $verificationUrl = url(config('app.asset_url').'/api/verify-receipt/' . $item->id);
+        $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->generate($verificationUrl));
         $data = [
+            'title' => $item->invoice_number,
             'item' => $item,
+            'qr_code' => $qrCode,
         ];
         // return $data;
         $dompdf = PDF::loadView('prints.payments.receipt-pdf', $data)->setPaper('a4', 'potrait');

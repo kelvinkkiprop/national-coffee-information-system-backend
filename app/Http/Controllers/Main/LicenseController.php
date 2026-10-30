@@ -79,7 +79,7 @@ class LicenseController extends Controller
 
         $nextNumber = Payment::withTrashed()->count()+1;
         // $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
-        $mInvoiceNumber = 'IN/_/'.date('Y').'/_/'.$nextNumber;
+        $mInvoiceNumber = 'IN//'.date('Y').'//'.$nextNumber;
         $mTariffId = 2;
         $payment = Payment::updateOrCreate(['id' => $paymentId],[
             'id' => $paymentId,
