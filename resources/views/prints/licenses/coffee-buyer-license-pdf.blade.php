@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>NCIS | Coffee Movement Permit</title>
+        <title>NCIS | Template</title>
         <style>
             @page {
                 size: A4;
@@ -46,11 +46,6 @@
                 left: -0 !important;
                 right: -4px !important;
                 width: auto;
-                /* text-align: center; */
-            }
-
-            .opacity-75 {
-                opacity: 0.75;
             }
 
             .border-success {
@@ -109,11 +104,12 @@
             .text-right {
                 text-align: right;
             }
-
+            .text-justify {
+                text-align: justify !important;
+            }
             .text-xs {
                 font-size: 11px;
             }
-
             .text-sm {
                 font-size: 12px;
             }
@@ -123,13 +119,13 @@
             .text-xxs {
                 font-size: 8px;
             }
+
             .row-print {
                 display: table;
                 width: 100%;
                 table-layout: fixed;
                 border-collapse: collapse;
             }
-
             .row-print > [class*="col-print-"] {
                 display: table-cell;
                 vertical-align: top;
@@ -194,9 +190,6 @@
             .rounded-circle {
                 border-radius: 50%;
             }
-            .rounded-pill {
-                border-radius: 50rem;
-            }
             .rounded-top-5 {
                 border-top-left-radius: 1.7rem;
                 border-top-right-radius: 1.7rem;
@@ -204,18 +197,6 @@
             .rounded-bottom-5 {
                 border-bottom-left-radius: 1.7rem;
                 border-bottom-right-radius: 1.7rem;
-            }
-            .rounded-bottom {
-                border-bottom-left-radius: 0.375rem;
-                border-bottom-right-radius: 0.375rem;
-            }
-            .rounded-start {
-                border-top-left-radius: 0.375rem;
-                border-bottom-left-radius: 0.375rem;
-            }
-            .rounded-end {
-                border-top-right-radius: 0.375rem;
-                border-bottom-right-radius: 0.375rem;
             }
 
             .m-0  {
@@ -237,22 +218,28 @@
                 margin: 3rem !important;
             }
             .my-0 {
-                margin-top: 0 !important; margin-bottom: 0 !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
             }
             .my-1 {
-                margin-top: 0.25rem !important; margin-bottom: 0.25rem !important;
+                margin-top: 0.25rem !important;
+                margin-bottom: 0.25rem !important;
             }
             .my-2 {
-                margin-top: 0.5rem !important; margin-bottom: 0.5rem !important;
+                margin-top: 0.5rem !important;
+                margin-bottom: 0.5rem !important;
             }
             .my-3 {
-                margin-top: 1rem !important; margin-bottom: 1rem !important;
+                margin-top: 1rem !important;
+                margin-bottom: 1rem !important;
             }
             .my-4 {
-                margin-top: 1.5rem !important; margin-bottom: 1.5rem !important;
+                margin-top: 1.5rem !important;
+                margin-bottom: 1.5rem !important;
             }
             .my-5 {
-                margin-top: 3rem !important; margin-bottom: 3rem !important;
+                margin-top: 3rem !important;
+                margin-bottom: 3rem !important;
             }
             .p-0  {
                 padding: 0 !important;
@@ -273,7 +260,8 @@
                 padding: 3rem !important;
             }
             .py-0 {
-                padding-top: 0 !important; padding-bottom: 0 !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
             }
             .px-1 {
                 padding-left: 0.25rem !important;
@@ -330,7 +318,6 @@
                 border-radius: 0.375rem;
                 box-sizing: border-box;
             }
-
             .alert-success {
                 color: #0f5132;
                 background-color: #d1e7dd;
@@ -342,7 +329,6 @@
                 border-color: #f5c2c7;
             }
 
-
             .container {
                 width: 100%;
                 padding-right: 12px;
@@ -351,7 +337,6 @@
                 margin-left: auto;
                 box-sizing: border-box;
             }
-
             fieldset {
                 border: 1px solid #d1e7dd;
             }
@@ -429,21 +414,23 @@
                                     <div class="row-print">
                                         <div class="col-print-6">
                                             <p class="m-1"><span class="text-muted">Name:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->name }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Registration No:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->application_number }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Email:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->email }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Town/City:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->town }}</u></p>
                                             <p class="m-1"><span class="text-muted">County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->county?->name}}</u></p>
-                                            <p class="m-1"><span class="text-muted">Street:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->street_name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Ward:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->ward?->name}}</u></p>
                                         </div>
                                         <div class="col-print-6">
+                                            <p class="m-1"><span class="text-muted">Registration No:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->application_number }}</u></p>
                                             <p class="m-1"><span class="text-muted">Mobile No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->phone_number }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Email:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->email }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Town / City:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->town }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Street/Road:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->street_name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Sub County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->subCounty?->name}}</u></p>
                                             <p class="m-1"><span class="text-muted">L.R. No./Plot No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->plot_number }}</u></p>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <div class="my-4">
-                                <div class="alert alert-success">
+                                <div class="alert alert-success text-justify">
                                     <p class="m-1"><b class="text-capitalize">{{ $item->user?->role?->name }}</b> <span class="text-dark">is hereby authorized to</span> <b>buy clean coffee</b>
                                     <span class="text-dark">only at the exchange for</span> <b>export (local sale or value addition) or import (for secondary processing)</b> <span class="text-dark">in Kenya,
                                     from </span><b>{{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }} - {{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</b>.</p>
@@ -453,7 +440,7 @@
                                 <legend class="bg-danger text-light rounded-4 px-2">
                                     <h5 class="m-0 py-1 px-4 text-uppercase">Terms &amp; Conditions</h5>
                                 </legend>
-                                <div class="my-2 text-justify">
+                                <div class="my-2 text-justify1">
                                     <p class="m-1"><b class="text-danger">1. </b>A licensed buyer shall submit trading returns to the Board on a monthly basis.</p>
                                     <p class="m-1"><b class="text-danger">2. </b>The licensed buyer shall comply with the Kenya Coffee Industry Standards and Code of Practice.</p>
                                     <p class="m-1"><b class="text-danger">3. </b>The licensed buyer shall allow free access to the premises by inspectors authorized by the Board.</p>
