@@ -150,9 +150,9 @@ $ sudo vim /etc/apache2/sites-available/laravel_konza_oss_permitting_management_
 <VirtualHost *:80>
    ServerName api.permitting-management-system.oss.konza.go.ke
    ServerAdmin kkiprop@konza.go.ke
-   DocumentRoot /var/www/html/permitting-management-system-backend/public
+   DocumentRoot /var/www/html/national-coffee-information-system-backend/public
 
-   <Directory /var/www/html/permitting-management-system-backend>
+   <Directory /var/www/html/national-coffee-information-system-backend>
        AllowOverride All
    </Directory>
    ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -167,8 +167,9 @@ sudo a2ensite laravel_konza_oss_permitting_management_system
 $ systemctl reload apache2
 
 - Give proper permissions to the project directory.
-sudo chgrp -R www-data /var/www/html/permitting-management-system-backend
-sudo chmod -R 775 /var/www/html/permitting-management-system-backend/storage
+sudo chgrp -R www-data /var/www/html/national-coffee-information-system-backend
+sudo chmod -R 775 /var/www/html/national-coffee-information-system-backend/storage
+
 ===================================./Deployment===================================
 
 
@@ -202,7 +203,7 @@ https://certbot.eff.org/instructions?ws=apache&os=ubuntubionic
 https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
 
 2. On Windows CMD
-pscp -r "E:\Projects\VS Code Projects\permitting-management-system-backend\public\downloads" root@102.220.22.243:/var/www/html/permitting-management-system-backend/public/
+pscp -r "E:\Projects\VS Code Projects\national-coffee-information-system-backend\public\downloads" root@102.220.22.243:/var/www/html/national-coffee-information-system-backend/public/
 ===================================./Copy_Files_Windows_to_Ubuntu_using_PuTTY===================================
 
 
@@ -213,13 +214,13 @@ $ sudo apt-get install supervisor
 $ sudo vi /etc/supervisor/conf.d/laravel-oss-permitting-management-system.conf
 [program:laravel-oss-permitting-management-system]
 process_name=%(program_name)s_%(process_num)02d
-command=/usr/bin/php /var/www/html/permitting-management-system-backend/artisan queue:work database --sleep=3 --tries=3
+command=/usr/bin/php /var/www/html/national-coffee-information-system-backend/artisan queue:work database --sleep=3 --tries=3
 autostart=true
 autorestart=true
 user=root
 numprocs=5
 redirect_stderr=true
-stdout_logfile=/var/www/html/permitting-management-system-backend/storage/logs/worker.log
+stdout_logfile=/var/www/html/national-coffee-information-system-backend/storage/logs/worker.log
 
 - Press ESC
 - Then :wq

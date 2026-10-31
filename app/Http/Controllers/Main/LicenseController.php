@@ -358,10 +358,10 @@ class LicenseController extends Controller
     {
         $item = License::with(['user','type','category','status'])->find($id);
         // return $item;
-        // return view('prints.licenses.coffee-buyer-license-pdf')->with('item', $item);
+        // return view('prints.licenses.coffee-buyer-license-pd')->with('item', $item);
 
         $verificationUrl = url(config('app.asset_url').'/api/verify-license/' . $item->id);
-        $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->backgroundColor(244, 235, 225)->generate($verificationUrl));
+        $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->generate($verificationUrl));
         $datePrinted = Carbon::now();
         $data = [
             'title' => $item->application_number,
