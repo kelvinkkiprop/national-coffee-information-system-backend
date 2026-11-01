@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('company_registration_number')->nullable();
             $table->date('company_establishment_date')->nullable();
             $table->string('kra_pin')->nullable();
+            $table->string('postal_code')->nullable();
             $table->string('postal_address')->nullable();
-            $table->string('physical_address')->nullable();
             // Location
             $table->unsignedBigInteger('region_id')->nullable();
             $table->unsignedBigInteger('county_id')->nullable();
@@ -40,6 +40,17 @@ return new class extends Migration
             $table->string('street_name')->nullable();
             $table->string('building_name')->nullable();
             $table->string('plot_number')->nullable();
+
+            // COMMON
+            $table->string('millers_code')->nullable();
+            // DealerRegistration
+            $table->longText('brief_company_profile')->nullable();
+            $table->string('directors_of_dealership')->nullable();
+            $table->string('engaged_persons_professional_skills')->nullable();
+            $table->date('date_of_issue')->nullable();
+            $table->date('effective_date')->nullable();
+            $table->date('expiry_date')->nullable();
+
 
             $table->timestamps();
             $table->softDeletes();

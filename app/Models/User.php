@@ -13,9 +13,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 // Add
+use App\Models\Main\UserDealershipService;
 use App\Models\Settings\Role;
 use App\Models\Settings\Profile;
 use App\Models\Others\UserStatus;
+use App\Models\Others\DealerRegistrationStatus;
 
 class User extends Authenticatable
 {
@@ -59,6 +61,9 @@ class User extends Authenticatable
         'otp_expires_at',
         'otp_verified',
         'otp_used',
+
+        'registering_dealer_id',
+        'dealer_registration_status_id'
     ];
 
     /**
@@ -98,6 +103,21 @@ class User extends Authenticatable
      */
     public function status(){
         return $this->hasOne(UserStatus::class, 'id', 'status_id');
+    }
+
+
+    /**
+     * dealerRegistrationStatus
+     */
+    public function dealerRegistrationStatus(){
+        return $this->hasOne(DealerRegistrationStatus::class, 'id', 'dealer_registration_status_id');
+    }
+
+    /**
+     * dealershipServices
+     */
+    public function dealershipServices(){
+        return $this->hasMany(UserDealershipService::class, 'user_id', 'id');
     }
 
     /**

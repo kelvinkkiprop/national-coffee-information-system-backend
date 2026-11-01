@@ -436,7 +436,7 @@
                                 <div class="alert alert-success text-justify">
                                     <p class="m-1 text-dark">
                                         <b class="text-success text-capitalize">{{ $item->user?->name }}</b> is hereby authorized to <b class="text-success">buy clean coffee</b> only at the
-                                        exchange for <b class="text-success">export (local sale or value addition) or import (for secondary processing)</b> in Kenya, from <b class="text-success">
+                                        exchange for <b class="text-success">export (local sale or value addition) or import (for secondary processing)</b> in the Republic of Kenya, from <b class="text-success">
                                         {{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }} - {{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</b>.
                                     </p>
                                 </div>
@@ -475,7 +475,7 @@
                 </div>
                 <div class="bg-success rounded-bottom-5 text-light border-top-red py-2">
                     <div class="text-light text-center">
-                        <b class="p-5 text-sm"><i>Coffee Board of Kenya · Certificate of Quality</i></b>
+                        <b class="p-5 text-sm"><i>Coffee Board of Kenya ·Form D1</i></b>
                     </div>
                 </div>
             </footer>

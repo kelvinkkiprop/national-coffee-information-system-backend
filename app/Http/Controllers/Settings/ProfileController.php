@@ -42,8 +42,8 @@ class ProfileController extends Controller
             'company_registration_number' => 'nullable|string',
             'company_establishment_date' => 'nullable|date|before_or_equal:today',
             'kra_pin' => 'nullable|string',
+            'postal_code' => 'required|string',
             'postal_address' => 'required|string',
-            'physical_address' => 'required|string',
             // Location
             'region_id' => 'nullable|integer',
             'county_id' => 'nullable|integer',
@@ -73,8 +73,8 @@ class ProfileController extends Controller
             'company_registration_number' => $fields['company_registration_number'],
             'company_establishment_date' => $fields['company_establishment_date'],
             'kra_pin' => $fields['kra_pin'],
+            'postal_code' => $fields['postal_code'],
             'postal_address' => $fields['postal_address'],
-            'physical_address' => $fields['physical_address'],
             // Location
             'region_id' => $fields['region_id'],
             'county_id' => $fields['county_id'],
@@ -126,8 +126,8 @@ class ProfileController extends Controller
             'company_registration_number' => 'nullable|string',
             'company_establishment_date' => 'nullable|date|before_or_equal:today',
             'kra_pin' => 'nullable|string',
+            'postal_code' => 'required|string',
             'postal_address' => 'required|string',
-            'physical_address' => 'required|string',
             // Location
             'region_id' => 'nullable|integer',
             'county_id' => 'nullable|integer',
@@ -154,8 +154,8 @@ class ProfileController extends Controller
             'company_registration_number' => $fields['company_registration_number'],
             'company_establishment_date' => $fields['company_establishment_date'],
             'kra_pin' => $fields['kra_pin'],
+            'postal_code' => $fields['postal_code'],
             'postal_address' => $fields['postal_address'],
-            'physical_address' => $fields['physical_address'],
             // Location
             'region_id' => $fields['region_id'],
             'county_id' => $fields['county_id'],

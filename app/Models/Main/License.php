@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Add
 use App\Models\User;
 use App\Models\Main\Payment;
+use App\Models\Settings\IssuingBody;
 use App\Models\Settings\LicenseType;
 use App\Models\Settings\LicenseCategory;
 use App\Models\Others\LicenseStatus;
@@ -39,11 +40,16 @@ class License extends Model
         'id',
         'user_id',
         'application_number',
+        'issuing_body_id',
         'category_id',
         'type_id',
         'financial_year',
         'expiry_date',
+
+        // LiquoringLicense
+        'year_of_certification',
         'coffee_tasting_expert_certificate',
+
         'commitment_declaration',
         'date_of_gazettement_intent',
         'date_of_issue',
@@ -61,6 +67,7 @@ class License extends Model
     protected $casts = [
         'commitment_declaration' => 'boolean',
     ];
+
 
     /**
     * appends
@@ -92,6 +99,12 @@ class License extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    /**
+     * issuingBody
+     */
+    public function issuingBody(){
+        return $this->hasOne(IssuingBody::class, 'id', 'issuing_body_id');
+    }
     /**
      * type
      */

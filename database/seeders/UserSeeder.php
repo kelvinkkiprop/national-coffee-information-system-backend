@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             ["id"=>Str::uuid(), "name"=>"Regional Officers","email"=>"regional1@konza.go.ke","password"=>Hash::make("Incorrect"),"role_id"=>8, "email_verified_at"=>now(),"remember_token"=>Str::random(50),"created_at"=>now()],
             ["id"=>Str::uuid(), "name"=>"Chief Executive Officer","email"=>"ceo1@konza.go.ke","password"=>Hash::make("Incorrect"),"role_id"=>9, "email_verified_at"=>now(),"remember_token"=>Str::random(50),"created_at"=>now()],
             ["id"=>Str::uuid(), "name"=>"Coffee Grower","email"=>"grower1@konza.go.ke","password"=>Hash::make("Incorrect"),"role_id"=>10, "email_verified_at"=>now(),"remember_token"=>Str::random(50),"created_at"=>now()],
+            ["id"=>Str::uuid(), "name"=>"Registered Dealer","email"=>"dealer1@konza.go.ke","password"=>Hash::make("Incorrect"),"role_id"=>null, "email_verified_at"=>now(),"remember_token"=>Str::random(50),"created_at"=>now()],
         ];
         User::insert($items);
     }

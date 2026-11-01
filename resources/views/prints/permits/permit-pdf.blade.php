@@ -121,7 +121,7 @@
                 <div class="my-2">
                     <p class="text-justify">
                         The Coffee Board of Kenya hereby authorizes <b><u>@if($item->user){{ $item->user?->name }}@endif</u></b>
-                        @if($item->user?->profile)Address {{ $item->user?->profile?->postal_address }} {{ $item->user?->profile?->physical_address }}
+                        @if($item->user?->profile)Address {{ $item->user?->profile?->postal_address }} {{ $item->user?->profile?->postal_address }}
                         County:<b><u>&nbsp;{{$item->user?->profile?->county?->name}}&nbsp;</u></b> Sub County:<b><u>&nbsp;{{$item->user?->profile?->subCounty?->name}}&nbsp;</u></b>
                         Ward:<b><u>&nbsp;{{$item->user?->profile?->ward?->name}}&nbsp;</u></b>Street Name:<b><u>&nbsp;{{$item->user?->profile?->street_name}}&nbsp;</u></b>
                         Plot Number:<b><u>&nbsp;{{$item->user?->profile?->plot_number}}&nbsp;</u></b>@endif

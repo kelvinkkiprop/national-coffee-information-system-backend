@@ -32,6 +32,9 @@ return new class extends Migration
             $table->boolean('otp_verified')->default(false);
             $table->boolean('otp_used')->default(false);
 
+            $table->uuid('registering_dealer_id')->nullable();
+            $table->unsignedBigInteger('dealer_registration_status_id')->default(3);
+
             $table->timestamps();
             $table->softDeletes();
         });

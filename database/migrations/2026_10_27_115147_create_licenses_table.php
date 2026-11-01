@@ -16,11 +16,22 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable();
             $table->string('application_number')->unique();
+            $table->unsignedBigInteger('issuing_body_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
             $table->string('financial_year')->nullable();
             $table->date('expiry_date')->nullable();
+
+            // CBK
+            // LiquoringLicense
+            $table->string('year_of_certification')->nullable();
             $table->string('coffee_tasting_expert_certificate')->nullable();
+            // CommercialMillersLicence
+            $table->string('milling_capacity')->nullable();
+
+            // COUNTY
+            $table->unsignedBigInteger('county_id')->nullable();
+
             $table->boolean('commitment_declaration')->default(true);
             $table->date('date_of_gazettement_intent')->nullable();
             $table->date('date_of_issue')->nullable();

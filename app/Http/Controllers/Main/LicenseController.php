@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Main\License;
 use App\Models\Main\Payment;
+use App\Models\Settings\IssuingBody;
 use App\Models\Settings\Tariff;
 use App\Models\Settings\LicenseType;
 use App\Models\Settings\LicenseCategory;
@@ -32,10 +33,10 @@ class LicenseController extends Controller
         $mCurrentUser= auth()->user();
         $mCurrentUser?->load('role');
         // return $mCurrentUser->role?->type_id;
-        if($mCurrentUser->role?->type_id==2){
-            return License::with(['user','type','category','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
+        if($mCurrentUser->role?->type_id==1){
+            return License::with(['user','type','issuingBody','category','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
         }else{
-            return License::with(['user','type','category','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
+            return License::with(['user','type','issuingBody','category','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
         }
     }
 
@@ -46,10 +47,11 @@ class LicenseController extends Controller
     {
         $fields = $request->validate([
             'category_id' => 'required|integer',
+            'issuing_body_id' => 'required|integer',
             'type_id' => 'required|integer',
             'financial_year' => 'required|string',
             'expiry_date' => 'required|date',
-            'coffee_tasting_expert_certificate' => 'nullable|required_if:type_id,5|file|mimes:pdf|max:40960',
+            'coffee_tasting_expert_certificate' => 'nullable|required_if:type_id,4|file|mimes:pdf|max:40960',
             'commitment_declaration' => 'required|string',
         ]);
 
@@ -61,14 +63,17 @@ class LicenseController extends Controller
         }
 
         // WithSoftDelete
+        $mIssuingBody = IssuingBody::find($fields['issuing_body_id']);
+        $mType = LicenseType::find($fields['type_id']);
         $nextNumber = License::withTrashed()->count()+1;
-        $mApplicationNumber = 'LI/'.date('Y').'/'.$nextNumber;
+        $mApplicationNumber = $mIssuingBody->alias.'/'.$mType->index_number_prefix.'/'.date('Y').'/'.$nextNumber;
         $paymentId = (string)Str::uuid();
         $mCurrentUser= auth()->user();
         $item = License::create([
             'user_id' => $mCurrentUser->id,
             'application_number' => $mApplicationNumber,
             'category_id' => $fields['category_id'],
+            'issuing_body_id' => $fields['issuing_body_id'],
             'type_id' => $fields['type_id'],
             'financial_year' => $fields['financial_year'],
             'expiry_date' => $fields['expiry_date'],
@@ -81,17 +86,17 @@ class LicenseController extends Controller
         // $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
         $mInvoiceNumber = 'IN//'.date('Y').'//'.$nextNumber;
         $mTariffId = 2;
-        $payment = Payment::updateOrCreate(['id' => $paymentId],[
-            'id' => $paymentId,
-            'invoice_number' => $mInvoiceNumber,
-            'user_id' => $mCurrentUser->id,
-            'amount' => Tariff::find($mTariffId)->amount,
-            'format' => 'json',
-            'service_id' => 2,
-            'tariff_id' => $mTariffId,
-        ]);
+        $payment = null;
+        // $payment = Payment::updateOrCreate(['id' => $paymentId],[
+        //     'id' => $paymentId,
+        //     'invoice_number' => $mInvoiceNumber,
+        //     'user_id' => $mCurrentUser->id,
+        //     'amount' => Tariff::find($mTariffId)->amount,
+        //     'format' => 'json',
+        //     'service_id' => 2,
+        //     'tariff_id' => $mTariffId,
+        // ]);
 
-        $mType = LicenseType::find($fields['type_id']);
         // Notification
         $email = $mCurrentUser->email;
         $subject = 'License Application - Acknowledgement';
@@ -150,7 +155,7 @@ class LicenseController extends Controller
      */
     public function show(string $id)
     {
-        return License::with(['user','type','category','status','payment.status'])->find($id);
+        return License::with(['user','type','issuingBody','category','status','payment.status'])->find($id);
     }
 
     /**
@@ -163,7 +168,7 @@ class LicenseController extends Controller
             'type_id' => 'required|integer',
             'financial_year' => 'required|string',
             'expiry_date' => 'required|date',
-            'coffee_tasting_expert_certificate' => 'nullable|required_if:type_id,5|file|mimes:pdf|max:40960',
+            'coffee_tasting_expert_certificate' => 'nullable|required_if:type_id,4|file|mimes:pdf|max:40960',
             'commitment_declaration' => 'required|string',
         ]);
 
@@ -289,7 +294,7 @@ class LicenseController extends Controller
         $term = $fields['search_term'];
         $items = null;
         if($mCurrentUser->role?->type_id==2){
-            $items = License::with(['user','type','category','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
+            $items = License::with(['user','type','issuingBody','category','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
@@ -305,7 +310,7 @@ class LicenseController extends Controller
                 });
             })->orderBy('created_at', 'desc')->get();
          }else{
-            $items = License::with(['user','type','category','status','payment.status'])->where(function($query) use($term){
+            $items = License::with(['user','type','issuingBody','category','status','payment.status'])->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
@@ -335,6 +340,7 @@ class LicenseController extends Controller
      */
     public function unpaginatedItems()
     {
+        $issuing_bodies = IssuingBody::orderBy('id', 'asc')->get();
         $license_types = LicenseType::orderBy('id', 'asc')->get();
         $license_categories = LicenseCategory::orderBy('id', 'asc')->get();
 
@@ -342,6 +348,7 @@ class LicenseController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [
+                'issuing_bodies' => $issuing_bodies,
                 'license_types' => $license_types,
                 'license_categories' => $license_categories,
             ]
@@ -352,11 +359,19 @@ class LicenseController extends Controller
 
 
     /**
+     * filterLicenseTypes
+     */
+    public function filterLicenseTypes($issuing_body_id)
+    {
+        return LicenseType::where('issuing_body_id', $issuing_body_id)->orderBy('name', 'asc')->get();
+    }
+
+    /**
      * generateLicensePdf
      */
     public function generateLicensePdf($id)
     {
-        $item = License::with(['user','type','category','status'])->find($id);
+        $item = License::with(['user','type','issuingBody','category','status'])->find($id);
         // return $item;
         // return view('prints.licenses.coffee-buyer-license-pd')->with('item', $item);
 
@@ -370,11 +385,18 @@ class LicenseController extends Controller
             'date_printed' => $datePrinted,
         ];
         // return $data;
-        if($item->type_id==1){//CoffeeBuyer
-            $dompdf = PDF::loadView('prints.licenses.coffee-buyer-license-pdf', $data)->setPaper('a4', 'potrait');
-        }elseif($item->type_id==3){//CoffeeAgent
-        // }else{
+        if($item->type_id==1){//CoffeeAgent
             $dompdf = PDF::loadView('prints.licenses.coffee-agent-license-pdf', $data)->setPaper('a4', 'potrait');
+        }elseif($item->type_id==2){//CoffeeBuyer
+            $dompdf = PDF::loadView('prints.licenses.coffee-buyer-license-pdf', $data)->setPaper('a4', 'potrait');
+        }elseif($item->type_id==3){//WarehouseOperator
+            $dompdf = PDF::loadView('prints.licenses.coffee-warehouse-operator-license-pdf', $data)->setPaper('a4', 'potrait');
+        }elseif($item->type_id==4){//CoffeeLiquor
+            $dompdf = PDF::loadView('prints.licenses.coffee-liquoring-license-pdf', $data)->setPaper('a4', 'potrait');
+        }elseif($item->type_id==5){//CoffeeCommercialMillers
+            $dompdf = PDF::loadView('prints.licenses.coffee-commercial-milling-license-pdf', $data)->setPaper('a4', 'potrait');
+        }elseif($item->type_id==6){//IndependentCuppingLab
+            $dompdf = PDF::loadView('prints.licenses.independent-cupping-lab-license-pdf', $data)->setPaper('a4', 'potrait');
         }else{
             $response = [
                 'status' => 'failed',

@@ -9,12 +9,14 @@ use App\Http\Controllers\Main\UserController;
 use App\Http\Controllers\Main\PermitController;
 use App\Http\Controllers\Main\PaymentController;
 use App\Http\Controllers\Main\LicenseController;
+use App\Http\Controllers\Main\DealerRegistrationController;;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\ProfileController;
 // Others
 use App\Http\Controllers\Others\ProcessPermitController;
 use App\Http\Controllers\Others\ProcessLicenseController;
+use App\Http\Controllers\Others\ProcessDealerRegistrationController;
 
 
 Route::get('/user', function (Request $request) {
@@ -54,6 +56,31 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
 /*
 |======================================================================
+| DealerRegistrationController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('dealer-registrations', DealerRegistrationController::class);
+    Route::post('search-dealer-registrations', [DealerRegistrationController::class, 'searchItems']);
+    Route::get('unpaginated-items-dealer-registrations', [DealerRegistrationController::class, 'unpaginatedItems']);
+    Route::get('certificate-pdf/{id}', [DealerRegistrationController::class, 'generateCertificatePdf']);
+});
+// Route::get('certificate-pdf/{id}', [DealerRegistrationController::class, 'generateCertificatePdf']);
+Route::get('verify-certificate/{id}', [DealerRegistrationController::class, 'verifyCertificate']);
+
+/*
+|======================================================================
+| ProcessDealerRegistrationController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::get('next-previous-status-process-dealer-registrations/{id}', [ProcessDealerRegistrationController::class, 'nextPreviousItems']);
+    Route::post('review-process-dealer-registrations/{id}', [ProcessDealerRegistrationController::class, 'reviewApplicationItem']);
+});
+
+
+/*
+|======================================================================
 | PermitController
 |======================================================================
 */
@@ -88,6 +115,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('search-licenses', [LicenseController::class, 'searchItems']);
     Route::get('unpaginated-items-licenses', [LicenseController::class, 'unpaginatedItems']);
     // Route::get('licenses-pdf/{id}', [LicenseController::class, 'generateLicensePdf']);
+
+    Route::get('filter-license-types/{id}', [LicenseController::class, 'filterLicenseTypes']);
 });
 Route::get('licenses-pdf/{id}', [LicenseController::class, 'generateLicensePdf']);
 Route::get('verify-license/{id}', [LicenseController::class, 'verifyLicense']);
@@ -115,10 +144,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('unpaginated-items-payments', [PaymentController::class, 'unpaginatedItems']);
 
     Route::get('generate-invoice-payments/{id}', [PaymentController::class, 'invoiceItem']);
-    // Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
+    Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
     Route::get('settled-payments/{id}', [PaymentController::class, 'settledItem']);
 });
-Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
+// Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
 
 
 /*
