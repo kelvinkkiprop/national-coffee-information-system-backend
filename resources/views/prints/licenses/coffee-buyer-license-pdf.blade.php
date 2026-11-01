@@ -51,6 +51,9 @@
             .border-success {
                 border: 3px solid #1d5b32;
             }
+            .border-danger {
+                border: 1px solid #9b1d2d;
+            }
             .border-bottom-red {
                 border-bottom: 3px solid #9b1d2d;
             }
@@ -361,7 +364,7 @@
                 <div class="row-print">
                     <div class="col-print-2 text-center">
                         <div class="logo-wrapper bg-light rounded-circle border-danger">
-                            <img class="img-fluid1" id="logo" src="./images/coffee_board_logo.png" width="86" height="86" alt="Logo">
+                            <img id="logo" src="./images/coffee_board_logo.png" width="86" height="86" alt="Logo">
                         </div>
                     </div>
                     <div class="col-print-8">
@@ -372,7 +375,7 @@
                     </div>
                     <div class="col-print-2 text-center">
                         <div class="logo-wrapper bg-light rounded-5 border-danger">
-                            <img class="img-fluid1" id="logo" src="./images/mark_of_origin.png" width="102" height="86" alt="Mark of Origin">
+                            <img id="logo" src="./images/mark_of_origin.png" width="102" height="86" alt="Mark of Origin">
                         </div>
                     </div>
                 </div>
@@ -387,20 +390,20 @@
                     <div class="container row-print">
                         <div class="col-print-3">
                             <div class="alert alert-success rounded-5">
-                                <p class="m-0 text-muted text-xs">License No</p>
-                                <h6 class="m-0 text-dark">{{ $item->application_number }}</h6>
+                                <p class="m-0 text-muted text-sm">License No</p>
+                                <h5 class="m-0 text-dark">{{ $item->application_number }}</h5>
                             </div>
                         </div>
                         <div class="col-print-3">
                             <div class="alert alert-success">
-                                <p class="m-0 text-muted text-xs">Valid From</p>
-                                <h6 class="m-0 text-dark">{{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }}</h6>
+                                <p class="m-0 text-muted text-sm">Valid From</p>
+                                <h5 class="m-0 text-dark">{{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }}</h5>
                             </div>
                         </div>
                         <div class="col-print-3">
                             <div class="alert alert-success">
-                                <p class="m-0 text-muted text-xs">Valid To</p>
-                                <h6 class="m-0 text-dark">{{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</h6>
+                                <p class="m-0 text-muted text-sm">Valid To</p>
+                                <h5 class="m-0 text-dark">{{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -431,9 +434,11 @@
                             </fieldset>
                             <div class="my-4">
                                 <div class="alert alert-success text-justify">
-                                    <p class="m-1"><b class="text-capitalize">{{ $item->user?->role?->name }}</b> <span class="text-dark">is hereby authorized to</span> <b>buy clean coffee</b>
-                                    <span class="text-dark">only at the exchange for</span> <b>export (local sale or value addition) or import (for secondary processing)</b> <span class="text-dark">in Kenya,
-                                    from </span><b>{{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }} - {{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</b>.</p>
+                                    <p class="m-1 text-dark">
+                                        <b class="text-success text-capitalize">{{ $item->user?->name }}</b> is hereby authorized to <b class="text-success">buy clean coffee</b> only at the
+                                        exchange for <b class="text-success">export (local sale or value addition) or import (for secondary processing)</b> in Kenya, from <b class="text-success">
+                                        {{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }} - {{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</b>.
+                                    </p>
                                 </div>
                             </div>
                             <fieldset class="my-4">
@@ -441,11 +446,11 @@
                                     <h5 class="m-0 py-1 px-4 text-uppercase">Terms &amp; Conditions</h5>
                                 </legend>
                                 <div class="my-2 text-justify1">
-                                    <p class="m-1"><b class="text-danger">1. </b>A licensed buyer shall submit trading returns to the Board on a monthly basis.</p>
-                                    <p class="m-1"><b class="text-danger">2. </b>The licensed buyer shall comply with the Kenya Coffee Industry Standards and Code of Practice.</p>
-                                    <p class="m-1"><b class="text-danger">3. </b>The licensed buyer shall allow free access to the premises by inspectors authorized by the Board.</p>
-                                    <p class="m-1"><b class="text-danger">4. </b>The Board may vary, suspend or revoke this license if the holder fails to abide by its terms and conditions.</p>
-                                    <p class="m-1"><b class="text-danger">5. </b>The coffee buyer's license does not include authority to engage in direct sale.</p>
+                                    <p class="m-1"><b class="text-danger">1. </b>A licensed buyer shall submit trading returns to the Board on a monthly basis;</p>
+                                    <p class="m-1"><b class="text-danger">2. </b>The licensed buyer shall comply with the Kenya Coffee Industry Standards and Code of Practice;</p>
+                                    <p class="m-1"><b class="text-danger">3. </b>The licensed buyer shall allow free access to the premises by inspectors authorized by the Board;</p>
+                                    <p class="m-1"><b class="text-danger">4. </b>The Board may vary, suspend or revoke this license if the holder fails to abide by its terms and conditions;</p>
+                                    <p class="m-1"><b class="text-danger">5. </b>The coffee buyer's license does not include the Board engaging in direct sale; and</p>
                                     <p class="m-1"><b class="text-danger">6. </b>The coffee buyer's license is not transferable.</p>
                                 </div>
                             </fieldset>
@@ -459,7 +464,7 @@
                         <div class="my-5">
                             <p class="m-1 text-xs text-muted">Date Printed</p>
                             <h6 class="m-1">{{ Carbon\Carbon::parse($date_printed)->format('d-M-Y') }}</h6>
-                            <p class="m-1 text-xs text-muted">Valid without a signature, scan the QR code to verify</p>
+                            <p class="m-1 text-xs text-muted">This document is valid without a signature. Scan the QR code to verify.</p>
                         </div>
                     </div>
                     <div class="col-print-6">

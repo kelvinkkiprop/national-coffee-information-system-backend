@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>NCIS | Coffee Movement Permit</title>
+        <title>NCIS | Template</title>
         <style>
             @page {
                 size: A4;
@@ -46,15 +46,13 @@
                 left: -0 !important;
                 right: -4px !important;
                 width: auto;
-                /* text-align: center; */
-            }
-
-            .opacity-75 {
-                opacity: 0.75;
             }
 
             .border-success {
                 border: 3px solid #1d5b32;
+            }
+             .border-danger {
+                border: 1px solid #9b1d2d;
             }
             .border-bottom-red {
                 border-bottom: 3px solid #9b1d2d;
@@ -109,11 +107,12 @@
             .text-right {
                 text-align: right;
             }
-
+            .text-justify {
+                text-align: justify !important;
+            }
             .text-xs {
                 font-size: 11px;
             }
-
             .text-sm {
                 font-size: 12px;
             }
@@ -123,13 +122,13 @@
             .text-xxs {
                 font-size: 8px;
             }
+
             .row-print {
                 display: table;
                 width: 100%;
                 table-layout: fixed;
                 border-collapse: collapse;
             }
-
             .row-print > [class*="col-print-"] {
                 display: table-cell;
                 vertical-align: top;
@@ -194,9 +193,6 @@
             .rounded-circle {
                 border-radius: 50%;
             }
-            .rounded-pill {
-                border-radius: 50rem;
-            }
             .rounded-top-5 {
                 border-top-left-radius: 1.7rem;
                 border-top-right-radius: 1.7rem;
@@ -204,18 +200,6 @@
             .rounded-bottom-5 {
                 border-bottom-left-radius: 1.7rem;
                 border-bottom-right-radius: 1.7rem;
-            }
-            .rounded-bottom {
-                border-bottom-left-radius: 0.375rem;
-                border-bottom-right-radius: 0.375rem;
-            }
-            .rounded-start {
-                border-top-left-radius: 0.375rem;
-                border-bottom-left-radius: 0.375rem;
-            }
-            .rounded-end {
-                border-top-right-radius: 0.375rem;
-                border-bottom-right-radius: 0.375rem;
             }
 
             .m-0  {
@@ -237,22 +221,28 @@
                 margin: 3rem !important;
             }
             .my-0 {
-                margin-top: 0 !important; margin-bottom: 0 !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
             }
             .my-1 {
-                margin-top: 0.25rem !important; margin-bottom: 0.25rem !important;
+                margin-top: 0.25rem !important;
+                margin-bottom: 0.25rem !important;
             }
             .my-2 {
-                margin-top: 0.5rem !important; margin-bottom: 0.5rem !important;
+                margin-top: 0.5rem !important;
+                margin-bottom: 0.5rem !important;
             }
             .my-3 {
-                margin-top: 1rem !important; margin-bottom: 1rem !important;
+                margin-top: 1rem !important;
+                margin-bottom: 1rem !important;
             }
             .my-4 {
-                margin-top: 1.5rem !important; margin-bottom: 1.5rem !important;
+                margin-top: 1.5rem !important;
+                margin-bottom: 1.5rem !important;
             }
             .my-5 {
-                margin-top: 3rem !important; margin-bottom: 3rem !important;
+                margin-top: 3rem !important;
+                margin-bottom: 3rem !important;
             }
             .p-0  {
                 padding: 0 !important;
@@ -273,7 +263,8 @@
                 padding: 3rem !important;
             }
             .py-0 {
-                padding-top: 0 !important; padding-bottom: 0 !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
             }
             .px-1 {
                 padding-left: 0.25rem !important;
@@ -330,7 +321,6 @@
                 border-radius: 0.375rem;
                 box-sizing: border-box;
             }
-
             .alert-success {
                 color: #0f5132;
                 background-color: #d1e7dd;
@@ -342,7 +332,6 @@
                 border-color: #f5c2c7;
             }
 
-
             .container {
                 width: 100%;
                 padding-right: 12px;
@@ -351,7 +340,6 @@
                 margin-left: auto;
                 box-sizing: border-box;
             }
-
             fieldset {
                 border: 1px solid #d1e7dd;
             }
@@ -368,6 +356,32 @@
                 padding-bottom: 1.2px;
                 line-height: normal;
             }
+            .table-bordered {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                border: 1px solid #d1e7dd;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .table-bordered th,
+            .table-bordered td {
+                border-right: 1px solid #d1e7dd;
+                border-bottom: 1px solid #d1e7dd;
+                padding: 6px;
+            }
+            .table-bordered th {
+                background-color: #d1e7dd;
+                color: #ffffff;
+                font-weight: bold;
+            }
+            .table-bordered tr:last-child td {
+                border-bottom: none;
+            }
+            .table-bordered th:last-child,
+            .table-bordered td:last-child {
+                border-right: none;
+            }
         </style>
     </head>
     <body>
@@ -376,7 +390,7 @@
                 <div class="row-print">
                     <div class="col-print-2 text-center">
                         <div class="logo-wrapper bg-light rounded-circle border-danger">
-                            <img class="img-fluid1" id="logo" src="./images/coffee_board_logo.png" width="86" height="86" alt="Logo">
+                            <img id="logo" src="./images/coffee_board_logo.png" width="86" height="86" alt="Logo">
                         </div>
                     </div>
                     <div class="col-print-8">
@@ -387,7 +401,7 @@
                     </div>
                     <div class="col-print-2 text-center">
                         <div class="logo-wrapper bg-light rounded-5 border-danger">
-                            <img class="img-fluid1" id="logo" src="./images/mark_of_origin.png" width="102" height="86" alt="Mark of Origin">
+                            <img id="logo" src="./images/mark_of_origin.png" width="102" height="86" alt="Mark of Origin">
                         </div>
                     </div>
                 </div>
@@ -396,26 +410,26 @@
                 <div>
                     <div class="text-center my-3">
                         <h6 class="m-0">THE COFFEE ACT (No. 8 of 2026)</h6>
-                        <h6 class="m-0 text-muted">THE COFFEE (GENERAL) REGULATIONS, 2026 · FIRST SCHEDULE (r. ……)</h6>
-                        <h2 class="m-0 text-success">COFFEE BUYER'S LICENCE</h2>
+                        <h6 class="m-0 text-muted">THE COFFEE (GENERAL) REGULATIONS, 2026</h6>
+                        <h2 class="m-0 text-success">COFFEE MOVEMENT PERMIT</h2>
                     </div>
                     <div class="container row-print">
                         <div class="col-print-3">
                             <div class="alert alert-success rounded-5">
-                                <p class="m-0 text-muted text-xs">License No</p>
-                                <h6 class="m-0 text-dark">CBK/CB/2026/001</h6>
+                                <p class="m-0 text-muted text-sm">Permit No</p>
+                                <h5 class="m-0 text-dark">{{ $item->application_number }}</h5>
                             </div>
                         </div>
                         <div class="col-print-3">
                             <div class="alert alert-success">
-                                <p class="m-0 text-muted text-xs">Valid From</p>
-                                <h6 class="m-0 text-dark">17 Aug-2026</h6>
+                                <p class="m-0 text-muted text-sm">Valid From</p>
+                                <h5 class="m-0 text-dark">{{ Carbon\Carbon::parse($item->effective_date)->format('d M, Y') }}</h5>
                             </div>
                         </div>
                         <div class="col-print-3">
                             <div class="alert alert-success">
-                                <p class="m-0 text-muted text-xs">Valid To</p>
-                                <h6 class="m-0 text-dark">17 Aug-2026</h6>
+                                <p class="m-0 text-muted text-sm">Valid Until</p>
+                                <h5 class="m-0 text-dark">{{ Carbon\Carbon::parse($item->expiry_date)->format('d M, Y') }}</h5>
                             </div>
                         </div>
                     </div>
@@ -428,42 +442,58 @@
                                 <div class="my-2">
                                     <div class="row-print">
                                         <div class="col-print-6">
-                                            <p class="m-1"><span class="text-muted">Category:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">Name of Applicant:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">Registration/Licence No:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">County:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">Town / City:</span> <span class="dotted-underline">Grower-Miller</u></p>
+                                            <p class="m-1"><span class="text-muted">Name:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Email:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->email }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Town/City:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->town }}</u></p>
+                                            <p class="m-1"><span class="text-muted">County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->county?->name}}</u></p>
+                                            <p class="m-1"><span class="text-muted">Ward:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->ward?->name}}</u></p>
                                         </div>
                                         <div class="col-print-6">
-                                            <p class="m-1">&nbsp;</p>
-                                            <p class="m-1"><span class="text-muted">Mobile No:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">Email:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">L.R. No./Plot No:</span> <span class="dotted-underline">Grower-Miller</u></p>
-                                            <p class="m-1"><span class="text-muted">Street:</span> <span class="dotted-underline">Grower-Miller</u></p>
+                                            <p class="m-1"><span class="text-muted">Registration No:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->application_number }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Mobile No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->phone_number }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Street/Road:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->street_name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Sub County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->subCounty?->name}}</u></p>
+                                            <p class="m-1"><span class="text-muted">L.R. No./Plot No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->plot_number }}</u></p>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <div class="my-4">
-                                <div class="alert alert-success">
-                                    <p class="m-1"><b>STEP SOLUTIONS LIMITED</b> <span class="text-dark">is hereby authorized to</span> <b>buy clean coffee</b>
-                                        <span class="text-dark">only at the exchange for</span> <b>export, local sale or value addition</b> <span class="text-dark">in Kenya,
-                                        from </span><b>17 Aug-2026 - 30 Jun-2027</b>.</p>
+                                <div class="alert alert-success text-justify">
+                                    <p class="m-1 text-dark">
+                                        <b class="text-success text-capitalize">{{ $item->user?->name }}</b> is hereby authorized to move <b class="text-success">{{ $item->number_of_bags }} bags</b>
+                                        of <b class="text-success">{{ $item->coffeeSpecies?->name }} {{ $item->coffeeForm?->alias }}</b> marks <b class="text-success">{{ $item->mark }},</b>
+                                        from <b class="text-success">{{$item->origin }} - {{ $item->destination }}</b>, by Lorry/Wagon Reg. No. <b class="text-success">{{ $item->vehicle_registration_number }}</b>,
+                                        a distance of <b class="text-success">{{ $item->distance }}km</b> driven by <b class="text-success">{{ $item->driver_name }} ({{ $item->driver_id_number }})</b>,
+                                        starting <b class="text-success">{{ Carbon\Carbon::parse($item->effective_date)->format('l, jS F Y') }}</b>.
+                                    </p>
                                 </div>
                             </div>
                             <fieldset class="my-4">
-                                <legend class="bg-danger text-light rounded-4 px-2">
-                                    <h5 class="m-0 py-1 px-4 text-uppercase">Terms &amp; Conditions</h5>
+                                <legend class="bg-success text-light rounded-4 px-2">
+                                    <h5 class="m-0 py-1 px-4 text-uppercase">Other</h5>
                                 </legend>
-                                <div class="text-justify">
-                                    <p class="m-1"><b class="text-danger">1. </b>A licensed buyer shall submit trading returns to the Board on a monthly basis.</p>
-                                    <p class="m-1"><b class="text-danger">2. </b>The licensed buyer shall comply with the Kenya Coffee Industry Standards and Code of Practice.</p>
-                                    <p class="m-1"><b class="text-danger">3. </b>The licensed buyer shall allow free access to the premises by inspectors authorized by the Board.</p>
-                                    <p class="m-1"><b class="text-danger">4. </b>The Board may vary, suspend or revoke this licence if the holder fails to abide by its terms and conditions.</p>
-                                    <p class="m-1"><b class="text-danger">5. </b>The coffee buyer's licence does not include authority to engage in direct sale.</p>
-                                    <p class="m-1"><b class="text-danger">6. </b>The coffee buyer's licence is not transferable</p>
+                                <div class="my-2">
+                                    <div class="row-print">
+                                        <div class="col-print-6">
+                                            <p class="m-1"><span class="text-muted">Coffee Type:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->coffeeSpecies?->name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Marks:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->mark }}</u></p>
+                                        </div>
+                                        <div class="col-print-6">
+                                            <p class="m-1"><span class="text-muted">Warehouse Receipt No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->warehouse_receipt_number }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Bags (60 kg):</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->number_of_bags }}</u></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </fieldset>
+                            <div class="my-4">
+                                <div class="border-danger rounded-4 text-center">
+                                    <h5 class="my-1 text-danger">THIS PERMIT IS NOT VALID BETWEEN 6.30 P.M - 6.30 A.M</h5>
+                                    <p class="my-1 text-muted text-sm">
+                                      Valid only for the coffee and vehicle(s) listed, within the validity period. Carry this original in the vehicle and produce it on demand.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -473,8 +503,8 @@
                     <div class="col-print-6">
                         <div class="my-5">
                             <p class="m-1 text-xs text-muted">Date Printed</p>
-                            <h6 class="m-1">17-Aug-2026</h6>
-                            <p class="m-1 text-xs text-muted">Valid without a signature. Verify by scanning the QR code.</p>
+                            <h6 class="m-1">{{ Carbon\Carbon::parse($date_printed)->format('d-M-Y') }}</h6>
+                            <p class="m-1 text-xs text-muted">Valid without a signature, scan the QR code to verify</p>
                         </div>
                     </div>
                     <div class="col-print-6">
@@ -483,9 +513,31 @@
                         </p>
                     </div>
                 </div>
+                <div class="container row-print my-2">
+                    <div class="col-print-12">
+                        <fieldset>
+                            <legend class="bg-danger text-light rounded-4 px-2">
+                                <h5 class="m-0 py-1 px-4 text-uppercase1">ENDORSEMENT ON RECEIPT · Receiving Miller/Warehouse/Port Officer</h5>
+                            </legend>
+                            <div class="my-2 text-justify1">
+                                <table class="table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-muted text-sm">Received By<br/><p class="m-1">&nbsp;</p></td>
+                                            <td class="text-muted text-sm">Premise Code<br/><p class="m-1">&nbsp;</p></td>
+                                            <td class="text-muted text-sm">Net Weight(kg)<br/><p class="m-1">&nbsp;</p></td>
+                                            <td class="text-muted text-sm">Date &amp; Time<br/><p class="m-1">&nbsp;</p></td>
+                                            <td class="text-muted text-sm">Signature &amp; Stamp<br/><p class="m-1">&nbsp;</p></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
                 <div class="bg-success rounded-bottom-5 text-light border-top-red py-2">
-                    <div class="text-light">
-                        <b class="p-5 text-sm">Coffee Board of Kenya · Certificate of Quality</b>
+                    <div class="text-light text-center">
+                        <b class="p-5 text-sm"><i>Coffee Board of Kenya · Form Q</i></b>
                     </div>
                 </div>
             </footer>

@@ -362,10 +362,10 @@ class PermitController extends Controller
     {
         $item = Permit::with(['user','type','status','coffeeSpecies','coffeeForm'])->find($id);
         // return $item;
-        // return view('prints.permits.permit-pdf')->with('item', $item);
+        // return view('prints.permits.coffee-movement-permit-pdf')->with('item', $item);
 
         $verificationUrl = url(config('app.asset_url').'/api/verify-permit/' . $item->id);
-        $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->backgroundColor(244, 235, 225)->generate($verificationUrl));
+        $qrCode = base64_encode(QrCode::format('svg')->size(150)->margin(1)->generate($verificationUrl));
         $datePrinted = Carbon::now();
         $data = [
             'title' => $item->application_number,
@@ -374,7 +374,7 @@ class PermitController extends Controller
             'date_printed' => $datePrinted,
         ];
         // return $data;
-        $dompdf = PDF::loadView('prints.permits.permit-pdf', $data)->setPaper('a4', 'potrait');
+        $dompdf = PDF::loadView('prints.permits.coffee-movement-permit-pdf', $data)->setPaper('a4', 'potrait');
         $name = preg_replace('/[^A-Za-z0-9_-]/','-',$item->application_number).'- Permit';
 
         $dompdf->output();
