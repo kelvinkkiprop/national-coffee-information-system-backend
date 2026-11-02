@@ -46,11 +46,35 @@ class License extends Model
         'financial_year',
         'expiry_date',
 
-        // LiquoringLicense
+        // 1.AgentLicense
+        'paid_share_capital',
+        'directors_details',
+        'years_of_technical_experience',
+        'growers_represented_and_signed_agreements',
+        'indemnity_against_professional_misconduct',
+        'liquorer_cupping_facility_engaged',
+        // 2.BuyerLicense
+        'license_purpose',
+        // 3.WarehouseOperatorLicense
+        'directors_name_address_and_occupations',
+        // 4.LiquoringLicense
         'year_of_certification',
+        'current_occupation',
         'coffee_tasting_expert_certificate',
+        // 5.CommercialMillersLicence
+        'milling_capacity',
+        'comprehensive_insurance_policy',
+        'mill_certification',
+        // 6.IndependentCuppingLabsLicence
+        'company_officials',
+        'licensed_liquorers_engaged',
+        'laboratory_facilities',
+        'services_to_be_offered',
+        'statutory_compliance',
 
+        'self_declaration_form',
         'commitment_declaration',
+
         'date_of_gazettement_intent',
         'date_of_issue',
         'effective_date',
@@ -73,16 +97,116 @@ class License extends Model
     * appends
     */
     protected $appends = [
+        'directors_details_url',
+        'years_of_technical_experience_url',
+        'growers_represented_and_signed_agreements_url',
+        'indemnity_against_professional_misconduct_url',
         'coffee_tasting_expert_certificate_url',
+        'comprehensive_insurance_policy_url',
+        'mill_certification_url',
+        'company_officials_url',
+        'statutory_compliance_url',
+        'self_declaration_form_url',
     ];
+
 
 
     /**
     * getters_and_setters
     */
+    public function getDirectorsDetailsUrlAttribute()
+    {
+        $value = $this->directors_details;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getYearsOfTechnicalExperienceUrlAttribute()
+    {
+        $value = $this->years_of_technical_experience;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getGrowersRepresentedAndSignedAgreementsUrlAttribute()
+    {
+        $value = $this->growers_represented_and_signed_agreements;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getIndemnityAgainstProfessionalMisconductUrlAttribute()
+    {
+        $value = $this->indemnity_against_professional_misconduct;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
     public function getCoffeeTastingExpertCertificateUrlAttribute()
     {
         $value = $this->coffee_tasting_expert_certificate;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getComprehensiveInsurancePolicyUrlAttribute()
+    {
+        $value = $this->comprehensive_insurance_policy;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getMillCertificationUrlAttribute()
+    {
+        $value = $this->mill_certification;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getCompanyOfficialsUrlAttribute()
+    {
+        $value = $this->company_officials;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getStatutoryComplianceUrlAttribute()
+    {
+        $value = $this->statutory_compliance;
+        if(is_null($value)){
+            return null;
+        }else{
+            $path = config('app.asset_url').config('app.paths.file_download');
+            return $path.$value;
+        }
+    }
+    public function getSelfDeclarationFormUrlAttribute()
+    {
+        $value = $this->self_declaration_form;
         if(is_null($value)){
             return null;
         }else{

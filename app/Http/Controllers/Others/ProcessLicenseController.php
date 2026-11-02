@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Main\License;
+use App\Models\Settings\CommitteeMember;
 use App\Models\Others\LicenseStatus;
 // Notifications
 use Illuminate\Support\Facades\Mail;
@@ -70,7 +71,8 @@ class ProcessLicenseController extends Controller
             Mail::to($mUser->email)->send(new AlertMail($data));
 
         }else if($mStatusId==4){//Review
-            $mUsers = User::whereIn('role_id', [5,7])->get(); //Finance/DG
+            $committee_member_ids = CommitteeMember::pluck('user_id');
+            $mUsers = User::whereIn('id', $committee_member_ids)->get();
             foreach ($mUsers as $mUser) {
                 $message = "<div>
                     <p>You have an new application to act on.</p>

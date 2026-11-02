@@ -23,15 +23,36 @@ return new class extends Migration
             $table->date('expiry_date')->nullable();
 
             // CBK
-            // LiquoringLicense
+            // 1.AgentLicense
+            $table->string('paid_share_capital')->nullable();
+            $table->string('directors_details')->nullable();
+            $table->string('years_of_technical_experience')->nullable();
+            $table->string('growers_represented_and_signed_agreements')->nullable();
+            $table->string('indemnity_against_professional_misconduct')->nullable();
+            $table->string('liquorer_cupping_facility_engaged')->nullable();
+            // 2.BuyerLicense
+            $table->string('license_purpose')->nullable();
+            // 3.WarehouseOperatorLicense
+            $table->string('directors_name_address_and_occupations')->nullable();
+            // 4.LiquoringLicense
             $table->string('year_of_certification')->nullable();
+            $table->string('current_occupation')->nullable();
             $table->string('coffee_tasting_expert_certificate')->nullable();
-            // CommercialMillersLicence
+            // 5.CommercialMillersLicence
             $table->string('milling_capacity')->nullable();
+            $table->string('comprehensive_insurance_policy')->nullable();
+            $table->string('mill_certification')->nullable();
+            // 6.IndependentCuppingLabsLicence
+            $table->string('company_officials')->nullable();
+            $table->string('licensed_liquorers_engaged')->nullable();
+            $table->string('laboratory_facilities')->nullable();
+            $table->string('services_to_be_offered')->nullable();
+            $table->string('statutory_compliance')->nullable();
 
             // COUNTY
             $table->unsignedBigInteger('county_id')->nullable();
 
+            $table->string('self_declaration_form')->nullable();
             $table->boolean('commitment_declaration')->default(true);
             $table->date('date_of_gazettement_intent')->nullable();
             $table->date('date_of_issue')->nullable();

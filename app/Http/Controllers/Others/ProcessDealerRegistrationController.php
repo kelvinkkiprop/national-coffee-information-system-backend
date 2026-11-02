@@ -91,6 +91,10 @@ class ProcessDealerRegistrationController extends Controller
             );
             Mail::to($mUser->email)->send(new AlertMail($data));
         }else if($mStatusId==5){//Rejected
+            User::where('id', $id)->update([
+                'dealer_registration_status_id' => null,
+                // 'remarks' => $fields['remarks'],
+            ]);
             // Notification
             $mUser = User::find($item->id);
             $message = "<div>

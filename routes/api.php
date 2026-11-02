@@ -12,6 +12,7 @@ use App\Http\Controllers\Main\LicenseController;
 use App\Http\Controllers\Main\DealerRegistrationController;;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
+use App\Http\Controllers\Settings\CommitteeController;
 use App\Http\Controllers\Settings\ProfileController;
 // Others
 use App\Http\Controllers\Others\ProcessPermitController;
@@ -164,6 +165,20 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
 /*
 |======================================================================
+| CommitteeController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('committees', CommitteeController::class);
+    Route::post('search-committees', [CommitteeController::class, 'searchItems']);
+    Route::get('unpaginated-items-committees', [CommitteeController::class, 'unpaginatedItems']);
+
+    Route::post('add-member-committees', [CommitteeController::class, 'addMember']);
+    Route::delete('remove-member-committees/{id}', [CommitteeController::class, 'removeMember']);
+});
+
+/*
+|======================================================================
 | RoleController
 |======================================================================
 */
@@ -172,7 +187,6 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('search-roles', [RoleController::class, 'searchItems']);
     Route::get('unpaginated-items-roles', [RoleController::class, 'unpaginatedItems']);
 });
-
 
 /*
 |======================================================================
