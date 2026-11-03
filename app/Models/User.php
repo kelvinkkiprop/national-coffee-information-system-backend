@@ -16,6 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Main\UserDealershipService;
 use App\Models\Settings\Role;
 use App\Models\Settings\Profile;
+use App\Models\Settings\CommitteeMember;
 use App\Models\Others\UserStatus;
 use App\Models\Others\DealerRegistrationStatus;
 
@@ -125,6 +126,13 @@ class User extends Authenticatable
      */
     public function profile(){
         return $this->hasOne(Profile::class, 'user_id', 'id');
+    }
+
+    /**
+     * committees
+     */
+    public function committees(){
+        return $this->hasMany(CommitteeMember::class, 'user_id', 'id');
     }
 
 }

@@ -22,7 +22,10 @@ class ProcessLicenseController extends Controller
     */
     public function nextPreviousItems(string $id)
     {
-        // return LicenseStatus::get();
+        // return LicenseStatus::where('id', $id-1)->orwhere('id', $id+1)->get();
+        if($id>=4){
+            return LicenseStatus::where('id', $id-1)->orwhere('id', $id+1)->orwhere('id', $id+2)->get();
+        }
         return LicenseStatus::where('id', $id-1)->orwhere('id', $id+1)->get();
     }
 

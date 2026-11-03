@@ -16,4 +16,5 @@ Artisan::command('inspire', function () {
 // Schedule::command('app:send-reminders')->weekdays()->dailyAt('08:00');
 // Schedule::command('app:update-permit-status')->dailyAt('00:00');
 Schedule::command('app:update-permit-status')->everyMinute();
+Schedule::command('app:update-license-status')->everyMinute();
 

@@ -110,6 +110,7 @@ VideoCipherService.php
 9. Commands
 php artisan make:command SendReminders
 php artisan make:command UpdatePermitStatus
+php artisan make:command UpdateLicenseStatus
 
 10. Common Commands
 php artisan config:cache
