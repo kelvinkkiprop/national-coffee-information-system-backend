@@ -16,8 +16,8 @@ class ServiceSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Permits', 'description'=>null],
-            ['id'=>2, 'name'=>'Licenses', 'description'=>null],
+            ["id"=>1, "name"=>"Permits", "description"=>null],
+            ["id"=>2, "name"=>"Licenses", "description"=>null],
         ];
         Service::insert($items);
 

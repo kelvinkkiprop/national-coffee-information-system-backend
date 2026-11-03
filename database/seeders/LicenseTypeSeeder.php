@@ -23,12 +23,12 @@ class LicenseTypeSeeder extends Seeder
             ["id"=> 4, "issuing_body_id"=>1, "name"=>"Liquorer Licence", "alias"=>null, "index_number_prefix"=>"LCN/L"],
             ["id"=> 5, "issuing_body_id"=>1, "name"=>"Commercial Millers Licence", "alias"=>null, "index_number_prefix"=>"LCN/CM"],
             ["id"=> 6, "issuing_body_id"=>1, "name"=>"Independent Cupping Labs Licence", "alias"=>null, "index_number_prefix"=>"LCN/ICL"],
-            // 2.CapitalMarketsAuthority
-            ["id"=> 7, "issuing_body_id"=>2, "name"=>"Brokers Licence", "alias"=>null, "index_number_prefix"=>"BR/LCN"],
-            // 3.CountyGovernment
-            ["id"=> 8, "issuing_body_id"=>3, "name"=>"Pulping Station Licence", "alias"=>null, "index_number_prefix"=>"PS/LCN"],
-            ["id"=> 9, "issuing_body_id"=>3, "name"=>"Grower Miller Licence", "alias"=>null, "index_number_prefix"=>"GM/LCN"],
-            ["id"=>10, "issuing_body_id"=>3, "name"=>"Warehouse Licence", "alias"=>null, "index_number_prefix"=>"W/LCN"],
+            // 2.CountyGovernment
+            ["id"=> 7, "issuing_body_id"=>2, "name"=>"Pulping Station Licence", "alias"=>null, "index_number_prefix"=>"PS/LCN"],
+            ["id"=> 8, "issuing_body_id"=>2, "name"=>"Grower Miller Licence", "alias"=>null, "index_number_prefix"=>"GM/LCN"],
+            ["id"=> 9, "issuing_body_id"=>2, "name"=>"Warehouse Licence", "alias"=>null, "index_number_prefix"=>"W/LCN"],
+            // 3.CapitalMarketsAuthority
+            ["id"=>10, "issuing_body_id"=>3, "name"=>"Brokers Licence", "alias"=>null, "index_number_prefix"=>"BR/LCN"],
             // 4.CoffeeResearchandTrainingInstitute
             ["id"=>11, "issuing_body_id"=>4, "name"=>"Nursery Certificate", "alias"=>null, "index_number_prefix"=>"N/C"],
             // // 1.CoffeeBoard

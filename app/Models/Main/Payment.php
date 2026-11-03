@@ -86,6 +86,7 @@ class Payment extends Model
         return $this->hasOne(Tariff::class, 'id', 'tariff_id');
     }
 
+
     /**
      * status
      */

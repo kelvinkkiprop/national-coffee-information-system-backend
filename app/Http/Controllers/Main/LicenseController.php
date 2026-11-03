@@ -134,10 +134,18 @@ class LicenseController extends Controller
         }
 
 
-        // WithSoftDelete
         $mIssuingBody = IssuingBody::find($fields['issuing_body_id']);
-        $mType = LicenseType::find($fields['type_id']);
+        if($mIssuingBody->id !=1 ){
+            $response = [
+                'status' => 'failed',
+                'message' => 'This license type is currently unavailable.',
+            ];
+            return response($response, 200);
+        }
+
+        // WithSoftDelete
         $nextNumber = License::withTrashed()->count()+1;
+        $mType = LicenseType::find($fields['type_id']);
         $mApplicationNumber = $mIssuingBody->alias.'/'.$mType->index_number_prefix.'/'.date('Y').'/'.$nextNumber;
         $paymentId = (string)Str::uuid();
         $mCurrentUser= auth()->user();

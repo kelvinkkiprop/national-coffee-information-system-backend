@@ -16,8 +16,8 @@ class TariffSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'service_id'=>1, 'code'=>1, 'name'=>'Movement Permit', 'amount'=>1],
-            ['id'=>2, 'service_id'=>2, 'code'=>2, 'name'=>'Coffee License', 'amount'=>1],
+            ["id"=>1, "service_id"=>1, "code"=>1, "name"=>"Movement Permit", "amount"=>1],
+            ["id"=>2, "service_id"=>2, "code"=>2, "name"=>"Coffee License", "amount"=>1],
         ];
         Tariff::insert($items);
     }

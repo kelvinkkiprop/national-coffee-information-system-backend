@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('permit_types', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('issuing_body_id')->nullable();
             $table->string('name');
             $table->string('alias')->nullable();
+            $table->string('index_number_prefix')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -7,14 +7,17 @@ use Illuminate\Http\Request;
 // Add
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Main\Permit;
 use App\Models\Main\Payment;
-use App\Models\Settings\Tariff;
+use App\Models\Settings\IssuingBody;
 use App\Models\Settings\CoffeeSpecies;
 use App\Models\Settings\CoffeeForm;
+use App\Models\Settings\Tariff;
 use App\Models\Settings\PermitType;
 use App\Models\Others\PermitStatus;
 // Notifications
@@ -32,9 +35,9 @@ class PermitController extends Controller
         $mCurrentUser?->load('role');
         // return $mCurrentUser->role?->type_id;
         if($mCurrentUser->role?->type_id==2){
-            return Permit::with(['user','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
+            return Permit::with(['user','issuingBody','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->paginate(10);
         }else{
-            return Permit::with(['user','type','coffeeSpecies','coffeeForm','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
+            return Permit::with(['user','issuingBody','type','coffeeSpecies','coffeeForm','status','payment.status'])->orderBy('created_at', 'desc')->paginate(10);
         }
     }
 
@@ -44,6 +47,7 @@ class PermitController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
+            'issuing_body_id' => 'required|integer',
             'type_id' => 'required|integer',
             'mark' => 'nullable|string',
             'coffee_species_id' => 'required|integer',
@@ -58,14 +62,25 @@ class PermitController extends Controller
             'warehouse_receipt_number' => 'required|string',
         ]);
 
+        $mIssuingBody = IssuingBody::find($fields['issuing_body_id']);
+        if($mIssuingBody->id !=1 ){
+            $response = [
+                'status' => 'failed',
+                'message' => 'This permit type is currently unavailable.',
+            ];
+            return response($response, 200);
+        }
+
         // WithSoftDelete
         $nextNumber = Permit::withTrashed()->count()+1;
-        $mApplicationNumber = 'PM/'.date('Y').'/'.$nextNumber;
+        $mType = PermitType::find($fields['type_id']);
+        $mApplicationNumber = $mIssuingBody->alias.'/'.$mType->index_number_prefix.'/'.date('Y').'/'.$nextNumber;
         $paymentId = (string)Str::uuid();
         $mCurrentUser= auth()->user();
         $item = Permit::create([
             'user_id' => $mCurrentUser->id,
             'application_number' => $mApplicationNumber,
+            'issuing_body_id' => $fields['issuing_body_id'],
             'type_id' => $fields['type_id'],
             'mark' => $fields['mark'],
             'coffee_species_id' => $fields['coffee_species_id'],
@@ -85,15 +100,16 @@ class PermitController extends Controller
         // $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
         $mInvoiceNumber = 'IN/_/'.date('Y').'/_/'.$nextNumber;
         $mTariffId = 1;
-        $payment = Payment::updateOrCreate(['id' => $paymentId],[
-            'id' => $paymentId,
-            'invoice_number' => $mInvoiceNumber,
-            'user_id' => $mCurrentUser->id,
-            'amount' => Tariff::find($mTariffId)->amount,
-            'format' => 'json',
-            'service_id' => 1,
-            'tariff_id' => $mTariffId,
-        ]);
+        $payment = null;
+        // $payment = Payment::updateOrCreate(['id' => $paymentId],[
+        //     'id' => $paymentId,
+        //     'invoice_number' => $mInvoiceNumber,
+        //     'user_id' => $mCurrentUser->id,
+        //     'amount' => Tariff::find($mTariffId)->amount,
+        //     'format' => 'json',
+        //     'service_id' => 1,
+        //     'tariff_id' => $mTariffId,
+        // ]);
 
         $mType = PermitType::find($fields['type_id']);
         // Notification
@@ -154,7 +170,7 @@ class PermitController extends Controller
      */
     public function show(string $id)
     {
-        return Permit::with(['user','type','status','coffeeSpecies','coffeeForm','payment.status'])->find($id);
+        return Permit::with(['user','issuingBody','type','status','coffeeSpecies','coffeeForm','payment.status'])->find($id);
     }
 
     /**
@@ -163,6 +179,7 @@ class PermitController extends Controller
     public function update(Request $request, string $id)
     {
         $fields = $request->validate([
+            'issuing_body_id' => 'required|integer',
             'type_id' => 'required|integer',
             'mark' => 'nullable|string',
             'coffee_species_id' => 'required|integer',
@@ -180,6 +197,7 @@ class PermitController extends Controller
         $item = Permit::where('id', $id)->update([
             // 'user_id' => $mCurrentUser->id,
             // 'application_number' => $mApplicationNumber,
+            'issuing_body_id' => $fields['issuing_body_id'],
             'type_id' => $fields['type_id'],
             'mark' => $fields['mark'],
             'coffee_species_id' => $fields['coffee_species_id'],
@@ -198,13 +216,14 @@ class PermitController extends Controller
         $mCurrentUser= auth()->user();
         $item = Permit::find($id);
         $mTariffId = 1;
-        $payment = Payment::updateOrCreate(['id' => $item->payment_id],[
-            'user_id' => $mCurrentUser->id,
-            'amount' => Tariff::find($mTariffId)->amount,
-            'format' => 'json',
-            'service_id' => 1,
-            'tariff_id' => $mTariffId,
-        ]);
+        $payment =null;
+        // $payment = Payment::updateOrCreate(['id' => $item->payment_id],[
+        //     'user_id' => $mCurrentUser->id,
+        //     'amount' => Tariff::find($mTariffId)->amount,
+        //     'format' => 'json',
+        //     'service_id' => 1,
+        //     'tariff_id' => $mTariffId,
+        // ]);
 
         $mType = PermitType::find($fields['type_id']);
         // Notification
@@ -291,7 +310,7 @@ class PermitController extends Controller
         $term = $fields['search_term'];
         $items = null;
         if($mCurrentUser->role?->type_id==2){
-            $items = Permit::with(['user','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
+            $items = Permit::with(['user','issuingBody','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
@@ -307,7 +326,7 @@ class PermitController extends Controller
                 });
             })->orderBy('created_at', 'desc')->get();
          }else{
-            $items = Permit::with(['user','type','status','coffeeSpecies','coffeeForm','payment.status'])->where(function($query) use($term){
+            $items = Permit::with(['user','issuingBody','type','status','coffeeSpecies','coffeeForm','payment.status'])->where(function($query) use($term){
                 $query->where('application_number','LIKE','%'.$term.'%');
                 $query->orWhere('mark','LIKE','%'.$term.'%');
                 $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
@@ -337,6 +356,7 @@ class PermitController extends Controller
      */
     public function unpaginatedItems()
     {
+        $issuing_bodies = IssuingBody::orderBy('id', 'asc')->get();
         $permit_types = PermitType::orderBy('id', 'asc')->get();
         $coffee_species = CoffeeSpecies::orderBy('id', 'asc')->get();
         $coffee_forms = CoffeeForm::orderBy('id', 'asc')->get();
@@ -345,6 +365,7 @@ class PermitController extends Controller
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [
+                'issuing_bodies' => $issuing_bodies,
                 'permit_types' => $permit_types,
                 'coffee_species' => $coffee_species,
                 'coffee_forms' => $coffee_forms,
@@ -356,11 +377,19 @@ class PermitController extends Controller
 
 
     /**
+     * filterPermitTypes
+     */
+    public function filterPermitTypes($issuing_body_id)
+    {
+        return PermitType::where('issuing_body_id', $issuing_body_id)->orderBy('name', 'asc')->get();
+    }
+
+    /**
      * generatePermitPdf
      */
     public function generatePermitPdf($id)
     {
-        $item = Permit::with(['user','type','status','coffeeSpecies','coffeeForm'])->find($id);
+        $item = Permit::with(['user','issuingBody','type','status','coffeeSpecies','coffeeForm'])->find($id);
         // return $item;
         // return view('prints.permits.coffee-movement-permit-pdf')->with('item', $item);
 

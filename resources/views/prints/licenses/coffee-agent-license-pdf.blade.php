@@ -411,7 +411,7 @@
                         <div class="col-print-12">
                             <fieldset class="my-4">
                                 <legend class="bg-success text-light rounded-4 px-2">
-                                    <h5 class="m-0 py-1 px-4 text-uppercase">Applicant</h5>
+                                    <h5 class="m-0 py-1 px-4 text-uppercase">License Holder</h5>
                                 </legend>
                                 <div class="my-2">
                                     <div class="row-print">

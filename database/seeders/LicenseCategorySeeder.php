@@ -16,8 +16,8 @@ class LicenseCategorySeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'New', 'alias'=>null],
-            ['id'=>2, 'name'=>'Renewal', 'alias'=>null],
+            ["id"=>1, "name"=>"New", "alias"=>null],
+            ["id"=>2, "name"=>"Renewal", "alias"=>null],
         ];
         LicenseCategory::insert($items);
     }

@@ -16,8 +16,8 @@ class PaymentStatusSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Pending', 'alias'=>'Invoice'],
-            ['id'=>2, 'name'=>'Settled', 'alias'=>'Receipt'],
+            ["id"=>1, "name"=>"Pending", "alias"=>"Invoice"],
+            ["id"=>2, "name"=>"Settled", "alias"=>"Receipt"],
         ];
         PaymentStatus::insert($items);
     }

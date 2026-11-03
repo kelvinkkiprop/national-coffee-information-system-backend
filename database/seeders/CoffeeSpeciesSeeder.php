@@ -16,8 +16,8 @@ class CoffeeSpeciesSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Arabica', 'alias'=>null],
-            ['id'=>2, 'name'=>'Robusta', 'alias'=>null],
+            ["id"=>1, "name"=>"Arabica", "alias"=>null],
+            ["id"=>2, "name"=>"Robusta", "alias"=>null],
         ];
         CoffeeSpecies::insert($items);
     }

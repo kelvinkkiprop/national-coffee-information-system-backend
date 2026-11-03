@@ -90,6 +90,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('search-permits', [PermitController::class, 'searchItems']);
     Route::get('unpaginated-items-permits', [PermitController::class, 'unpaginatedItems']);
     Route::get('permits-pdf/{id}', [PermitController::class, 'generatePermitPdf']);
+
+    Route::get('filter-permit-types/{id}', [PermitController::class, 'filterPermitTypes']);
 });
 // Route::get('permits-pdf/{id}', [PermitController::class, 'generatePermitPdf']);
 Route::get('verify-permit/{id}', [PermitController::class, 'verifyPermit']);

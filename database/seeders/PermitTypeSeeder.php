@@ -16,9 +16,11 @@ class PermitTypeSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Coffee Movement Permit for Local Market', 'alias'=>null],
-            ['id'=>2, 'name'=>'Coffee Movement Permit for Exports', 'alias'=>null],
-            ['id'=>3, 'name'=>'Coffee Movement Permit for Imports', 'alias'=>null],
+            // 1.CoffeeBoard
+            ["id"=> 1, "issuing_body_id"=>1, "name"=>"Import Permit", "alias"=>null, "index_number_prefix"=>"IM/P"],
+            ["id"=> 2, "issuing_body_id"=>1, "name"=>"Export Permit", "alias"=>null, "index_number_prefix"=>"EX/P"],
+            // 2.CountyGovernment
+            ["id"=> 3, "issuing_body_id"=>2, "name"=>"Local Permit", "alias"=>null, "index_number_prefix"=>"L/P"],
         ];
         PermitType::insert($items);
     }

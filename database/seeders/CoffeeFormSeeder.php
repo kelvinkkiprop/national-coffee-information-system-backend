@@ -16,9 +16,9 @@ class CoffeeFormSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Cherry', 'alias'=>'Cherries'],
-            ['id'=>2, 'name'=>'Parchment', 'alias'=>'Parchments'],
-            ['id'=>3, 'name'=>'Clean Coffee', 'alias'=>'Clean Coffee'],
+            ["id"=>1, "name"=>"Cherry", "alias"=>"Cherries"],
+            ["id"=>2, "name"=>"Parchment", "alias"=>"Parchments"],
+            ["id"=>3, "name"=>"Clean Coffee", "alias"=>"Clean Coffee"],
         ];
         CoffeeForm::insert($items);
     }

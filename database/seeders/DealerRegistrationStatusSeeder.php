@@ -16,12 +16,12 @@ class DealerRegistrationStatusSeeder extends Seeder
     {
         // Default
         $items = [
-            ['id'=>1, 'name'=>'Draft', 'alias'=>'Draft'],
-            ['id'=>2, 'name'=>'Returned', 'alias'=>'Return'],
-            ['id'=>3, 'name'=>'Under Review', 'alias'=>'To Review'],
-            ['id'=>4, 'name'=>'Approved', 'alias'=>'Approve'],
-            ['id'=>5, 'name'=>'Rejected', 'alias'=>'Reject'],
-            ['id'=>6, 'name'=>'Expired', 'alias'=>'Expired'],
+            ["id"=>1, "name"=>"Draft", "alias"=>"Draft"],
+            ["id"=>2, "name"=>"Returned", "alias"=>"Return"],
+            ["id"=>3, "name"=>"Under Review", "alias"=>"To Review"],
+            ["id"=>4, "name"=>"Approved", "alias"=>"Approve"],
+            ["id"=>5, "name"=>"Rejected", "alias"=>"Reject"],
+            ["id"=>6, "name"=>"Expired", "alias"=>"Expired"],
         ];
         DealerRegistrationStatus::insert($items);
 

@@ -13,6 +13,7 @@ use App\Models\Main\Payment;
 use App\Models\Settings\PermitType;
 use App\Models\Settings\CoffeeSpecies;
 use App\Models\Settings\CoffeeForm;
+use App\Models\Settings\IssuingBody;
 use App\Models\Others\PermitStatus;
 use App\Models\Others\PaymentStatus;
 
@@ -40,6 +41,7 @@ class Permit extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'issuing_body_id',
 
         'application_number',
         'type_id',
@@ -54,6 +56,12 @@ class Permit extends Model
         'driver_name',
         'driver_id_number',
         'warehouse_receipt_number',
+
+        // 'professional_skills_of_persons_engaged',
+        // 'brief_company_profile ',
+        // 'directors_details ',
+        // 'supporting_documents ',
+
         'date_of_issue',
         'effective_date',
         'duration',
@@ -102,6 +110,12 @@ class Permit extends Model
         return $this->hasOne(CoffeeForm::class, 'id', 'coffee_form_id');
     }
 
+    /**
+     * issuingBody
+     */
+    public function issuingBody(){
+        return $this->hasOne(IssuingBody::class, 'id', 'issuing_body_id');
+    }
 
     /**
      * payment
