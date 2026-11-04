@@ -28,6 +28,8 @@ php artisan make:seeder LicenseStatusSeeder
 php artisan make:seeder LicenseIssuingBodySeeder
 php artisan make:seeder DealerRegistrationStatusSeeder
 php artisan make:seeder CommitteeSeeder
+php artisan make:seeder CoffeePlotSeeder
+php artisan make:seeder CoffeeTransactionStageSeeder
 
 
 4. Controllers
@@ -38,6 +40,9 @@ php artisan make:controller Main/LicenseController --api --resource
 php artisan make:controller Main/PermitController --api --resource
 php artisan make:controller Main/PaymentController --api --resource
 php artisan make:controller Main/DealerRegistrationController --api --resource
+php artisan make:controller Main/CoffeePlotController --api --resource
+php artisan make:controller Main/CoffeeDeliveryController --api --resource
+php artisan make:controller Main/CoffeeTransactionController --api --resource
 php artisan make:controller Settings/RoleController --api --resource
 php artisan make:controller Settings/CommitteeController --api --resource
 php artisan make:controller Settings/ProfileController --api --resource
@@ -53,6 +58,11 @@ php artisan make:model Main/UserDealershipService -m
 php artisan make:model Main/Payment -m
 php artisan make:model Main/Service -m
 php artisan make:model Main/Tariff -m
+php artisan make:model Main/CoffeePlot -m
+php artisan make:model Main/CoffeeDelivery -m
+php artisan make:model Main/CoffeeTransaction -m
+php artisan make:model Main/CoffeeLot -m
+php artisan make:model Others/CoffeeTransactionStage -m
 php artisan make:model Settings/Role -m
 php artisan make:model Settings/Committee -m
 php artisan make:model Settings/CommitteeMember -m
@@ -544,4 +554,76 @@ ADD COLUMN `streetscape_engineer_status_id` INT NULL,
 ADD COLUMN `water_engineer_reviewer_id` TEXT NULL,
 ADD COLUMN `water_engineer_status_id` INT NULL;
 ===================================./SQL_QUERIES===================================
+
+
+
+
+===================================./PROXY_CONFIG===================================
+1. Installation
+sudo apt install nginx
+
+2. Nginix Configuration file
+sudo vim /etc/nginx/sites-available/proxy_config
+server {
+    listen 80;
+    server_name test-ncis.coffeeboard.go.ke;
+
+    location / {
+        proxy_pass http://192.168.0.146:3001;
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+3. Create a Symbolic Link
+    sudo ln -s /etc/nginx/sites-available/proxy_config /etc/nginx/sites-enabled/
+    sudo ln -sf /etc/nginx/sites-available/proxy_config /etc/nginx/sites-enabled/proxy_config
+    sudo nginx -t
+    sudo systemctl reload nginx
+    sudo systemctl status nginx
+
+4. Test (Enable Port 3001)
+curl -I http://192.168.0.146:3001
+curl -I http://test-ncis.coffeeboard.go.ke
+
+5. Reference
+https://technoracle.com/install-laravel-on-ubuntu-22-04/
+===================================./PROXY_CONFIG===================================
+
+
+===================================CERT_BOT===================================
+1. Install
+sudo apt update
+sudo apt install snapd -y
+sudo snap install core
+sudo snap refresh core
+sudo snap install --classic certbot
+
+2. Prepare the Certbot command
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+3. Run Certbot
+sudo certbot --nginx
+
+4. Test automatic renewal
+sudo certbot renew --dry-run
+
+6. Verify Certbot installation
+sudo certbot certificates
+
+7. Check Nginx
+sudo nginx -t
+sudo systemctl reload nginx
+
+8. Access Site
+visit https://yourwebsite.com/
+
+9.Reference
+https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal
+===================================./CERT_BOT===================================
+
 

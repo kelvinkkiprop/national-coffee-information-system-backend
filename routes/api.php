@@ -9,7 +9,10 @@ use App\Http\Controllers\Main\UserController;
 use App\Http\Controllers\Main\PermitController;
 use App\Http\Controllers\Main\PaymentController;
 use App\Http\Controllers\Main\LicenseController;
-use App\Http\Controllers\Main\DealerRegistrationController;;
+use App\Http\Controllers\Main\DealerRegistrationController;
+use App\Http\Controllers\Main\CoffeePlotController;
+use App\Http\Controllers\Main\CoffeeDeliveryController;
+use App\Http\Controllers\Main\CoffeeTransactionController;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\CommitteeController;
@@ -54,6 +57,44 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 });
 
+
+/*
+|======================================================================
+| CoffeeTransactionController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('coffee-transactions', CoffeeTransactionController::class);
+    Route::post('search-coffee-transactions', [CoffeeTransactionController::class, 'searchItems']);
+    Route::get('unpaginated-items-coffee-transactions', [CoffeeTransactionController::class, 'unpaginatedItems']);
+
+    Route::get('filter-lots-and-deliveries-coffee-transactions/{id}', [CoffeeTransactionController::class, 'filterLotsAndDeliveries']);
+});
+
+
+/*
+|======================================================================
+| CoffeeDeliveryController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('coffee-deliveries', CoffeeDeliveryController::class);
+    Route::post('search-coffee-deliveries', [CoffeeDeliveryController::class, 'searchItems']);
+    Route::get('unpaginated-items-coffee-deliveries', [CoffeeDeliveryController::class, 'unpaginatedItems']);
+
+    Route::get('filter-farmer-plots-coffee-deliveries/{id}', [CoffeeDeliveryController::class, 'filterFarmerPlots']);
+});
+
+/*
+|======================================================================
+| CoffeePlotController
+|======================================================================
+*/
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::resource('coffee-plots', CoffeePlotController::class);
+    Route::post('search-coffee-plots', [CoffeePlotController::class, 'searchItems']);
+    Route::get('unpaginated-items-coffee-plots', [CoffeePlotController::class, 'unpaginatedItems']);
+});
 
 /*
 |======================================================================
