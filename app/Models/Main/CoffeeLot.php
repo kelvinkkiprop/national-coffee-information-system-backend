@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\Settings\CoffeeSpecies;
+use App\Models\Main\CoffeeLot;
+use App\Models\Main\CoffeeDelivery;
 
 class CoffeeLot extends Model
 {
@@ -61,5 +63,21 @@ class CoffeeLot extends Model
     public function stage(){
         return $this->hasOne(CoffeeTransactionStage::class, 'id', 'coffee_species_id');
     }
+
+
+    /**
+     * deliveries
+     */
+    public function deliveries(){
+        return $this->hasMany(CoffeeDelivery::class, 'lot_id', 'id');
+    }
+
+    /**
+     * lots
+     */
+    public function lots(){
+        return $this->hasMany(CoffeeLot::class, 'parent_lot_id', 'id');
+    }
+
 
 }

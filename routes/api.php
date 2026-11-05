@@ -70,6 +70,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     Route::get('filter-lots-and-deliveries-coffee-transactions/{id}', [CoffeeTransactionController::class, 'filterLotsAndDeliveries']);
 });
+Route::post('trace-coffee-transactions', [CoffeeTransactionController::class, 'traceItem']);
+
 
 
 /*

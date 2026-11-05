@@ -146,7 +146,7 @@ class CommitteeController extends Controller
             'user_id' => 'required|string',
         ]);
 
-        CommitteeMember::updateOrCreate([
+        $item = CommitteeMember::updateOrCreate([
             'committee_id' => $fields['committee_id'],
             'user_id' => $fields['user_id'],
         ],[

@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use App\Models\Main\CoffeePlot;
 use App\Models\Settings\CoffeeSpecies;
 
 class CoffeeDelivery extends Model
@@ -65,6 +66,16 @@ class CoffeeDelivery extends Model
     public function coffeeSpecies(){
         return $this->hasOne(CoffeeSpecies::class, 'id', 'coffee_species_id');
     }
+
+
+
+    /**
+     * plot
+     */
+    public function plot(){
+        return $this->hasOne(CoffeePlot::class, 'id', 'plot_id');
+    }
+
 
 
 }
