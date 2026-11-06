@@ -33,15 +33,19 @@ class CoffeeTransaction extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'serial_no',
-
+        'buyer_id',
+        'buyer_name',
+        'traceability_mark',
+        'transaction_number',
+        'stage_id',
         'grade',
         'quantity',
-        'processed_at',
+
+        'source',
+        'destination',
         'shipment_ref',
-        'buyer_name',
-        'shipped_on',
-        'stage_id',
+        'shipped_at',
+        'remarks',
 
         'created_at',
         'updated_at',

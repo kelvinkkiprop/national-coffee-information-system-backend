@@ -18,7 +18,8 @@ class CoffeeTransactionController extends Controller
      */
     public function index()
     {
-        return CoffeeTransaction::with(['user','stage','lot.lots.deliveries.plot'])->orderBy('created_at', 'desc')->paginate(10);
+        // return CoffeeTransaction::with(['user','stage','lot','lot.parentLots.deliveries.plot'])->orderBy('created_at', 'desc')->paginate(10);
+        return CoffeeTransaction::with(['user','stage','lot','lot.parentLots.deliveries.plot'])->orderBy('created_at', 'desc')->paginate(10);
     }
 
     /**
@@ -40,70 +41,53 @@ class CoffeeTransactionController extends Controller
 
         $mCurrentUser = auth()->user();
         $mStage = CoffeeTransactionStage::find($fields['stage_id']);
-        if($mStage->id==1){//Aggregation
-            $nextNumber = CoffeeTransaction::withTrashed()->count()+1;
-            $mTransactionNumber = 'TR/'.$mStage->index_number_prefix.'/'.date('Y').'/'.$nextNumber;
-            $item = CoffeeTransaction::create([
-                'serial_no' => $mTransactionNumber,
-                // 'user_id' => $fields['user_id'],
-                'user_id' => $mCurrentUser->id,
-                'grade' => $fields['grade'],
-                'quantity' => $fields['quantity'],
-                // 'processed_at' => $fields['processed_at'],
-                // 'shipped_on' => $fields['shipped_on'],
-                'stage_id' => $fields['stage_id'],
-            ]);
+        $nextNumber = CoffeeTransaction::withTrashed()->count()+1;
+        $mTransactionNumber = $mStage->abbreviation.'-'.date('Y').'-'.$nextNumber;
+        $mTraceabilityMark = 'NCIS-'.date('Y').'-'.sprintf('%06d', $nextNumber);
+        $item = CoffeeTransaction::create([
+            'transaction_number' => $mTransactionNumber,
+            'traceability_mark' => $mTraceabilityMark,
+            'user_id' => $mCurrentUser->id,
+            // 'buyer_id' => $fields['buyer_id'],
+            // 'buyer_name' => $fields['buyer_name'],
+            'stage_id' => $fields['stage_id'],
+            'grade' => $fields['grade'],
+            'quantity' => $fields['quantity'],
+            // 'source' => $fields['source'],
+            // 'destination' => $fields['destination'],
+            // 'shipment_ref' => $fields['shipment_ref'],
+            // 'shipped_at' => $fields['shipped_at'],
+            // 'processed_at' => $fields['processed_at'],
+            // 'remarks' => $fields['remarks'],
+        ]);
 
-            // DeleteOld
-            // CoffeeLot::where('user_id', $userId)->delete();
-            // WithSoftDelete
-            $nextNumber = CoffeeLot::withTrashed()->count()+1;
-            $mLotNumber = $mStage->index_number_prefix.'/LO/'.date('Y').'/'.$nextNumber;
-            $item = CoffeeLot::create([
-                'transaction_id' => $item->id,
-                'cooperative_society_id' => $mCurrentUser->id,
-                'lot_number' => $mLotNumber,
-                'stage_id' => $mStage->id,
-                'quantity' => $fields['quantity'],
-                'grade' => $fields['grade'],
-            ]);
+        $nextNumber = CoffeeLot::withTrashed()->count()+1;
+        $mLotNumber = $mStage->abbreviation.'-LOT-'.date('Y').'-'.$nextNumber;
+        $mItem = CoffeeLot::create([
+            'transaction_id' => $item->id,
+            'cooperative_society_id' => $mCurrentUser->id,
+            'lot_number' => $mLotNumber,
+            'stage_id' => $mStage->id,
+            'quantity' => $fields['quantity'],
+            'grade' => $fields['grade'],
+        ]);
+
+
+        if($mStage->id==1){//Aggregation
             $deliveryIds = $request->delivery_ids;
             foreach ($deliveryIds as $deliveryId) {
                 CoffeeDelivery::where('id', $deliveryId)->update([
-                    'lot_id' => $item->id,
+                    'lot_id' => $mItem->id,
+                    'status_id' => 2,
                 ]);
             }
         }else{//Milling/Export
-            // WithSoftDelete
-            $nextNumber = CoffeeTransaction::withTrashed()->count()+1;
-            $mTransactionNumber = 'TR/'.$mStage->index_number_prefix.'/'.date('Y').'/'.$nextNumber;
-            $item = CoffeeTransaction::create([
-                'serial_no' => $mTransactionNumber,
-                // 'user_id' => $fields['user_id'],
-                'user_id' => $mCurrentUser->id,
-                'grade' => $fields['grade'],
-                'quantity' => $fields['quantity'],
-                // 'processed_at' => $fields['processed_at'],
-                // 'shipped_on' => $fields['shipped_on'],
-                'stage_id' => $fields['stage_id'],
-            ]);
-            // WithSoftDelete
-            $nextNumber = CoffeeLot::withTrashed()->count()+1;
-            $mLotNumber = $mStage->index_number_prefix.'/LO/'.date('Y').'/'.$nextNumber;
-            // ParentLot
-            $mItem = CoffeeLot::create([
-                'transaction_id' => $item->id,
-                'cooperative_society_id' => $mCurrentUser->id,
-                'lot_number' => $mLotNumber,
-                'stage_id' => $fields['stage_id'],
-                'grade' => $fields['grade'],
-                'quantity' => $fields['quantity'],
-            ]);
             // UpdateChildren
             $lotsIds = $request->lot_ids;
             foreach ($lotsIds as $lotId) {
                 CoffeeLot::where('id', $lotId)->update([
                     'parent_lot_id' => $mItem->id,
+                    'status_id' => 2,
                 ]);
             }
         }
@@ -121,7 +105,7 @@ class CoffeeTransactionController extends Controller
      */
     public function show(string $id)
     {
-        return CoffeeTransaction::with('owner')->find($id);
+        return CoffeeTransaction::with(['user','stage','lot.parentLots.deliveries.plot'])->find($id);
     }
 
     /**
@@ -176,10 +160,10 @@ class CoffeeTransactionController extends Controller
         ]);
 
         $term = $fields['search_term'];
-        $items = CoffeeTransaction::with('owner')->where(function($query) use($term){
+        $items = CoffeeTransaction::with('user')->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('alias','LIKE','%'.$term.'%');
-            $query->orWhereHas('owner', function($q) use ($term) {
+            $query->orWhereHas('user', function($q) use ($term) {
                 $q->where(function($q) use ($term) {
                     $q->where('name', 'LIKE', '%' . $term . '%');
                     $q->orWhere('alias', 'LIKE', '%' . $term . '%');
@@ -228,12 +212,15 @@ class CoffeeTransactionController extends Controller
         if($stage_id==1){//Aggregation
             $coffee_deliveries = CoffeeDelivery::where('lot_id', null)->orderBy('created_at', 'desc')->get();
             // $coffee_deliveries = CoffeeDelivery::orderBy('created_at', 'desc')->get();
-        }elseif($stage_id==2){//Milling
-            // $coffee_lots = CoffeeLot::where('parent_lot_id', null)->where('stage_id', 1)->orderBy('created_at', 'desc')->get();
-            $coffee_lots = CoffeeLot::where('stage_id', 1)->orderBy('created_at', 'desc')->get();
-        }elseif($stage_id==3){//Export
-            // $coffee_lots = CoffeeLot::where('transaction_id', null)->where('stage_id', 2)->orderBy('created_at', 'desc')->get();
-            $coffee_lots = CoffeeLot::where('stage_id', 2)->orderBy('created_at', 'desc')->get();
+        // }elseif($stage_id==2){//Milling
+        //     // $coffee_lots = CoffeeLot::where('parent_lot_id', null)->where('stage_id', 1)->orderBy('created_at', 'desc')->get();
+        //     $coffee_lots = CoffeeLot::where('stage_id', 1)->orderBy('created_at', 'desc')->get();
+        // }elseif($stage_id==3){//Export
+        //     // $coffee_lots = CoffeeLot::where('transaction_id', null)->where('stage_id', 2)->orderBy('created_at', 'desc')->get();
+        //     $coffee_lots = CoffeeLot::where('stage_id', 2)->orderBy('created_at', 'desc')->get();
+        // }
+        }else{//Milling/Bulking
+            $coffee_lots = CoffeeLot::where('stage_id', $stage_id-1)->where('status_id',1)->orderBy('created_at', 'desc')->get();
         }
 
         $response = [
@@ -258,16 +245,15 @@ class CoffeeTransactionController extends Controller
     public function traceItem(Request $request)
     {
         $fields = $request->validate([
-            'serial_number' => 'required|string',
+            'traceability_mark' => 'required|string',
         ]);
 
-
-        $mSerialNumber=$fields['serial_number'];
-        $item = CoffeeTransaction::with(['stage','lot.lots.deliveries.plot'])->where('serial_no', $mSerialNumber)->first();
+        $mMark=$fields['traceability_mark'];
+        $item = CoffeeTransaction::with(['stage','lot.parentLots.deliveries.plot'])->where('traceability_mark', $mMark)->first();
         if(!$item){
             $response = [
                 'status' => 'failed',
-                'message' => 'Incorrect serial number or no records found',
+                'message' => 'Incorrect traceability mark or no records found',
                 'data' => null
             ];
             return response($response, 200);

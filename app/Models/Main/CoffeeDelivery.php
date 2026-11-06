@@ -36,16 +36,21 @@ class CoffeeDelivery extends Model
         'id',
         'delivery_number',
 
+        'user_id',
         'farmer_id',
         'plot_id',
         'cooperative_society_id',
         'collection_centre_id',
         'coffee_species_id',
+        'harvest_date',
+        'harvest_season',
         'delivery_date',
+        'number_of_bags',
         'quantity',
+        'price_per_kg',
+
         'lot_id',
         'recorded_by',
-
         'status_id',
 
         'created_at',
@@ -54,10 +59,17 @@ class CoffeeDelivery extends Model
 
 
     /**
-     * owner
+     * user
      */
-    public function owner(){
-        return $this->hasOne(User::class, 'id', 'owner_id');
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    /**
+     * farmer
+     */
+    public function farmer(){
+        return $this->hasOne(User::class, 'id', 'farmer_id');
     }
 
     /**
@@ -67,13 +79,18 @@ class CoffeeDelivery extends Model
         return $this->hasOne(CoffeeSpecies::class, 'id', 'coffee_species_id');
     }
 
-
+    /**
+     * lot
+     */
+    public function lot(){
+        return $this->hasOne(CoffeeLot::class, 'id', 'lot_id');
+    }
 
     /**
      * plot
      */
     public function plot(){
-        return $this->hasOne(CoffeePlot::class, 'id', 'plot_id');
+        return $this->belongsTo(CoffeePlot::class, 'plot_id', 'id');
     }
 
 

@@ -17,7 +17,7 @@ class CoffeeDeliveryController extends Controller
      */
     public function index()
     {
-        return CoffeeDelivery::with(['owner','coffeeSpecies'])->orderBy('created_at', 'desc')->paginate(10);
+        return CoffeeDelivery::with(['user','coffeeSpecies'])->orderBy('created_at', 'desc')->paginate(10);
     }
 
     /**
@@ -31,23 +31,33 @@ class CoffeeDeliveryController extends Controller
             // 'cooperative_society_id' => 'required|string',
             // 'collection_centre_id' => 'required|string',
             'coffee_species_id' => 'required|integer',
-            'delivery_date' => 'required|date',
+            'harvest_date' => 'required|date',
+            'harvest_season' => 'required|string',
+            'delivery_date' => 'required|date|after_or_equal:harvest_date',
+            'number_of_bags' => 'required|integer',
             'quantity' => 'required|numeric',
+            'price_per_kg' => 'required|numeric',
         ]);
 
+        $mCurrentUser = auth()->user();
         // WithSoftDelete
         $nextNumber = CoffeeDelivery::withTrashed()->count()+1;
-        $mDeliveryNumber = 'CD/'.date('Y').'/'.$nextNumber;
-
+        $mDeliveryNumber = 'DLV-'.date('Y').'-'.$nextNumber;
         $item = CoffeeDelivery::create([
             'delivery_number' => $mDeliveryNumber,
+            'user_id' => $mCurrentUser->id,
             'farmer_id' => $fields['farmer_id'],
             'plot_id' => $fields['plot_id'],
             // 'cooperative_society_id' => $fields['cooperative_society_id'],
             // 'collection_centre_id' => $fields['collection_centre_id'],
             'coffee_species_id' => $fields['coffee_species_id'],
+            'harvest_date' => $fields['harvest_date'],
+            'harvest_season' => $fields['harvest_season'],
             'delivery_date' => $fields['delivery_date'],
+            'number_of_bags' => $fields['number_of_bags'],
             'quantity' => $fields['quantity'],
+            'price_per_kg' => $fields['price_per_kg'],
+            'recorded_by' => $mCurrentUser->id
         ]);
 
         $response = [
@@ -63,7 +73,7 @@ class CoffeeDeliveryController extends Controller
      */
     public function show(string $id)
     {
-        return CoffeeDelivery::with('owner')->find($id);
+        return CoffeeDelivery::with('user','farmer','coffeeSpecies','plot','lot')->find($id);
     }
 
     /**
@@ -118,10 +128,10 @@ class CoffeeDeliveryController extends Controller
         ]);
 
         $term = $fields['search_term'];
-        $items = CoffeeDelivery::with('owner')->where(function($query) use($term){
+        $items = CoffeeDelivery::with('user')->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('alias','LIKE','%'.$term.'%');
-            $query->orWhereHas('owner', function($q) use ($term) {
+            $query->orWhereHas('user', function($q) use ($term) {
                 $q->where(function($q) use ($term) {
                     $q->where('name', 'LIKE', '%' . $term . '%');
                     $q->orWhere('alias', 'LIKE', '%' . $term . '%');

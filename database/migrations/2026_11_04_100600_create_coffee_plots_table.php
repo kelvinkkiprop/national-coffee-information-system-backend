@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->longText('geo_json_geometry')->nullable();
+            $table->boolean('greater_than_4ha')->default(true);
             $table->integer('deforestation_status_id')->default(2); //Pending, Compliant, Non-compliant, Under Review
             $table->date('deforestation_checked_at')->nullable();
             $table->date('deforestation_evidence')->nullable();//AssessmentReport/SupportingEvidence

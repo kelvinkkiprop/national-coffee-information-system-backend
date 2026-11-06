@@ -81,7 +81,7 @@ body { width:210mm; height:297mm; font-size:8.2pt; }
   <div class="law"><strong>THE COFFEE ACT (No. 8 of 2026)</strong><br><span class="muted">THE COFFEE (GENERAL) REGULATIONS, 2026 · FIRST SCHEDULE (r.4D(7), 8(2), 9E(2))</span></div>
   <div class="main-title">COFFEE MOVEMENT PERMIT</div>
   <table class="serials"><tr>
-   <td><span class="small-label">Permit Serial No.</span><span class="serial-value">CBK/MP/2026/0000123</span></td>
+   <td><span class="small-label">Permit Traceability Mark</span><span class="serial-value">CBK/MP/2026/0000123</span></td>
    <td><span class="small-label">Date &amp; Time of Issue</span><span class="serial-value">29-Oct-2026 · 09:15 a.m.</span></td>
    <td><span class="small-label">Valid Until</span><span class="serial-value">02-Nov-2026, 6.30 p.m.</span></td>
   </tr></table>

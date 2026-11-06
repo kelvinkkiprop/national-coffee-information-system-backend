@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('alias')->nullable();
-            $table->string('index_number_prefix')->nullable();
+            $table->string('abbreviation')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -50,7 +50,9 @@ class CoffeePlotController extends Controller
             'county_id' => $fields['county_id'],
             'latitude' => $fields['latitude'],
             'longitude' => $fields['longitude'],
+            'greater_than_4ha' => $fields['size']>4 ? true : false,
             'geo_json_geometry' => $fields['geo_json_geometry'],
+            // 'geo_json_geometry' => json_encode($fields['geo_json_geometry']),
         ]);
 
         $response = [
@@ -97,7 +99,9 @@ class CoffeePlotController extends Controller
             'county_id' => $fields['county_id'],
             'latitude' => $fields['latitude'],
             'longitude' => $fields['longitude'],
+            'greater_than_4ha' => $fields['size']>4 ? true : false,
             'geo_json_geometry' => $fields['geo_json_geometry'],
+            // 'geo_json_geometry' => json_encode($fields['geo_json_geometry']),
         ]);
 
         $response = [
@@ -161,7 +165,7 @@ class CoffeePlotController extends Controller
     public function unpaginatedItems()
     {
         // $coffee_plots = CoffeePlot::orderBy('id', 'asc')->limit(2)->get();
-        $coffee_plots = CoffeePlot::get();
+        $coffee_plots = CoffeePlot::with(['coffeeSpecies'])->get();
         $users = User::orderBy('name', 'asc')->get();
         $coffee_species = CoffeeSpecies::orderBy('id', 'asc')->get();
         $counties = County::orderBy('id', 'asc')->get();

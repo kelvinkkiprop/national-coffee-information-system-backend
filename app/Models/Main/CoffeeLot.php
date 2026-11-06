@@ -72,10 +72,11 @@ class CoffeeLot extends Model
         return $this->hasMany(CoffeeDelivery::class, 'lot_id', 'id');
     }
 
+
     /**
-     * lots
+     * parentLots
      */
-    public function lots(){
+    public function parentLots(){
         return $this->hasMany(CoffeeLot::class, 'parent_lot_id', 'id');
     }
 

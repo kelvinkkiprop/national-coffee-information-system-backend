@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('coffee_lots', function (Blueprint $table) {
             // $table->id();
             $table->uuid('id')->primary();
+            $table->string('lot_number')->nullable();
             $table->uuid('cooperative_society_id')->nullable();
             $table->integer('stage_id')->nullable();
-            $table->string('lot_number')->nullable();
             $table->uuid('transaction_id')->nullable();
             $table->uuid('parent_lot_id')->nullable();
             $table->string('grade')->nullable();

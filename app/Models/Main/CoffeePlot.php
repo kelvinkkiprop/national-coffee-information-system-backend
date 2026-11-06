@@ -44,6 +44,7 @@ class CoffeePlot extends Model
         'latitude',
         'longitude',
         'geo_json_geometry',
+        'greater_than_4ha',
         'deforestation_free',
         'legal_compliance_status_id',
         'status_id',
@@ -51,6 +52,11 @@ class CoffeePlot extends Model
         'created_at',
         'updated_at',
     ];
+
+    protected $casts = [
+        'greater_than_4ha' => 'boolean',
+    ];
+
 
 
     /**
