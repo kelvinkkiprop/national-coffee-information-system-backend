@@ -105,7 +105,7 @@ class CoffeeTransactionController extends Controller
      */
     public function show(string $id)
     {
-        return CoffeeTransaction::with(['user','stage','lot.parentLots.deliveries.plot'])->find($id);
+        return CoffeeTransaction::with(['user','stage','lot','lot.deliveries.plot','lot.parentLots.deliveries.plot','lot.parentLots.parentLots.deliveries.plot'])->find($id);
     }
 
     /**
@@ -249,7 +249,7 @@ class CoffeeTransactionController extends Controller
         ]);
 
         $mMark=$fields['traceability_mark'];
-        $item = CoffeeTransaction::with(['stage','lot.parentLots.deliveries.plot'])->where('traceability_mark', $mMark)->first();
+        $item = CoffeeTransaction::with(['stage','lot.deliveries.plot', 'lot.parentLots.deliveries.plot','lot.parentLots.parentLots.deliveries.plot'])->where('traceability_mark', $mMark)->first();
         if(!$item){
             $response = [
                 'status' => 'failed',
@@ -259,10 +259,11 @@ class CoffeeTransactionController extends Controller
             return response($response, 200);
         }
 
+
         $response = [
             'status' => 'success',
             'message' => 'Record retrieved successfully',
-            'data' => $item
+            'data' => $item,
         ];
         return response($response, 200);
     }

@@ -63,8 +63,9 @@ class CoffeeTransaction extends Model
      * stage
      */
     public function stage(){
-        return $this->hasOne(CoffeeTransactionStage::class, 'id', 'stage_id');
+        return $this->belongsTo(CoffeeTransactionStage::class, 'stage_id', 'id');
     }
+
 
     /**
      * lot

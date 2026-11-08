@@ -50,20 +50,14 @@ class CoffeeLot extends Model
     ];
 
 
+
+
     /**
      * user
      */
     public function user(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-
-    /**
-     * stage
-     */
-    public function stage(){
-        return $this->hasOne(CoffeeTransactionStage::class, 'id', 'coffee_species_id');
-    }
-
 
     /**
      * deliveries
@@ -79,6 +73,5 @@ class CoffeeLot extends Model
     public function parentLots(){
         return $this->hasMany(CoffeeLot::class, 'parent_lot_id', 'id');
     }
-
 
 }
