@@ -305,42 +305,27 @@ class PermitController extends Controller
             'search_term' => 'required|string'
         ]);
 
-        $mCurrentUser= auth()->user();
-        $mCurrentUser?->load('role');
+        $mCurrentUser = auth()->user();
+        $mCurrentUser->loadMissing('role');
+
         $term = $fields['search_term'];
-        $items = null;
-        if($mCurrentUser->role?->type_id==2){
-            $items = Permit::with(['user','issuingBody','type','coffeeSpecies','coffeeForm','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
-                $query->where('application_number','LIKE','%'.$term.'%');
-                $query->orWhere('mark','LIKE','%'.$term.'%');
-                $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
-                $query->orWhere('origin','LIKE','%'.$term.'%');
-                $query->orWhere('destination','LIKE','%'.$term.'%');
-                $query->orWhere('driver_name','LIKE','%'.$term.'%');
-                $query->orWhere('warehouse_receipt_number','LIKE','%'.$term.'%');
-                $query->orWhereHas('status', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
+        $items = Permit::with(['user','issuingBody','type','coffeeSpecies','coffeeForm','status','payment.status'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
+            $q->where('user_id', $mCurrentUser->id)
+        )->where(function($query) use($term){
+            $query->where('application_number','LIKE','%'.$term.'%');
+            $query->orWhere('mark','LIKE','%'.$term.'%');
+            $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
+            $query->orWhere('origin','LIKE','%'.$term.'%');
+            $query->orWhere('destination','LIKE','%'.$term.'%');
+            $query->orWhere('driver_name','LIKE','%'.$term.'%');
+            $query->orWhere('warehouse_receipt_number','LIKE','%'.$term.'%');
+            $query->orWhereHas('status', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
                 });
-            })->orderBy('created_at', 'desc')->get();
-         }else{
-            $items = Permit::with(['user','issuingBody','type','status','coffeeSpecies','coffeeForm','payment.status'])->where(function($query) use($term){
-                $query->where('application_number','LIKE','%'.$term.'%');
-                $query->orWhere('mark','LIKE','%'.$term.'%');
-                $query->orWhere('number_of_bags','LIKE','%'.$term.'%');
-                $query->orWhere('origin','LIKE','%'.$term.'%');
-                $query->orWhere('destination','LIKE','%'.$term.'%');
-                $query->orWhere('driver_name','LIKE','%'.$term.'%');
-                $query->orWhere('warehouse_receipt_number','LIKE','%'.$term.'%');
-                $query->orWhereHas('status', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
-                });
-            })->orderBy('created_at', 'desc')->get();         }
+            });
+        })->orderBy('created_at', 'desc')->get();
 
         $response = [
             'status' => 'success',

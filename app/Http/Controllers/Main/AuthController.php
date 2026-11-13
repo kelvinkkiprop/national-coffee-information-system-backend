@@ -88,6 +88,7 @@ class AuthController extends Controller
            'name' => $fields['name'],
            'email' => $fields['email'],
            'password' => Hash::make($fields['password']),
+           'status_id' => 1,//Inactive
            'remember_token' => Str::random(50),
            'verification_code' => $verification_code,
            'otp_code' => $otp_code,

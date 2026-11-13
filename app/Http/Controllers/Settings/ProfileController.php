@@ -32,15 +32,13 @@ class ProfileController extends Controller
     {
         $fields = $request->validate([
             // Basic
-            'role_id' => 'required|integer',
-            'id_number' => 'required|string',
-            'country_code' => 'required|string',
             'phone_number' => 'required|string',
             'country_id' => 'required|integer',
             // General
             'legal_status_id' => 'required|integer',
-            'company_registration_number' => 'nullable|string',
-            'company_establishment_date' => 'nullable|date|before_or_equal:today',
+            'id_number' => 'nullable|required_if:legal_status_id,1|string',
+            'company_registration_number' => 'nullable|required_unless:legal_status_id,1|string',
+            'company_establishment_date' => 'nullable|required_unless:legal_status_id,1|before_or_equal:today',
             'kra_pin' => 'nullable|string',
             'postal_code' => 'required|string',
             'postal_address' => 'required|string',
@@ -59,22 +57,23 @@ class ProfileController extends Controller
         ]);
 
         $mCurrentUser = auth()->user();
+        $mCurrentUser->phone_number = $fields['phone_number'];
+        $mCurrentUser->status_id = 2;
+        $mCurrentUser->save();
+
         // $item = Profile::create([
         $item = Profile::updateOrCreate(['user_id' => $mCurrentUser->id],[
             'user_id' => $mCurrentUser->id,
             // Basic
-            'role_id' => $fields['role_id'],
-            'id_number' => $fields['id_number'],
-            'country_code' => $fields['country_code'],
-            'phone_number' => $fields['phone_number'],
             'country_id' => $fields['country_id'],
             // General
             'legal_status_id' => $fields['legal_status_id'],
+            'id_number' => $fields['id_number'],
             'company_registration_number' => $fields['company_registration_number'],
             'company_establishment_date' => $fields['company_establishment_date'],
             'kra_pin' => $fields['kra_pin'],
-            'postal_code' => $fields['postal_code'],
             'postal_address' => $fields['postal_address'],
+            'postal_code' => $fields['postal_code'],
             // Location
             'region_id' => $fields['region_id'],
             'county_id' => $fields['county_id'],
@@ -88,10 +87,6 @@ class ProfileController extends Controller
             'building_name' => $fields['building_name'],
             'plot_number' => $fields['plot_number'],
         ]);
-
-        $item = User::findOrFail($mCurrentUser->id);
-        $item->role_id = $fields['role_id'];
-        $item->save();
 
         $response = [
             'status' => 'success',
@@ -116,15 +111,13 @@ class ProfileController extends Controller
     {
         $fields = $request->validate([
             // Basic
-            'role_id' => 'required|integer',
-            'id_number' => 'required|string',
-            'country_code' => 'required|string',
             'phone_number' => 'required|string',
             'country_id' => 'required|integer',
             // General
             'legal_status_id' => 'required|integer',
-            'company_registration_number' => 'nullable|string',
-            'company_establishment_date' => 'nullable|date|before_or_equal:today',
+            'id_number' => 'nullable|required_if:legal_status_id,1|string',
+            'company_registration_number' => 'nullable|required_unless:legal_status_id,1|string',
+            'company_establishment_date' => 'nullable|required_unless:legal_status_id,1|before_or_equal:today',
             'kra_pin' => 'nullable|string',
             'postal_code' => 'required|string',
             'postal_address' => 'required|string',
@@ -142,15 +135,18 @@ class ProfileController extends Controller
             'plot_number' => 'nullable|string',
         ]);
 
+
+        $mCurrentUser = auth()->user();
+        $mCurrentUser->phone_number = $fields['phone_number'];
+        $mCurrentUser->status_id = 2;
+        $mCurrentUser->save();
+
         $item = Profile::where('id', $id)->update([
             // Basic
-            'role_id' => $fields['role_id'],
-            'id_number' => $fields['id_number'],
-            'country_code' => $fields['country_code'],
-            'phone_number' => $fields['phone_number'],
             'country_id' => $fields['country_id'],
             // General
             'legal_status_id' => $fields['legal_status_id'],
+            'id_number' => $fields['id_number'],
             'company_registration_number' => $fields['company_registration_number'],
             'company_establishment_date' => $fields['company_establishment_date'],
             'kra_pin' => $fields['kra_pin'],
@@ -169,12 +165,6 @@ class ProfileController extends Controller
             'building_name' => $fields['building_name'],
             'plot_number' => $fields['plot_number'],
         ]);
-
-        // $mCurrentUser = auth()->user();
-        // $item = User::findOrFail($mCurrentUser->id);
-        // $item = User::findOrFail($mCurrentUser->id);
-        // $item->role_id = $fields['role_id'];
-        // $item->save();
 
         $response = [
             'status' => 'success',

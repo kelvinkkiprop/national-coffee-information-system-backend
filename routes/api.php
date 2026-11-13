@@ -36,7 +36,9 @@ Route::get('/user', function (Request $request) {
 */
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('forms-and-resources', [DashboardController::class, 'formsAndResourcesItem']);
 });
+Route::get('forms-and-resources/{type_id}/{filename}', [DashboardController::class, 'downloadFormsAndResourcesItemItem']);
 
 
 /*

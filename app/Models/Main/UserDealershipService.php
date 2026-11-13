@@ -32,7 +32,10 @@ class UserDealershipService extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'dealer_registration_id',
         'category_id',
+        'expiry_date',
+        'status_id',
 
         'created_at',
         'updated_at',

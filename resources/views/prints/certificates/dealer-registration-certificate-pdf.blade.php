@@ -416,18 +416,18 @@
                                 <div class="my-2">
                                     <div class="row-print">
                                         <div class="col-print-6">
-                                            <p class="m-1"><span class="text-muted">Name:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->name }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Email:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->email }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Town/City:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->town }}</u></p>
-                                            <p class="m-1"><span class="text-muted">County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->county?->name}}</u></p>
-                                            <p class="m-1"><span class="text-muted">Ward:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->ward?->name}}</u></p>
+                                            <p class="m-1"><span class="text-muted">Name:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user->name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Email:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user->email }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Town/City:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->town }}</u></p>
+                                            <p class="m-1"><span class="text-muted">County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->county?->name}}</u></p>
+                                            <p class="m-1"><span class="text-muted">Ward:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->ward?->name}}</u></p>
                                         </div>
                                         <div class="col-print-6">
                                             <p class="m-1"><span class="text-muted">Registration No:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->application_number }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Mobile No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->phone_number }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Street/Road:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->street_name }}</u></p>
-                                            <p class="m-1"><span class="text-muted">Sub County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->subCounty?->name}}</u></p>
-                                            <p class="m-1"><span class="text-muted">L.R. No./Plot No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->plot_number }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Mobile No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->phone_number }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Street/Road:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->street_name }}</u></p>
+                                            <p class="m-1"><span class="text-muted">Sub County:</span>&nbsp;<span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->subCounty?->name}}</u></p>
+                                            <p class="m-1"><span class="text-muted">L.R. No./Plot No:</span> <span class="dotted-underline text-capitalize">&nbsp;{{ $item->user?->profile?->plot_number }}</u></p>
                                         </div>
                                     </div>
                                 </div>

@@ -19,11 +19,12 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
             $table->unsignedBigInteger('role_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->unsignedBigInteger('status_id')->default(1);
+            $table->unsignedBigInteger('status_id')->default(2);
             $table->unsignedBigInteger('verification_code')->nullable();
 
             // OTP

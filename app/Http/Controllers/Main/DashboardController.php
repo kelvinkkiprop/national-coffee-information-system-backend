@@ -13,6 +13,7 @@ use App\Models\Settings\Profile;
 
 class DashboardController extends Controller
 {
+
     /**
      * Index
      */
@@ -40,6 +41,49 @@ class DashboardController extends Controller
             'data' => $data
         ];
         return response($response, 201);
+    }
+
+
+    /**
+     * formsAndResourcesItem
+     */
+    public function formsAndResourcesItem()
+    {
+        $forms = [
+            ['id'=>1, 'type_id'=>1, 'name'=>'Self-Declaration Form', 'filename'=>'FORM M - SELF-DECLARATION FORM.pdf'],
+            ['id'=>2, 'type_id'=>1, 'name'=>'Notification of Coffee Events', 'filename'=>'FORM H - NOTIFICATION OF COFFEE EVENTS.pdf'],
+        ];
+        $other_resources = [
+            ['id'=>1, 'type_id'=>2, 'name'=>'User Manual', 'filename'=>'USER MANUAL.pdf'],
+        ];
+
+        $data = [
+            'forms' => $forms,
+            'other_resources' => $other_resources,
+        ];
+
+        $response = [
+            'status' => 'success',
+            'message' => 'Data retrieved successfully',
+            'data' => $data
+        ];
+        return response($response, 201);
+    }
+
+    /**
+    * downloadFormsAndResourcesItemItem
+    */
+    public function downloadFormsAndResourcesItemItem(string $type_id, string $filename)
+    {
+        if($type_id==1){ //Forms
+            $filepath = public_path('downloads/Forms/'.$filename);
+            return response()->file($filepath);
+            // return Response::download($filepath);
+        }elseif($type_id==2){
+            $filepath = public_path('downloads/OtherResources/'.$filename);
+            return response()->file($filepath);
+            // return Response::download($filepath);
+        }
     }
 
 }

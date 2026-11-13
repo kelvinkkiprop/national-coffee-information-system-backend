@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 // Add
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Main\DealerRegistration;
+use App\Models\Main\UserDealershipService;
 use App\Models\Others\DealerRegistrationStatus;
 // Notifications
 use Illuminate\Support\Facades\Mail;
@@ -44,16 +46,15 @@ class ProcessDealerRegistrationController extends Controller
         $mRemarks = $fields['remarks'];
 
         // Notifications
-        $item = User::find($id);
-        User::where('id', $id)->update([
-            'dealer_registration_status_id' => $mStatusId,
+        $item = DealerRegistration::where('id', $id)->update([
+            'status_id' => $mStatusId,
             // 'remarks' => $fields['remarks'],
         ]);
         if($mStatusId==2){//Returned
             $fields = $request->validate([
                 'remarks' => 'string|nullable',
             ]);
-            $mUser = User::find($item->id);
+            $mUser = User::find($item->user_id);
             $message = "<div>
                 <p>We regret to inform you that your application has been returned.</p>
                 <p>
@@ -72,8 +73,12 @@ class ProcessDealerRegistrationController extends Controller
             Mail::to($mUser->email)->send(new AlertMail($data));
 
         }else if($mStatusId==4){//Approved
+            $item = DealerRegistration::where('id', $id)->update([
+                'status_id' => $fields['status_id'],
+                'expiry_date' => Carbon::now()->addYear(),
+            ]);
             // Notification
-            $mUser = User::find($item->id);
+            $mUser = User::find($item->user_id);
             $message = "<div>
                 <p>We are glad to inform you that your application has been approved.</p>
                 <p>
@@ -91,9 +96,8 @@ class ProcessDealerRegistrationController extends Controller
             );
             Mail::to($mUser->email)->send(new AlertMail($data));
         }else if($mStatusId==5){//Rejected
-            User::where('id', $id)->update([
-                'dealer_registration_status_id' => null,
-                // 'remarks' => $fields['remarks'],
+            $item = DealerRegistration::where('id', $id)->update([
+                'status_id' => $fields['status_id'],
             ]);
             // Notification
             $mUser = User::find($item->id);

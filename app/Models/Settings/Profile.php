@@ -45,8 +45,6 @@ class Profile extends Model
         // Basic
         'role_id',
         'id_number',
-        'country_code',
-        'phone_number',
         'country_id',
         // General
         'legal_status_id',
@@ -68,41 +66,9 @@ class Profile extends Model
         'building_name',
         'plot_number',
 
-        // COMMON
-        'millers_code',
-        // DealerRegistration
-        'brief_company_profile',
-        'directors_of_dealership',
-        'engaged_persons_professional_skills',
-
-
         'created_at',
         'updated_at',
     ];
-
-
-
-    /**
-    * appends
-    */
-    protected $appends = [
-        'engaged_persons_professional_skills_url',
-    ];
-
-
-    /**
-    * getters_and_setters
-    */
-    public function getEngagedPersonsProfessionalSkillsUrlAttribute()
-    {
-        $value = $this->engaged_persons_professional_skills;
-        if(is_null($value)){
-            return null;
-        }else{
-            $path = config('app.asset_url').config('app.paths.file_download');
-            return $path.$value;
-        }
-    }
 
 
 

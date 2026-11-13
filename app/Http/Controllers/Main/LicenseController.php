@@ -534,70 +534,41 @@ class LicenseController extends Controller
             'search_term' => 'required|string'
         ]);
 
-        $mCurrentUser= auth()->user();
-        $mCurrentUser?->load('role');
+        $mCurrentUser = auth()->user();
+        $mCurrentUser->loadMissing('role');
+
         $term = $fields['search_term'];
-        $items = null;
-        if($mCurrentUser->role?->type_id==1){
-            $items = License::with(['user','type','issuingBody','category','status','payment.status'])->where('user_id', $mCurrentUser->id)->where(function($query) use($term){
-                $query->where('application_number','LIKE','%'.$term.'%');
-                $query->orWhere('financial_year','LIKE','%'.$term.'%');
-                $query->orWhere('expiry_date','LIKE','%'.$term.'%');
-                $query->orWhereHas('user', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('email', 'LIKE', '%' . $term . '%');
-                    });
+        $items = License::with(['user','type','issuingBody','category','status','payment.status'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
+            $q->where('user_id', $mCurrentUser->id)
+        )->where(function($query) use($term){
+            $query->where('application_number','LIKE','%'.$term.'%');
+            $query->orWhere('financial_year','LIKE','%'.$term.'%');
+            $query->orWhere('expiry_date','LIKE','%'.$term.'%');
+            $query->orWhereHas('user', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('email', 'LIKE', '%' . $term . '%');
                 });
-                $query->orWhereHas('category', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
+            });
+            $query->orWhereHas('category', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
                 });
-                $query->orWhereHas('issuingBody', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
+            });
+            $query->orWhereHas('issuingBody', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
                 });
-                $query->orWhereHas('status', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
+            });
+            $query->orWhereHas('status', function($q) use ($term) {
+                $q->where(function($q) use ($term) {
+                    $q->where('name', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
                 });
-            })->orderBy('created_at', 'desc')->get();
-         }else{
-            $items = License::with(['user','type','issuingBody','category','status','payment.status'])->where(function($query) use($term){
-                $query->where('application_number','LIKE','%'.$term.'%');
-                $query->orWhere('financial_year','LIKE','%'.$term.'%');
-                $query->orWhere('expiry_date','LIKE','%'.$term.'%');
-                $query->orWhereHas('user', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('email', 'LIKE', '%' . $term . '%');
-                    });
-                });
-                $query->orWhereHas('category', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
-                });
-                $query->orWhereHas('issuingBody', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
-                });
-                $query->orWhereHas('status', function($q) use ($term) {
-                    $q->where(function($q) use ($term) {
-                        $q->where('name', 'LIKE', '%' . $term . '%');
-                        $q->orWhere('alias', 'LIKE', '%' . $term . '%');
-                    });
-                });
-            })->where('user_id', $mCurrentUser->id)->orderBy('created_at', 'desc')->get();         }
+            });
+        })->orderBy('created_at', 'desc')->get();
 
         $response = [
             'status' => 'success',

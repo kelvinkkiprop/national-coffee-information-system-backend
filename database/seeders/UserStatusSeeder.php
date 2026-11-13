@@ -16,9 +16,9 @@ class UserStatusSeeder extends Seeder
     {
         // Default
         $items = [
-            ["id"=>1, "name"=>"Active", "alias"=>"Activate", "created_at"=>now()],
-            ["id"=>2, "name"=>"Disabled", "alias"=>"Disable", "created_at"=>now()],
-            ["id"=>3, "name"=>"Blocked", "alias"=>"Block", "created_at"=>now()],
+            ["id"=>1, "name"=>"Inactive", "alias"=>"New", "created_at"=>now()],
+            ["id"=>2, "name"=>"Active", "alias"=>"Activate", "created_at"=>now()],
+            ["id"=>3, "name"=>"Disabled", "alias"=>"Disable", "created_at"=>now()],
         ];
         UserStatus::insert($items);
     }

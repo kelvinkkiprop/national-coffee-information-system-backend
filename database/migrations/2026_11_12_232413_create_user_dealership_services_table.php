@@ -15,10 +15,14 @@ return new class extends Migration
             // $table->id();
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable();
+            $table->uuid('dealer_registration_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->date('expiry_date')->nullable();
+            $table->integer('status_id')->default(1);
             $table->timestamps();
             // Cascade
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('dealer_registration_id')->references('id')->on('dealer_registrations')->onDelete('cascade');
         });
     }
 

@@ -138,8 +138,13 @@ class CoffeePlotController extends Controller
             'search_term' => 'required|string'
         ]);
 
+        $mCurrentUser = auth()->user();
+        $mCurrentUser->loadMissing('role');
+
         $term = $fields['search_term'];
-        $items = CoffeePlot::with('owner')->where(function($query) use($term){
+        $items = CoffeeTransaction::with(['owner'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
+                $q->where('user_id', $mCurrentUser->id)
+            )->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('alias','LIKE','%'.$term.'%');
             $query->orWhereHas('owner', function($q) use ($term) {

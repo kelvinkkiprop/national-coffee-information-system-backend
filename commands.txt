@@ -62,6 +62,7 @@ php artisan make:model Main/CoffeePlot -m
 php artisan make:model Main/CoffeeDelivery -m
 php artisan make:model Main/CoffeeTransaction -m
 php artisan make:model Main/CoffeeLot -m
+php artisan make:model Main/DealerRegistration -m
 php artisan make:model Others/CoffeeTransactionStage -m
 php artisan make:model Settings/Role -m
 php artisan make:model Settings/Committee -m
@@ -569,7 +570,7 @@ server {
     server_name test-ncis.coffeeboard.go.ke;
 
     location / {
-        proxy_pass http://192.168.0.146:3001;
+        proxy_pass http://192.168.90.60:3001;
         proxy_http_version 1.1;
 
         proxy_set_header Host $host;
@@ -587,7 +588,7 @@ server {
     sudo systemctl status nginx
 
 4. Test (Enable Port 3001)
-curl -I http://192.168.0.146:3001
+curl -I http://192.168.90.60:3001
 curl -I http://test-ncis.coffeeboard.go.ke
 
 5. Reference
@@ -627,3 +628,17 @@ https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal
 ===================================./CERT_BOT===================================
 
 
+
+===================================IP_ROUTE===================================
+1. Check Custom Config (From Local IP to Firewall)
+ip route
+
+2. Check Current Network Config
+ip addr
+ip route
+
+3. Add a static route
+sudo ip route add 10.10.10.0/24 via 10.10.10.10
+
+sudo vim /etc/netplan/50-cloud-init.yaml
+===================================./IP_ROUTE===================================

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Main\CoffeeTransaction;
 use App\Models\Main\CoffeeDelivery;
 use App\Models\Main\CoffeeLot;
+use App\Models\Main\UserDealershipService;
 use App\Models\Others\CoffeeTransactionStage;
 
 class CoffeeTransactionController extends Controller
@@ -28,6 +29,7 @@ class CoffeeTransactionController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
+            'user_id' => 'required|string',
             'stage_id' => 'required|integer',
             'grade' => 'required|string',
             'quantity' => 'required|numeric',
@@ -47,7 +49,7 @@ class CoffeeTransactionController extends Controller
         $item = CoffeeTransaction::create([
             'transaction_number' => $mTransactionNumber,
             'traceability_mark' => $mTraceabilityMark,
-            'user_id' => $mCurrentUser->id,
+            'user_id' => $fields['user_id'],
             // 'buyer_id' => $fields['buyer_id'],
             // 'buyer_name' => $fields['buyer_name'],
             'stage_id' => $fields['stage_id'],
@@ -65,7 +67,7 @@ class CoffeeTransactionController extends Controller
         $mLotNumber = $mStage->abbreviation.'-LOT-'.date('Y').'-'.$nextNumber;
         $mItem = CoffeeLot::create([
             'transaction_id' => $item->id,
-            'cooperative_society_id' => $mCurrentUser->id,
+            'user_id' => $mCurrentUser->id,
             'lot_number' => $mLotNumber,
             'stage_id' => $mStage->id,
             'quantity' => $fields['quantity'],
@@ -159,8 +161,13 @@ class CoffeeTransactionController extends Controller
             'search_term' => 'required|string'
         ]);
 
+        $mCurrentUser = auth()->user();
+        $mCurrentUser->loadMissing('role');
+
         $term = $fields['search_term'];
-        $items = CoffeeTransaction::with('user')->where(function($query) use($term){
+        $items = CoffeeTransaction::with(['user'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
+                $q->where('user_id', $mCurrentUser->id)
+            )->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('alias','LIKE','%'.$term.'%');
             $query->orWhereHas('user', function($q) use ($term) {
@@ -185,12 +192,21 @@ class CoffeeTransactionController extends Controller
      */
     public function unpaginatedItems()
     {
+        $mCurrentUser=auth()->user();
+        $mDealersIDs=UserDealershipService::where('status_id', 2)->pluck('user_id');
+
+        $users = User::where('role_id', 34)->when($mCurrentUser->role_id==1, function($query) use($mDealersIDs){
+            $query->whereIn('id', $mDealersIDs);
+        })->when($mCurrentUser->role_id!=1, function($query) use($mCurrentUser) {
+            $query->where('id', $mCurrentUser->id);
+        })->orderBy('name', 'asc')->get();
         $stages = CoffeeTransactionStage::orderBy('id', 'asc')->get();
 
         $response = [
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => [
+                'users' => $users,
                 'stages' => $stages,
             ]
         ];
@@ -210,7 +226,11 @@ class CoffeeTransactionController extends Controller
         $coffee_lots = null;
 
         if($stage_id==1){//Aggregation
-            $coffee_deliveries = CoffeeDelivery::where('lot_id', null)->orderBy('created_at', 'desc')->get();
+            // $coffee_deliveries = CoffeeDelivery::where('lot_id', null)->orderBy('created_at', 'desc')->get();
+            $coffee_deliveries = CoffeeDelivery::where('lot_id', null)->when($mCurrentUser->role_id!=1, function($query) use($mCurrentUser) {
+                $query->where('user_id', $mCurrentUser->id);
+            })->orderBy('created_at', 'desc')->get();
+
             // $coffee_deliveries = CoffeeDelivery::orderBy('created_at', 'desc')->get();
         // }elseif($stage_id==2){//Milling
         //     // $coffee_lots = CoffeeLot::where('parent_lot_id', null)->where('stage_id', 1)->orderBy('created_at', 'desc')->get();
@@ -220,7 +240,10 @@ class CoffeeTransactionController extends Controller
         //     $coffee_lots = CoffeeLot::where('stage_id', 2)->orderBy('created_at', 'desc')->get();
         // }
         }else{//Milling/Bulking
-            $coffee_lots = CoffeeLot::where('stage_id', $stage_id-1)->where('status_id',1)->orderBy('created_at', 'desc')->get();
+            // $coffee_lots = CoffeeLot::where('stage_id', $stage_id-1)->where('status_id',1)->orderBy('created_at', 'desc')->get();
+            $coffee_lots = CoffeeLot::where('stage_id', $stage_id-1)->where('status_id',1)->when($mCurrentUser->role_id!=1, function($query) use($mCurrentUser) {
+                $query->where('user_id', $mCurrentUser->id);
+            })->orderBy('created_at', 'desc')->get();
         }
 
         $response = [
