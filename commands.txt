@@ -235,8 +235,8 @@ pscp -r "E:\Projects\VS Code Projects\national-coffee-information-system-backend
 ===================================./supervisor===================================
 - How to use supervisor to process jobs in Laravel in Linux Server
 $ sudo apt-get install supervisor
-$ sudo vi /etc/supervisor/conf.d/laravel-oss-permitting-management-system.conf
-[program:laravel-oss-permitting-management-system]
+$ sudo vi /etc/supervisor/conf.d/ncis_test.conf
+[program:ncis_test]
 process_name=%(program_name)s_%(process_num)02d
 command=/usr/bin/php /var/www/html/national-coffee-information-system-backend/artisan queue:work database --sleep=3 --tries=3
 autostart=true
@@ -250,10 +250,10 @@ stdout_logfile=/var/www/html/national-coffee-information-system-backend/storage/
 - Then :wq
 sudo supervisorctl reread
 sudo supervisorctl update
-sudo supervisorctl start 'laravel-oss-permitting-management-system:*'
+sudo supervisorctl start 'ncis_test:*'
 OR
-sudo supervisorctl start laravel-oss-permitting-management-system.conf
-supervisorctl restart laravel-oss-permitting-management-system:*
+sudo supervisorctl start ncis_test.conf
+supervisorctl restart ncis_test:*
 
 
 -Check if supervisor is running
@@ -557,20 +557,58 @@ ADD COLUMN `water_engineer_status_id` INT NULL;
 ===================================./SQL_QUERIES===================================
 
 
+===================================ENABLE_SSH===================================
+1. Install/Update
+sudo apt update
+
+2. Enable and start SSH
+sudo systemctl enable ssh
+sudo systemctl start ssh
+sudo systemctl status ssh
+sudo systemctl restart ssh
+
+3. Allow SSH through the firewall
+sudo ufw reload
+sudo ufw enable
+sudo ufw allow 22
+sudo ufw status
+sudo ss -tlnp | grep :22
+
+4. Check SSH configuration
+sudo vim /etc/ssh/sshd_config
+
+- Ensure these settings are enabled:
+    Port 22
+    PubkeyAuthentication yes
+    PasswordAuthentication yes
+- For ubuntu 24
+sudo vim /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+    PasswordAuthentication yes
+
+5. Save and validate:
+sudo sshd -t
+sudo systemctl restart ssh
+===================================./ENABLE_SSH===================================
+
+
 
 
 ===================================./PROXY_CONFIG===================================
 1. Installation
+sudo apt update
 sudo apt install nginx
 
 2. Nginix Configuration file
 sudo vim /etc/nginx/sites-available/proxy_config
+# ==========================================================
+# NCIS - TEST
+# ==========================================================
 server {
     listen 80;
     server_name test-ncis.coffeeboard.go.ke;
 
     location / {
-        proxy_pass http://192.168.90.60:3001;
+        proxy_pass http://10.10.10.21:80;
         proxy_http_version 1.1;
 
         proxy_set_header Host $host;
@@ -580,6 +618,25 @@ server {
     }
 }
 
+# ==========================================================
+# NCIS - PRODUCTION
+# ==========================================================
+server {
+    listen 80;
+    server_name ncis.coffeeboard.go.ke;
+
+    location / {
+        proxy_pass http://10.10.10.22:80;
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+
 3. Create a Symbolic Link
     sudo ln -s /etc/nginx/sites-available/proxy_config /etc/nginx/sites-enabled/
     sudo ln -sf /etc/nginx/sites-available/proxy_config /etc/nginx/sites-enabled/proxy_config
@@ -587,8 +644,8 @@ server {
     sudo systemctl reload nginx
     sudo systemctl status nginx
 
-4. Test (Enable Port 3001)
-curl -I http://192.168.90.60:3001
+4. Test (Enable Port 80)
+curl -I http://10.10.10.21:80
 curl -I http://test-ncis.coffeeboard.go.ke
 
 5. Reference
