@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             SubCountySeeder::class,
             WardSeeder::class,
             LegalStatusSeeder::class,
+            GrowerTypeSeeder::class,
             DealershipCategorySeeder::class,
             DealerRegistrationStatusSeeder::class,
             PaymentStatusSeeder::class,

@@ -154,4 +154,17 @@ return [
         'base_url' => env('PESAFLOW_BASE_URL', 'https://payments.ecitizen.go.ke'),
     ],
 
+
+    /*
+    |===========================================================================
+    | ARC_GIS
+    |===========================================================================
+    */
+    'ARC_GIS' => [
+        'base_url' => env('GIS_BASE_URL', 'https://gis.konza.go.ke'),
+        'username' => env('GIS_USERNAME', 'kotda_oss_api_access'),
+        'password' => env('GIS_PASSWORD', 'TqFe>N&{Y3Ke7;xg'),
+    ],
+
+
 ];

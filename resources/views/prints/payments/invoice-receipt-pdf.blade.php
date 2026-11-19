@@ -396,7 +396,7 @@
                             <div class="text-muted">
                                 <p class="m-0 p-0 text-uppercase">{{ $item->user?->name }}</p>
                                 <p class="m-0 p-0">{{ $item->user?->email }}</p>
-                                <p class="m-0 p-0">{{ $item->user?->profile?->phone_number }}</p>
+                                <p class="m-0 p-0">{{ $item->user?->profile?->phone }}</p>
                             </div>
                             @endif
                         </td>
@@ -475,7 +475,7 @@
                 <thead>
                     <tr>
                         <td align="left">
-                            <p class="m-0 p-0"><strong>PAYMENT INFORMATION</strong></p>
+                            <p class="m-0 p-0"><strong>PAYMENT DETAILS</strong></p>
                             <div>
                                 <p class="m-0 p-0">eCitizen:<strong> eCitizen Payments</strong></p>
                                 <p class="m-0 p-0">M-Pesa Paybill:<strong> 222222</strong></p>

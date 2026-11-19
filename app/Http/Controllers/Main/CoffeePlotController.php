@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
+use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use App\Models\Main\CoffeePlot;
 use App\Models\Main\UserDealershipService;
@@ -32,7 +33,7 @@ class CoffeePlotController extends Controller
             'size' => 'required|numeric',
             'soil_profile' => 'nullable|string',
             'coffee_species_id' => 'required|integer',
-            'cooperative_society_id' => 'nullable|integer',
+            'cooperative_society_id' => 'nullable|string',
             'country_id' => 'required|integer',
             'county_id' => 'required|integer',
             'latitude' => 'required|numeric',
@@ -81,7 +82,7 @@ class CoffeePlotController extends Controller
             'size' => 'required|numeric',
             'soil_profile' => 'nullable|string',
             'coffee_species_id' => 'required|integer',
-            'cooperative_society_id' => 'nullable|integer',
+            'cooperative_society_id' => 'nullable|string',
             'country_id' => 'required|integer',
             'county_id' => 'required|integer',
             'latitude' => 'required|numeric',
@@ -192,6 +193,154 @@ class CoffeePlotController extends Controller
             ]
         ];
         return response($response, 200);
+    }
+
+
+
+
+
+    /**
+     * syncGisCoffeePlotItems
+     */
+    public function syncGisCoffeePlotItems(Request $request)
+    {
+        $fields = $request->validate([
+            'category_id' => 'required|string'
+        ]);
+        $mCategoryId = $fields['category_id'];
+
+        $mToken = $this->authGIS();
+        if(!$mToken){
+            $response = [
+                'status' => 'failed',
+                'message' => 'Failed to generate token',
+            ];
+            return response($response, 200);
+        }
+        // $response = [
+        //     'status' => 'failed',
+        //     'message' => 'Token generated successfully!',
+        //     'data' => $mToken,
+        // ];
+        // return response($response, 201);
+
+        $base_url = config('app.ARC_GIS.base_url');
+        $url=null;
+        if($mCategoryId==1){//GreaterThan4ha
+            $url = $base_url."/server/rest/services/Hosted/Kericho_County_Coffee_Farms/FeatureServer/1/query"; //GreaterThan4H
+        }else{//LessThan4ha
+            $url = $base_url."/server/rest/services/Hosted/Kericho_County_Coffee_Farms/FeatureServer/0/query"; //LessThan4H
+        }
+
+        $response = Http::withOptions([
+            'verify' => false,
+        ])->accept('application/json')->get($url, [
+            'where'    => 'OBJECTID>0',
+            'f'        => 'json',
+            'outFields'=> '*',
+            'token'    => $mToken,
+        ]);
+        // return $response;
+        $mData = $response->json();
+        // return $mData;
+
+        $mFeatures = $mData['features'];
+        $mRows = [];
+        foreach ($mFeatures as $mFeature) {
+            $mAttributes = $mFeature['attributes'];
+            $mGeometry   = $mFeature['geometry'];
+            // return $mGeometry['rings'][0];
+            // $mRings = $mGeometry['rings'][0];
+            $mUuid = $mAttributes['uuid'];
+
+            $mGeoJsonGeometry = json_encode([
+                'type' => 'Polygon',
+                'coordinates' => $mGeometry['rings']
+            ]);
+
+            $mRows[] = [
+                'id' => $mAttributes['uuid'],
+                'size' => $mAttributes['SHAPE__Area'],
+                'latitude' => $mAttributes['latitude'],
+                'longitude' => $mAttributes['longitude'],
+                'number_of_coffee_trees' => $mAttributes['trees_brea'],
+                // 'rings' => json_encode($mRings), // safer for DB storage
+                'geo_json_geometry' => $mGeoJsonGeometry,
+                // 'created_at' => now(),
+                // 'updated_at' => now(),
+            ];
+        }
+
+        // 'id',
+        // 'owner_id',
+        // 'size',
+        // 'soil_profile',
+        // 'number_of_coffee_trees',
+        // 'coffee_species_id',
+        // 'cooperative_society_id',
+        // 'country_id',
+        // 'county_id',
+        // 'latitude',
+        // 'longitude',
+        // 'geo_json_geometry',
+        // 'greater_than_4ha',
+        // 'deforestation_free',
+        // 'legal_compliance_status_id',
+        // 'status_id',
+
+        // 'created_at',
+        // 'updated_at',
+
+        // Atomic_UPSERT_prevents_duplicates_and_race_conditions
+        CoffeePlot::upsert($mRows, ['id'], [
+            'id',
+            'size',
+            'latitude',
+            'longitude',
+            'number_of_coffee_trees',
+            'geo_json_geometry',
+            // 'rings',
+            // 'updated_at'
+        ]);
+        $response = [
+            'status' => 'success',
+            'message' => count($mRows).' plots synchronized successfully',
+        ];
+        return response($response, 201);
+    }
+
+
+    /**
+     * authGIS
+     */
+    public function authGIS()
+    {
+        // Shared
+        $base_url = config('app.ARC_GIS.base_url');
+        $username = config('app.ARC_GIS.username');
+        $password = config('app.ARC_GIS.password');
+        $url = $base_url."/portal/sharing/rest/generateToken";
+
+        $response = Http::withOptions([
+            'verify' => false, //OnDevOnly
+        ])
+        ->withHeaders([
+            'Content-Type' => 'application/ecmascript',
+        ])
+        ->asForm() // still sends body as x-www-form-urlencoded
+        ->acceptJson()
+        ->post($url, [
+            'username'   => $username,
+            'password'   => $password,
+            'client'     => 'referer',
+            'f'          => 'json',
+            'expiration' => 60,
+            'referer'    => $base_url,
+        ]);
+
+        $mData = $response->json();
+        $mToken = $mData['token'];
+        return $mToken;
     }
 
 }

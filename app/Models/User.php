@@ -19,6 +19,7 @@ use App\Models\Settings\Profile;
 use App\Models\Settings\CommitteeMember;
 use App\Models\Others\UserStatus;
 use App\Models\Others\DealerRegistrationStatus;
+use App\Models\Others\GrowerType;
 
 class User extends Authenticatable
 {
@@ -52,7 +53,8 @@ class User extends Authenticatable
         'middle_name',
         'last_name',
         'email',
-        'phone_number',
+        'phone',
+        'id_number',
         'password',
         'role_id',
         'status_id',
@@ -64,8 +66,9 @@ class User extends Authenticatable
         'otp_verified',
         'otp_used',
 
-        'registering_dealer_id',
-        'dealer_registration_status_id'
+        'grower_type_id',
+        'dealership_id',
+        'dealership_registration_status_id'
     ];
 
     /**
@@ -112,7 +115,14 @@ class User extends Authenticatable
      * dealerRegistrationStatus
      */
     public function dealerRegistrationStatus(){
-        return $this->hasOne(DealerRegistrationStatus::class, 'id', 'dealer_registration_status_id');
+        return $this->hasOne(DealerRegistrationStatus::class, 'id', 'dealership_registration_status_id');
+    }
+
+    /**
+     * growerType
+     */
+    public function growerType(){
+        return $this->hasOne(GrowerType::class, 'id', 'grower_type_id');
     }
 
     /**

@@ -19,22 +19,23 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
-            $table->string('phone_number')->nullable();
-            $table->unsignedBigInteger('role_id')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('id_number')->nullable();
+            $table->integer('role_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->unsignedBigInteger('status_id')->default(2);
-            $table->unsignedBigInteger('verification_code')->nullable();
-
+            $table->integer('status_id')->default(2);
+            $table->integer('verification_code')->nullable();
             // OTP
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->boolean('otp_verified')->default(false);
             $table->boolean('otp_used')->default(false);
 
-            $table->uuid('registering_dealer_id')->nullable();
-            $table->unsignedBigInteger('dealer_registration_status_id')->default(3);
+            $table->integer('grower_type_id')->nullable();
+            $table->uuid('dealership_id')->nullable();
+            $table->unsignedBigInteger('dealership_registration_status_id')->default(3);
 
             $table->timestamps();
             $table->softDeletes();

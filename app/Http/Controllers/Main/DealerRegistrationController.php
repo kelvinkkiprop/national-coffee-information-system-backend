@@ -47,16 +47,16 @@ class DealerRegistrationController extends Controller
             'certificate_of_incorporation_or_registration',
             'directors_details_id_passport_and_kra_pins',
             'tax_compliance_certificate',
-            // 20_Coffee_Training_School
+            // 16_Coffee_Training_School
             'premises_ownership_or_lease_document',
             'training_equipment_inventory',
             'course_outline_and_training_curriculum',
             'names_qualifications_and_certificates_of_trainers',
             'education_or_training_accreditation_certificate',
             'public_health_certificate',
-            // 21_Event_Organisers
+            // 17_Event_Organisers
             'company_profile',
-             // 22_Coffee_Projects
+             // 18_Coffee_Projects
             'project_document',
             'county_government_support_letters_and_mou',
             'implementation_plan_monitoring_and_evaluation_framework',
@@ -72,22 +72,22 @@ class DealerRegistrationController extends Controller
             'category_id' => 'required|string',
             // 'category_id.*' => 'required|integer|exists:categories,id',
             // Common
-            'certificate_of_incorporation_or_registration' => 'required_if:category_id,20,21,22,23|nullable|file|mimes:pdf|max:40960',
-            'directors_details_id_passport_and_kra_pins' => 'required_if:category_id,20,21,22,23|nullable|file|mimes:pdf|max:40960',
-            'tax_compliance_certificate' => 'required_if:category_id,20,21,23|nullable|file|mimes:pdf|max:40960',
-            // 20_Coffee_Training_School
-            'premises_ownership_or_lease_document' => 'required_if:category_id,20|nullable|file|mimes:pdf|max:40960',
-            'training_equipment_inventory' => 'required_if:category_id,20|nullable|file|mimes:pdf|max:40960',
-            'course_outline_and_training_curriculum' => 'required_if:category_id,20|nullable|file|mimes:pdf|max:40960',
-            'names_qualifications_and_certificates_of_trainers' => 'required_if:category_id,20|nullable|file|mimes:pdf|max:40960',
-            'education_or_training_accreditation_certificate' => 'required_if:category_id,20|nullable|file|mimes:pdf|max:40960',
-            'public_health_certificate' => 'required_if:category_id,20|nullable|file|mimes:pdf|max:40960',
-            // 21_Event_Organisers
-            'company_profile' => 'required_if:category_id,21|nullable|file|mimes:pdf|max:40960',
-            // 22_Coffee_Projects
-            'project_document' => 'required_if:category_id,22|nullable|file|mimes:pdf|max:40960',
-            'county_government_support_letters_and_mou' => 'required_if:category_id,22|nullable|file|mimes:pdf|max:40960',
-            'implementation_plan_monitoring_and_evaluation_framework' => 'required_if:category_id,22|nullable|file|mimes:pdf|max:40960',
+            'certificate_of_incorporation_or_registration' => 'required_if:category_id,16,17,18,23|nullable|file|mimes:pdf|max:40960',
+            'directors_details_id_passport_and_kra_pins' => 'required_if:category_id,16,17,18,23|nullable|file|mimes:pdf|max:40960',
+            'tax_compliance_certificate' => 'required_if:category_id,16,17,23|nullable|file|mimes:pdf|max:40960',
+            // 16_Coffee_Training_School
+            'premises_ownership_or_lease_document' => 'required_if:category_id,16|nullable|file|mimes:pdf|max:40960',
+            'training_equipment_inventory' => 'required_if:category_id,16|nullable|file|mimes:pdf|max:40960',
+            'course_outline_and_training_curriculum' => 'required_if:category_id,16|nullable|file|mimes:pdf|max:40960',
+            'names_qualifications_and_certificates_of_trainers' => 'required_if:category_id,16|nullable|file|mimes:pdf|max:40960',
+            'education_or_training_accreditation_certificate' => 'required_if:category_id,16|nullable|file|mimes:pdf|max:40960',
+            'public_health_certificate' => 'required_if:category_id,16|nullable|file|mimes:pdf|max:40960',
+            // 17_Event_Organisers
+            'company_profile' => 'required_if:category_id,17|nullable|file|mimes:pdf|max:40960',
+            // 18_Coffee_Projects
+            'project_document' => 'required_if:category_id,18|nullable|file|mimes:pdf|max:40960',
+            'county_government_support_letters_and_mou' => 'required_if:category_id,18|nullable|file|mimes:pdf|max:40960',
+            'implementation_plan_monitoring_and_evaluation_framework' => 'required_if:category_id,18|nullable|file|mimes:pdf|max:40960',
             'cooperative_society_id' => 'nullable|string',
         ]);
 
@@ -115,7 +115,7 @@ class DealerRegistrationController extends Controller
             $mTaxComplianceCertificate = time().uniqid().'.'.$request->tax_compliance_certificate->extension();
             $request->tax_compliance_certificate->storeAs($path_uploads, $mTaxComplianceCertificate, 'public');
         }
-        // 20_Coffee_Training_School
+        // 16_Coffee_Training_School
         $mPremisesOwnershipOrLeaseDocument=null;
         if ($request->hasFile('premises_ownership_or_lease_document')){
             $mPremisesOwnershipOrLeaseDocument = time().uniqid().'.'.$request->premises_ownership_or_lease_document->extension();
@@ -146,13 +146,13 @@ class DealerRegistrationController extends Controller
             $mPublicHealthCertificate = time().uniqid().'.'.$request->public_health_certificate->extension();
             $request->public_health_certificate->storeAs($path_uploads, $mPublicHealthCertificate, 'public');
         }
-        // 21_Event_Organisers
+        // 17_Event_Organisers
         $mCompanyProfile=null;
         if ($request->hasFile('company_profile')){
             $mCompanyProfile = time().uniqid().'.'.$request->company_profile->extension();
             $request->company_profile->storeAs($path_uploads, $mCompanyProfile, 'public');
         }
-        // 22_Coffee_Projects
+        // 18_Coffee_Projects
         $mProjectDocument=null;
         if ($request->hasFile('project_document')){
             $mProjectDocument = time().uniqid().'.'.$request->project_document->extension();
@@ -179,16 +179,16 @@ class DealerRegistrationController extends Controller
             'tax_compliance_certificate' => $mTaxComplianceCertificate,
             // 2_Grower
             'cooperative_society_id' => $fields['cooperative_society_id'],
-            // 20_Coffee_Training_School
+            // 16_Coffee_Training_School
             'premises_ownership_or_lease_document' => $mPremisesOwnershipOrLeaseDocument,
             'training_equipment_inventory' => $mTrainingEquipmentInventory,
             'course_outline_and_training_curriculum' => $mCourseOutlineAndTrainingCurriculum,
             'names_qualifications_and_certificates_of_trainers' => $mNamesQualificationsAndCertificatesOfTrainers,
             'education_or_training_accreditation_certificate' => $mEducationOrTrainingAccreditationCertificate,
             'public_health_certificate' => $mPublicHealthCertificate,
-            // 21_Event_Organisers
+            // 17_Event_Organisers
             'company_profile' => $mCompanyProfile,
-            // 22_Coffee_Projects
+            // 18_Coffee_Projects
             'project_document' => $mProjectDocument,
             'county_government_support_letters_and_mou' => $mCountyGovernmentSupportLettersAndMou,
             'implementation_plan_monitoring_and_evaluation_framework' => $mImplementationPlanMonitoringAndEvaluationFramework,
@@ -264,14 +264,14 @@ class DealerRegistrationController extends Controller
             'directors_of_dealership' => 'required|string',
             'category_id' => 'required|string',
             // 'category_id.*' => 'required|integer|exists:categories,id',
-            'certificate_of_incorporation_or_registration' => 'required_if:category_id,21,23|nullable|file|mimes:pdf|max:40960',
+            'certificate_of_incorporation_or_registration' => 'required_if:category_id,17,23|nullable|file|mimes:pdf|max:40960',
         ]);
 
 
         $userId = $fields['user_id'];
         $item = User::where('id', $userId)->update([
             'role_id' => 34,//Dealer,
-            'dealer_registration_status_id' => 3,
+            'dealership_registration_status_id' => 3,
         ]);
 
         // DeleteOld
@@ -345,14 +345,14 @@ class DealerRegistrationController extends Controller
      */
     public function destroy(string $id)
     {
-        $item = DealerRegistration::with('profile')->find($id);
+        $item = DealerRegistration::find($id);
             // Update
-            $item = User::find($item->user_id);
-            $item->role_id = null;
-            $item->save();
-            // Remove
-            $path_downloads = config('app.paths.file_download');
-            $file_url = public_path($path_downloads.$item->profile->certificate_of_incorporation_or_registration);
+            // $item = User::find($item->user_id);
+            // $item->role_id = null;
+            // $item->save();
+            // // Remove
+            // $path_downloads = config('app.paths.file_download');
+            // $file_url = public_path($path_downloads.$item->profile->certificate_of_incorporation_or_registration);
         $item->delete();
 
         $response = [

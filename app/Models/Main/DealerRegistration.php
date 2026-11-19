@@ -46,22 +46,25 @@ class DealerRegistration extends Model
         'tax_compliance_certificate',
          // 2_Grower
          'cooperative_society_id',
-        // 20_Coffee_Training_School
+        // 16_Coffee_Training_School
         'premises_ownership_or_lease_document',
         'training_equipment_inventory',
         'course_outline_and_training_curriculum',
         'names_qualifications_and_certificates_of_trainers',
         'education_or_training_accreditation_certificate',
         'public_health_certificate',
-        // 21_Event_Organisers
+        // 17_Event_Organisers
         'company_profile',
-        // 22_Coffee_Projects
+        // 18_Coffee_Projects
         'project_document',
         'county_government_support_letters_and_mou',
         'implementation_plan_monitoring_and_evaluation_framework',
 
         'created_at',
         'updated_at',
+
+        'status_id',
+        'expiry_date',
     ];
 
 
@@ -74,16 +77,16 @@ class DealerRegistration extends Model
         'certificate_of_incorporation_or_registration_url',
         'directors_details_id_passport_and_kra_pins_url',
         'tax_compliance_certificate_url',
-        // 20_Coffee_Training_School
+        // 16_Coffee_Training_School
         'premises_ownership_or_lease_document_url',
         'training_equipment_inventory_url',
         'course_outline_and_training_curriculum_url',
         'names_qualifications_and_certificates_of_trainers_url',
         'education_or_training_accreditation_certificate_url',
         'public_health_certificate_url',
-        // 21_Event_Organisers
+        // 17_Event_Organisers
         'company_profile_url',
-        // 22_Coffee_Projects
+        // 18_Coffee_Projects
         'project_document_url',
         'county_government_support_letters_and_mou_url',
         'implementation_plan_monitoring_and_evaluation_framework_url',

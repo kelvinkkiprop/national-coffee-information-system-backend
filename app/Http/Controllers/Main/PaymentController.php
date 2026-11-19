@@ -168,9 +168,9 @@ class PaymentController extends Controller
 
 
     /**
-     * receiptPdf
+     * invoiceReceiptPdf
      */
-    public function receiptPdf($id)
+    public function invoiceReceiptPdf($id)
     {
         $item = Payment::with(['user','service','tariff','status'])->find($id);
         // return $item;
@@ -186,7 +186,6 @@ class PaymentController extends Controller
         $amount_in_words = $ksh_or_usd.' '.$formatted_amount_in_words.' Only';
         // return $amount_in_words;
 
-
         $data = [
             'title' => $item->invoice_number,
             'item' => $item,
@@ -194,7 +193,7 @@ class PaymentController extends Controller
             'qr_code' => $qrCode,
         ];
         // return $data;
-        $dompdf = PDF::loadView('prints.payments.receipt-pdf', $data)->setPaper('a4', 'potrait');
+        $dompdf = PDF::loadView('prints.payments.invoice-receipt-pdf', $data)->setPaper('a4', 'potrait');
         $name = preg_replace('/[^A-Za-z0-9_-]/','-',$item->invoice_number).'- Receipt';
 
         $dompdf->output();

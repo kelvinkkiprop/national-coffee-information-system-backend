@@ -195,12 +195,13 @@ class CoffeeTransactionController extends Controller
         $mCurrentUser=auth()->user();
         $mDealersIDs=UserDealershipService::where('status_id', 2)->pluck('user_id');
 
-        $users = User::where('role_id', 34)->when($mCurrentUser->role_id==1, function($query) use($mDealersIDs){
-            $query->whereIn('id', $mDealersIDs);
-        })->when($mCurrentUser->role_id!=1, function($query) use($mCurrentUser) {
-            $query->where('id', $mCurrentUser->id);
-        })->orderBy('name', 'asc')->get();
+        // $users = User::where('role_id', 34)->when($mCurrentUser->role_id==1, function($query) use($mDealersIDs){
+        //     $query->whereIn('id', $mDealersIDs);
+        // })->when($mCurrentUser->role_id!=1, function($query) use($mCurrentUser) {
+        //     $query->where('id', $mCurrentUser->id);
+        // })->orderBy('name', 'asc')->get();
         $stages = CoffeeTransactionStage::orderBy('id', 'asc')->get();
+        $users = User::orderBy('name', 'asc')->get();
 
         $response = [
             'status' => 'success',

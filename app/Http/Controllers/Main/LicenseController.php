@@ -425,13 +425,13 @@ class LicenseController extends Controller
         $item = License::find($id);
         $mTariffId = 2;
         $payment = null;
-        // $payment = Payment::updateOrCreate(['id' => $item->payment_id],[
-        //     'user_id' => $mCurrentUser->id,
-        //     'amount' => Tariff::find($mTariffId)->amount,
-        //     'format' => 'json',
-        //     'service_id' => 2,
-        //     'tariff_id' => $mTariffId,
-        // ]);
+        $payment = Payment::updateOrCreate(['id' => $item->payment_id],[
+            'user_id' => $mCurrentUser->id,
+            'amount' => Tariff::find($mTariffId)->amount,
+            'format' => 'json',
+            'service_id' => 2,
+            'tariff_id' => $mTariffId,
+        ]);
 
         $mType = LicenseType::find($fields['type_id']);
         // Notification
@@ -662,6 +662,7 @@ class LicenseController extends Controller
     {
         $item = License::find($id);
         if($item){
+            // return $item;
             return "License is valid";
         }else{
             return "License is invalid";

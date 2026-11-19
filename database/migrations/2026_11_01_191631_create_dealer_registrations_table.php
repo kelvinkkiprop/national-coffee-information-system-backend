@@ -23,16 +23,16 @@ return new class extends Migration
             $table->string('tax_compliance_certificate')->nullable();
             // 2_Grower
             $table->uuid('cooperative_society_id')->nullable();
-            // 20_Coffee_Training_School
+            // 16_Coffee_Training_School
             $table->string('premises_ownership_or_lease_document')->nullable();
             $table->string('training_equipment_inventory')->nullable();
             $table->string('course_outline_and_training_curriculum')->nullable();
             $table->string('names_qualifications_and_certificates_of_trainers')->nullable();
             $table->string('education_or_training_accreditation_certificate')->nullable();
             $table->string('public_health_certificate')->nullable();
-            // 21_Event_Organisers
+            // 17_Event_Organisers
             $table->string('company_profile')->nullable();
-            // 22_Coffee_Projects
+            // 18_Coffee_Projects
             $table->string('project_document')->nullable();
             $table->string('county_government_support_letters_and_mou')->nullable();
             $table->string('implementation_plan_monitoring_and_evaluation_framework')->nullable();

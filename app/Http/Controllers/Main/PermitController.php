@@ -98,18 +98,18 @@ class PermitController extends Controller
 
         $nextNumber = Payment::withTrashed()->count()+1;
         // $mInvoiceNumber = 'IN/'.date('Y').'/'.$nextNumber;
-        $mInvoiceNumber = 'IN/_/'.date('Y').'/_/'.$nextNumber;
+        $mInvoiceNumber = 'IN/_//'.date('Y').'/_//'.$nextNumber;
         $mTariffId = 1;
-        $payment = null;
-        // $payment = Payment::updateOrCreate(['id' => $paymentId],[
-        //     'id' => $paymentId,
-        //     'invoice_number' => $mInvoiceNumber,
-        //     'user_id' => $mCurrentUser->id,
-        //     'amount' => Tariff::find($mTariffId)->amount,
-        //     'format' => 'json',
-        //     'service_id' => 1,
-        //     'tariff_id' => $mTariffId,
-        // ]);
+        // $payment = null;
+        $payment = Payment::updateOrCreate(['id' => $paymentId],[
+            'id' => $paymentId,
+            'invoice_number' => $mInvoiceNumber,
+            'user_id' => $mCurrentUser->id,
+            'amount' => Tariff::find($mTariffId)->amount,
+            'format' => 'json',
+            'service_id' => 1,
+            'tariff_id' => $mTariffId,
+        ]);
 
         $mType = PermitType::find($fields['type_id']);
         // Notification

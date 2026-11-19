@@ -32,7 +32,7 @@ class ProfileController extends Controller
     {
         $fields = $request->validate([
             // Basic
-            'phone_number' => 'required|string',
+            'phone' => 'required|string',
             'country_id' => 'required|integer',
             // General
             'legal_status_id' => 'required|integer',
@@ -57,7 +57,8 @@ class ProfileController extends Controller
         ]);
 
         $mCurrentUser = auth()->user();
-        $mCurrentUser->phone_number = $fields['phone_number'];
+        $mCurrentUser->id_number = $fields['id_number'];
+        $mCurrentUser->phone = $fields['phone'];
         $mCurrentUser->status_id = 2;
         $mCurrentUser->save();
 
@@ -68,7 +69,6 @@ class ProfileController extends Controller
             'country_id' => $fields['country_id'],
             // General
             'legal_status_id' => $fields['legal_status_id'],
-            'id_number' => $fields['id_number'],
             'company_registration_number' => $fields['company_registration_number'],
             'company_establishment_date' => $fields['company_establishment_date'],
             'kra_pin' => $fields['kra_pin'],
@@ -111,7 +111,7 @@ class ProfileController extends Controller
     {
         $fields = $request->validate([
             // Basic
-            'phone_number' => 'required|string',
+            'phone' => 'required|string',
             'country_id' => 'required|integer',
             // General
             'legal_status_id' => 'required|integer',
@@ -137,7 +137,8 @@ class ProfileController extends Controller
 
 
         $mCurrentUser = auth()->user();
-        $mCurrentUser->phone_number = $fields['phone_number'];
+        $mCurrentUser->id_number = $fields['id_number'];
+        $mCurrentUser->phone = $fields['phone'];
         $mCurrentUser->status_id = 2;
         $mCurrentUser->save();
 
@@ -146,7 +147,6 @@ class ProfileController extends Controller
             'country_id' => $fields['country_id'],
             // General
             'legal_status_id' => $fields['legal_status_id'],
-            'id_number' => $fields['id_number'],
             'company_registration_number' => $fields['company_registration_number'],
             'company_establishment_date' => $fields['company_establishment_date'],
             'kra_pin' => $fields['kra_pin'],

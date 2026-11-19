@@ -180,6 +180,7 @@ class CoffeeDeliveryController extends Controller
         $users = User::when($mCurrentUser->role_id!=1, function($query) use($mCurrentUser) {
             $query->where('id', $mCurrentUser->id);
         })->orderBy('name', 'asc')->get();
+        $growers = User::orderBy('name', 'asc')->get();
 
         $response = [
             'status' => 'success',

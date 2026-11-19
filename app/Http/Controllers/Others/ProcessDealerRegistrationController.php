@@ -45,11 +45,16 @@ class ProcessDealerRegistrationController extends Controller
         $mStatusId = $fields['status_id'];
         $mRemarks = $fields['remarks'];
 
-        // Notifications
-        $item = DealerRegistration::where('id', $id)->update([
+        $item = DealerRegistration::find($id);
+        // return $item;
+        $item->update([
             'status_id' => $mStatusId,
+            'expiry_date' => $mStatusId==4 ? Carbon::now()->addYear() : '', //Approved
             // 'remarks' => $fields['remarks'],
         ]);
+
+        // Notification
+        $mUser = User::find($item->user_id);
         if($mStatusId==2){//Returned
             $fields = $request->validate([
                 'remarks' => 'string|nullable',
@@ -73,12 +78,6 @@ class ProcessDealerRegistrationController extends Controller
             Mail::to($mUser->email)->send(new AlertMail($data));
 
         }else if($mStatusId==4){//Approved
-            $item = DealerRegistration::where('id', $id)->update([
-                'status_id' => $fields['status_id'],
-                'expiry_date' => Carbon::now()->addYear(),
-            ]);
-            // Notification
-            $mUser = User::find($item->user_id);
             $message = "<div>
                 <p>We are glad to inform you that your application has been approved.</p>
                 <p>
@@ -96,11 +95,7 @@ class ProcessDealerRegistrationController extends Controller
             );
             Mail::to($mUser->email)->send(new AlertMail($data));
         }else if($mStatusId==5){//Rejected
-            $item = DealerRegistration::where('id', $id)->update([
-                'status_id' => $fields['status_id'],
-            ]);
             // Notification
-            $mUser = User::find($item->id);
             $message = "<div>
                 <p>We regret to inform you that your application has been rejected.</p>
                 <p>

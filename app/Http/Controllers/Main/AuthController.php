@@ -138,7 +138,6 @@ class AuthController extends Controller
             'is_otp_verified' => false,
             // 'is_otp_used' => true,
         ]);
-
         //Revoke current session token
         // auth()->user()->tokens()->delete();
         $user->tokens()->delete();

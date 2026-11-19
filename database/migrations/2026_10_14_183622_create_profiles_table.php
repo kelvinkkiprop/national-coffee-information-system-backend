@@ -16,7 +16,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id')->unique();
             // Basic
-            $table->string('id_number')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             // General
             $table->unsignedBigInteger('legal_status_id')->nullable();

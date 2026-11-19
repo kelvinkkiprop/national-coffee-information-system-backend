@@ -30,6 +30,7 @@ php artisan make:seeder DealerRegistrationStatusSeeder
 php artisan make:seeder CommitteeSeeder
 php artisan make:seeder CoffeePlotSeeder
 php artisan make:seeder CoffeeTransactionStageSeeder
+php artisan make:seeder GrowerTypeSeeder
 
 
 4. Controllers
@@ -63,7 +64,6 @@ php artisan make:model Main/CoffeeDelivery -m
 php artisan make:model Main/CoffeeTransaction -m
 php artisan make:model Main/CoffeeLot -m
 php artisan make:model Main/DealerRegistration -m
-php artisan make:model Others/CoffeeTransactionStage -m
 php artisan make:model Settings/Role -m
 php artisan make:model Settings/Committee -m
 php artisan make:model Settings/CommitteeMember -m
@@ -83,6 +83,8 @@ php artisan make:model Others/SubCounty -m
 php artisan make:model Others/Constituency -m
 php artisan make:model Others/Ward -m
 php artisan make:model Others/LegalStatus -m
+php artisan make:model Others/GrowerType -m
+php artisan make:model Others/CoffeeTransactionStage -m
 php artisan make:model Others/PermitStatus -m
 php artisan make:model Others/LicenseStatus -m
 php artisan make:model Others/DealerRegistrationStatus -m
@@ -431,7 +433,7 @@ php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider" -
 
 I. Import
 3. Make an import Model
-php artisan make:import ImportRegisteredProfessional --model=Profile
+php artisan make:import ImportRegisteredFarmer --model=User
 
 4. Update ImportUser Model
 use App\Models\User;

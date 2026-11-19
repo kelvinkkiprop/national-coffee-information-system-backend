@@ -13,6 +13,9 @@ use App\Models\Others\UserStatus;
 // Notifications
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AlertMail;
+// import
+use App\Imports\ImportRegisteredFarmer;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -21,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with(['role','status'])->orderBy('created_at', 'desc')->paginate(10);
+        return User::with(['role','growerType','status'])->orderBy('created_at', 'desc')->paginate(10);
     }
 
     /**
@@ -177,7 +180,7 @@ class UserController extends Controller
         ]);
 
         $term = $fields['search_term'];
-        $items = User::with(['role','status'])->where(function($query) use($term){
+        $items = User::with(['role','growerType','status'])->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
             $query->orWhere('email','LIKE','%'.$term.'%');
             $query->orWhereHas('role', function($q) use ($term) {
@@ -221,4 +224,31 @@ class UserController extends Controller
         ];
         return response($response, 200);
     }
+
+
+
+
+    /**
+     * importFarmerItems
+     */
+    public function importFarmerItems(Request $request)
+    {
+
+        $fields = $request->validate([
+            'attachment' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        // import
+        // $file = $request['attachment'];
+        // Excel::import(new ImportRegisteredFarmer, $file);
+        $file = $request->file('attachment');
+        Excel::import(new ImportRegisteredFarmer(), $file);
+
+        $response = [
+            'status' => 'success',
+            'message' => 'Registered farmers imported successfully',
+        ];
+        return response($response, 201);
+    }
+
 }

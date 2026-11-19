@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::resource('coffee-plots', CoffeePlotController::class);
     Route::post('search-coffee-plots', [CoffeePlotController::class, 'searchItems']);
     Route::get('unpaginated-items-coffee-plots', [CoffeePlotController::class, 'unpaginatedItems']);
+    Route::post('sync-gis-coffee-plots', [CoffeePlotController::class, 'syncGisCoffeePlotItems']);
 });
 
 /*
@@ -192,7 +193,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('unpaginated-items-payments', [PaymentController::class, 'unpaginatedItems']);
 
     Route::get('generate-invoice-payments/{id}', [PaymentController::class, 'invoiceItem']);
-    Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
+    Route::get('invoice-receipt-pdf/{id}', [PaymentController::class, 'invoiceReceiptPdf']);
     Route::get('settled-payments/{id}', [PaymentController::class, 'settledItem']);
 });
 // Route::get('receipt-pdf/{id}', [PaymentController::class, 'receiptPdf']);
@@ -207,6 +208,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::resource('users', UserController::class);
     Route::post('search-users', [UserController::class, 'searchItems']);
     Route::get('unpaginated-items-users', [UserController::class, 'unpaginatedItems']);
+
+    Route::post('import-farmer-items-users', [UserController::class, 'importFarmerItems']);
 });
 
 

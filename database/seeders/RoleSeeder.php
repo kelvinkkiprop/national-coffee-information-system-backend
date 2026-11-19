@@ -29,14 +29,15 @@ class RoleSeeder extends Seeder
 
             // 2.External
             ["id"=>10, "type_id"=>2, "name"=>"Dealer", "alias"=>null, "created_at"=>now()],
-            ["id"=>11, "type_id"=>2, "name"=>"Certification Bodies", "alias"=>null, "created_at"=>now()],
-            ["id"=>12, "type_id"=>2, "name"=>"NGOs", "alias"=>null, "created_at"=>now()],
-            ["id"=>13, "type_id"=>2, "name"=>"County Governments", "alias"=>null, "created_at"=>now()],
-            ["id"=>14, "type_id"=>2, "name"=>"Capital Market Authority", "alias"=>null, "created_at"=>now()],
-            ["id"=>15, "type_id"=>2, "name"=>"Coffee Research and Training Institute", "alias"=>null, "created_at"=>now()],
-            ["id"=>16, "type_id"=>2, "name"=>"Ministry of Co-operative", "alias"=>null, "created_at"=>now()],
-            ["id"=>17, "type_id"=>2, "name"=>"Importers", "alias"=>null, "created_at"=>now()],
-            ["id"=>18, "type_id"=>2, "name"=>"EU Operator & Regulators", "alias"=>null, "created_at"=>now()],
+            ["id"=>11, "type_id"=>2, "name"=>"Farmer", "alias"=>null, "created_at"=>now()],
+            ["id"=>12, "type_id"=>2, "name"=>"Certification Bodies", "alias"=>null, "created_at"=>now()],
+            ["id"=>13, "type_id"=>2, "name"=>"NGOs", "alias"=>null, "created_at"=>now()],
+            ["id"=>14, "type_id"=>2, "name"=>"County Governments", "alias"=>null, "created_at"=>now()],
+            ["id"=>15, "type_id"=>2, "name"=>"Capital Market Authority", "alias"=>null, "created_at"=>now()],
+            ["id"=>16, "type_id"=>2, "name"=>"Coffee Research and Training Institute", "alias"=>null, "created_at"=>now()],
+            ["id"=>17, "type_id"=>2, "name"=>"Ministry of Co-operative", "alias"=>null, "created_at"=>now()],
+            ["id"=>18, "type_id"=>2, "name"=>"Importers", "alias"=>null, "created_at"=>now()],
+            ["id"=>19, "type_id"=>2, "name"=>"EU Operator & Regulators", "alias"=>null, "created_at"=>now()],
 
         ];
         Role::insert($items);
