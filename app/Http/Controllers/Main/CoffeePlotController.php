@@ -20,7 +20,7 @@ class CoffeePlotController extends Controller
      */
     public function index()
     {
-        return CoffeePlot::with(['owner','coffeeSpecies'])->orderBy('created_at', 'desc')->paginate(10);
+        return CoffeePlot::with(['owner','coffeeSpecies','riskLevel'])->orderBy('created_at', 'desc')->paginate(10);
     }
 
     /**
@@ -143,7 +143,7 @@ class CoffeePlotController extends Controller
         $mCurrentUser->loadMissing('role');
 
         $term = $fields['search_term'];
-        $items = CoffeeTransaction::with(['owner'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
+        $items = CoffeeTransaction::with(['owner','coffeeSpecies','riskLevel'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
                 $q->where('user_id', $mCurrentUser->id)
             )->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');

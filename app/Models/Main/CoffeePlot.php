@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\Settings\CoffeeSpecies;
+use App\Models\Others\PlotRiskLevel;
 
 class CoffeePlot extends Model
 {
@@ -45,6 +46,7 @@ class CoffeePlot extends Model
         'longitude',
         'geo_json_geometry',
         'greater_than_4ha',
+        'risk_level_id',
         'deforestation_free',
         'legal_compliance_status_id',
         'status_id',
@@ -56,6 +58,30 @@ class CoffeePlot extends Model
     protected $casts = [
         'greater_than_4ha' => 'boolean',
     ];
+
+
+    /**
+    * appends
+    */
+    protected $appends = [
+        'risk_level_percentage',
+    ];
+
+
+
+    /**
+    * getters_and_setters
+    */
+    public function getRiskLevelPercentageAttribute()
+    {
+        $value = $this->risk_level_id;
+        if(is_null($value)){
+            return null;
+        }else{
+            $percentage = $value*20;
+            return $percentage;
+        }
+    }
 
 
 
@@ -71,6 +97,13 @@ class CoffeePlot extends Model
      */
     public function coffeeSpecies(){
         return $this->hasOne(CoffeeSpecies::class, 'id', 'coffee_species_id');
+    }
+
+    /**
+     * riskLevel
+     */
+    public function riskLevel(){
+        return $this->hasOne(PlotRiskLevel::class, 'id', 'risk_level_id');
     }
 
 }

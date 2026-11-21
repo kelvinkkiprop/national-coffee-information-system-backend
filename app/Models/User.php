@@ -20,6 +20,10 @@ use App\Models\Settings\CommitteeMember;
 use App\Models\Others\UserStatus;
 use App\Models\Others\DealerRegistrationStatus;
 use App\Models\Others\GrowerType;
+use App\Models\Others\Country;
+use App\Models\Others\County;
+use App\Models\Others\SubCounty;
+use App\Models\Others\Ward;
 
 class User extends Authenticatable
 {
@@ -66,6 +70,25 @@ class User extends Authenticatable
         'otp_verified',
         'otp_used',
 
+        'country_id',
+        'legal_status_id',
+        'company_registration_number',
+        'company_establishment_date',
+        'kra_pin',
+        'postal_code',
+        'postal_address',
+        'region_id',
+        'county_id',
+        'sub_county_id',
+        'ward_id',
+        'location',
+        'sub_location',
+        'village',
+        'town',
+        'street_name',
+        'building_name',
+        'plot_number',
+
         'grower_type_id',
         'dealership_id',
         'dealership_registration_status_id'
@@ -95,7 +118,6 @@ class User extends Authenticatable
     }
 
 
-
     /**
      * role
      */
@@ -109,7 +131,6 @@ class User extends Authenticatable
     public function status(){
         return $this->hasOne(UserStatus::class, 'id', 'status_id');
     }
-
 
     /**
      * dealerRegistrationStatus
@@ -133,10 +154,31 @@ class User extends Authenticatable
     }
 
     /**
-     * profile
+     * country
      */
-    public function profile(){
-        return $this->hasOne(Profile::class, 'user_id', 'id');
+    public function country(){
+        return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+
+    /**
+     * county
+     */
+    public function county(){
+        return $this->hasOne(County::class, 'id', 'county_id');
+    }
+
+    /**
+     * subCounty
+     */
+    public function subCounty(){
+        return $this->hasOne(SubCounty::class, 'id', 'sub_county_id');
+    }
+
+    /**
+     * ward
+     */
+    public function ward(){
+        return $this->hasOne(Ward::class, 'id', 'ward_id');
     }
 
     /**

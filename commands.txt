@@ -31,6 +31,7 @@ php artisan make:seeder CommitteeSeeder
 php artisan make:seeder CoffeePlotSeeder
 php artisan make:seeder CoffeeTransactionStageSeeder
 php artisan make:seeder GrowerTypeSeeder
+php artisan make:seeder PlotRiskLevelSeeder
 
 
 4. Controllers
@@ -88,6 +89,7 @@ php artisan make:model Others/CoffeeTransactionStage -m
 php artisan make:model Others/PermitStatus -m
 php artisan make:model Others/LicenseStatus -m
 php artisan make:model Others/DealerRegistrationStatus -m
+php artisan make:model Others/PlotRiskLevel -m
 
 php artisan make:model FromParcelAllocation/Investor
 php artisan make:model FromParcelAllocation/ParcelLandUseGroup

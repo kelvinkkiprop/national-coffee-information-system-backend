@@ -44,7 +44,7 @@ class CoffeePlotSeeder extends Seeder
                         ]
                     ]
                 ]),
-                "deforestation_status_id"=>2, //Compliant
+                "risk_level_id"=>1, //VeryLow
                 "deforestation_checked_at"=>now(),
                 "created_at"=>now(),
             ],
@@ -111,7 +111,7 @@ class CoffeePlotSeeder extends Seeder
                         ]
                     ]
                 ]),
-                "deforestation_status_id"=>2, //Compliant
+                "risk_level_id"=>2, //Low
                 "deforestation_checked_at"=>now(),
                 "created_at"=>now(),
             ],
@@ -186,7 +186,7 @@ class CoffeePlotSeeder extends Seeder
                         ]
                     ]
                 ]),
-                "deforestation_status_id"=>3, //Non-compliant
+                "risk_level_id"=>3, //High
                 "deforestation_checked_at"=>now(),
                 "created_at"=>now(),
             ],

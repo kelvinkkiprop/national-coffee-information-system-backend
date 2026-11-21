@@ -16,7 +16,6 @@ use App\Http\Controllers\Main\CoffeeTransactionController;
 // Settings
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\CommitteeController;
-use App\Http\Controllers\Settings\ProfileController;
 // Others
 use App\Http\Controllers\Others\ProcessPermitController;
 use App\Http\Controllers\Others\ProcessLicenseController;
@@ -209,6 +208,11 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('search-users', [UserController::class, 'searchItems']);
     Route::get('unpaginated-items-users', [UserController::class, 'unpaginatedItems']);
 
+    Route::post('update-profile-users/{id}', [UserController::class, 'profileItem']);
+    Route::get('filter-counties/{id}', [UserController::class, 'filterCounties']);
+    Route::get('filter-sub-counties/{id}', [UserController::class, 'filterSubCounties']);
+    Route::get('filter-wards/{id}', [UserController::class, 'filterWards']);
+
     Route::post('import-farmer-items-users', [UserController::class, 'importFarmerItems']);
 });
 
@@ -236,19 +240,4 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::resource('roles', RoleController::class);
     Route::post('search-roles', [RoleController::class, 'searchItems']);
     Route::get('unpaginated-items-roles', [RoleController::class, 'unpaginatedItems']);
-});
-
-/*
-|======================================================================
-| ProfileController
-|======================================================================
-*/
-Route::group(['middleware' => ['auth:sanctum']], function() {
-    Route::resource('profile', ProfileController::class);
-    Route::post('search-profile', [ProfileController::class, 'searchItems']);
-    Route::get('unpaginated-items-profile', [ProfileController::class, 'unpaginatedItems']);
-
-    Route::get('filter-counties/{id}', [ProfileController::class, 'filterCounties']);
-    Route::get('filter-sub-counties/{id}', [ProfileController::class, 'filterSubCounties']);
-    Route::get('filter-wards/{id}', [ProfileController::class, 'filterWards']);
 });

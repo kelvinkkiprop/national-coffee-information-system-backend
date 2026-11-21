@@ -83,7 +83,7 @@ class CoffeeTransactionController extends Controller
                     'status_id' => 2,
                 ]);
             }
-        }else{//Milling/Export
+        }else{//Processing/Milling/Warehousing
             // UpdateChildren
             $lotsIds = $request->lot_ids;
             foreach ($lotsIds as $lotId) {
@@ -107,7 +107,15 @@ class CoffeeTransactionController extends Controller
      */
     public function show(string $id)
     {
-        return CoffeeTransaction::with(['user','stage','lot','lot.deliveries.plot','lot.parentLots.deliveries.plot','lot.parentLots.parentLots.deliveries.plot'])->find($id);
+        return CoffeeTransaction::with([
+            'user',
+            'stage',
+            'lot',
+            'lot.deliveries.plot',
+            'lot.parentLots.deliveries.plot',
+            'lot.parentLots.parentLots.deliveries.plot',
+            'lot.parentLots.parentLots.parentLots.deliveries.plot'
+        ])->find($id);
     }
 
     /**
@@ -273,7 +281,13 @@ class CoffeeTransactionController extends Controller
         ]);
 
         $mMark=$fields['traceability_mark'];
-        $item = CoffeeTransaction::with(['stage','lot.deliveries.plot', 'lot.parentLots.deliveries.plot','lot.parentLots.parentLots.deliveries.plot'])->where('traceability_mark', $mMark)->first();
+        $item = CoffeeTransaction::with([
+            'stage',
+            'lot.deliveries.plot',
+            'lot.parentLots.deliveries.plot',
+            'lot.parentLots.parentLots.deliveries.plot',
+            'lot.parentLots.parentLots.parentLots.deliveries.plot'
+        ])->where('traceability_mark', $mMark)->first();
         if(!$item){
             $response = [
                 'status' => 'failed',
