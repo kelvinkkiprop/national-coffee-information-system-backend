@@ -14,19 +14,22 @@ return new class extends Migration
         Schema::create('coffee_plots', function (Blueprint $table) {
             // $table->id();
             $table->uuid('id')->primary();
-            $table->uuid('owner_id')->nullable();
+            $table->uuid('farmer_id')->nullable();
             $table->decimal('size', 10, 2)->nullable(); // Hectares
             $table->string('soil_profile')->nullable();
-            $table->integer('number_of_coffee_trees')->nullable();
+            $table->integer('tree_count')->nullable();
             $table->integer('coffee_species_id')->nullable();
             $table->uuid('cooperative_society_id')->nullable();
             $table->integer('country_id')->nullable();
             $table->integer('county_id')->nullable();
+            $table->integer('data_source_id')->nullable();//GPS_Surveys/RemoteSensing
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->longText('geo_json_geometry')->nullable();
             $table->boolean('greater_than_4ha')->default(true);
             $table->integer('risk_level_id')->default(1);
+            $table->integer('object_id')->nullable();
+            $table->integer('farm_id')->nullable();
             $table->date('deforestation_checked_at')->nullable();
             $table->string('deforestation_evidence')->nullable();//AssessmentReport/SupportingEvidence
 

@@ -188,6 +188,7 @@ class UserController extends Controller
         $term = $fields['search_term'];
         $items = User::with(['role','growerType','status'])->where(function($query) use($term){
             $query->where('name','LIKE','%'.$term.'%');
+            $query->orWhere('id_number','LIKE','%'.$term.'%');
             $query->orWhere('email','LIKE','%'.$term.'%');
             $query->orWhereHas('role', function($q) use ($term) {
                 $q->where(function($q) use ($term) {

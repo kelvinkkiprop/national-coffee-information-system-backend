@@ -33,17 +33,17 @@ return new class extends Migration
             $table->boolean('otp_verified')->default(false);
             $table->boolean('otp_used')->default(false);
             // Profile
-            $table->unsignedBigInteger('country_id')->nullable();
-            $table->unsignedBigInteger('legal_status_id')->nullable();
+            $table->integer('country_id')->nullable();
+            $table->integer('legal_status_id')->nullable();
             $table->string('company_registration_number')->nullable();
             $table->date('company_establishment_date')->nullable();
             $table->string('kra_pin')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('postal_address')->nullable();
-            $table->unsignedBigInteger('region_id')->nullable();
-            $table->unsignedBigInteger('county_id')->nullable();
-            $table->unsignedBigInteger('sub_county_id')->nullable();
-            $table->unsignedBigInteger('ward_id')->nullable();
+            $table->integer('region_id')->nullable();
+            $table->integer('county_id')->nullable();
+            $table->integer('sub_county_id')->nullable();
+            $table->integer('ward_id')->nullable();
             $table->string('location')->nullable();
             $table->string('sub_location')->nullable();
             $table->string('village')->nullable();
@@ -51,10 +51,20 @@ return new class extends Migration
             $table->string('street_name')->nullable();
             $table->string('building_name')->nullable();
             $table->string('plot_number')->nullable();
+            // Other
+            $table->integer('gender_id')->nullable();
+            $table->string('county_name')->nullable();
+            $table->string('sub_county_name')->nullable();
+            $table->string('ward_name')->nullable();
+            $table->string('society_name')->nullable();
+            $table->string('factory')->nullable();
+            $table->string('grower_code')->nullable();
+            $table->string('estate_name')->nullable();
+            $table->string('estate_code')->nullable();
             // EUDR
             $table->integer('grower_type_id')->nullable();
             $table->uuid('dealership_id')->nullable();
-            $table->unsignedBigInteger('dealership_registration_status_id')->default(3);
+            $table->integer('dealership_registration_status_id')->default(3);
 
             $table->timestamps();
             $table->softDeletes();

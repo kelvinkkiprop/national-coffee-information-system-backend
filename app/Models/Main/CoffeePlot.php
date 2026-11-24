@@ -34,19 +34,22 @@ class CoffeePlot extends Model
     */
     protected $fillable = [
         'id',
-        'owner_id',
+        'farmer_id',
         'size',
         'soil_profile',
-        'number_of_coffee_trees',
+        'tree_count',
         'coffee_species_id',
         'cooperative_society_id',
         'country_id',
         'county_id',
+        'data_source_id',
         'latitude',
         'longitude',
         'geo_json_geometry',
         'greater_than_4ha',
         'risk_level_id',
+        'object_id',
+        'farm_id',
         'deforestation_free',
         'legal_compliance_status_id',
         'status_id',
@@ -86,10 +89,10 @@ class CoffeePlot extends Model
 
 
     /**
-     * owner
+     * farmer
      */
-    public function owner(){
-        return $this->hasOne(User::class, 'id', 'owner_id');
+    public function farmer(){
+        return $this->hasOne(User::class, 'id', 'farmer_id');
     }
 
     /**

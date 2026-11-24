@@ -20,7 +20,7 @@ class CoffeePlotController extends Controller
      */
     public function index()
     {
-        return CoffeePlot::with(['owner','coffeeSpecies','riskLevel'])->orderBy('created_at', 'desc')->paginate(10);
+        return CoffeePlot::with(['farmer','coffeeSpecies','riskLevel'])->orderBy('created_at', 'desc')->paginate(10);
     }
 
     /**
@@ -29,7 +29,7 @@ class CoffeePlotController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'owner_id' => 'required|string',
+            'farmer_id' => 'required|string',
             'size' => 'required|numeric',
             'soil_profile' => 'nullable|string',
             'coffee_species_id' => 'required|integer',
@@ -42,7 +42,7 @@ class CoffeePlotController extends Controller
         ]);
 
         $item = CoffeePlot::create([
-            'owner_id' => $fields['owner_id'],
+            'farmer_id' => $fields['farmer_id'],
             'size' => $fields['size'],
             'soil_profile' => $fields['soil_profile'],
             'coffee_species_id' => $fields['coffee_species_id'],
@@ -69,7 +69,7 @@ class CoffeePlotController extends Controller
      */
     public function show(string $id)
     {
-        return CoffeePlot::with('owner')->find($id);
+        return CoffeePlot::with('farmer')->find($id);
     }
 
     /**
@@ -78,7 +78,7 @@ class CoffeePlotController extends Controller
     public function update(Request $request, string $id)
     {
         $fields = $request->validate([
-            'owner_id' => 'required|string',
+            'farmer_id' => 'required|string',
             'size' => 'required|numeric',
             'soil_profile' => 'nullable|string',
             'coffee_species_id' => 'required|integer',
@@ -91,7 +91,7 @@ class CoffeePlotController extends Controller
         ]);
 
         $item = CoffeePlot::where('id', $id)->update([
-            'owner_id' => $fields['owner_id'],
+            'farmer_id' => $fields['farmer_id'],
             'size' => $fields['size'],
             'soil_profile' => $fields['soil_profile'],
             'coffee_species_id' => $fields['coffee_species_id'],
@@ -143,15 +143,17 @@ class CoffeePlotController extends Controller
         $mCurrentUser->loadMissing('role');
 
         $term = $fields['search_term'];
-        $items = CoffeeTransaction::with(['owner','coffeeSpecies','riskLevel'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
+        $items = CoffeePlot::with(['farmer','coffeeSpecies','riskLevel'])->when($mCurrentUser->role?->type_id != 1, fn($q) =>
                 $q->where('user_id', $mCurrentUser->id)
             )->where(function($query) use($term){
-            $query->where('name','LIKE','%'.$term.'%');
-            $query->orWhere('alias','LIKE','%'.$term.'%');
-            $query->orWhereHas('owner', function($q) use ($term) {
+            $query->where('size','LIKE','%'.$term.'%');
+            $query->orWhere('tree_count','LIKE','%'.$term.'%');
+            $query->orWhere('object_id','LIKE','%'.$term.'%');
+            $query->orWhere('farm_id','LIKE','%'.$term.'%');
+            $query->orWhereHas('farmer', function($q) use ($term) {
                 $q->where(function($q) use ($term) {
                     $q->where('name', 'LIKE', '%' . $term . '%');
-                    $q->orWhere('alias', 'LIKE', '%' . $term . '%');
+                    $q->orWhere('email', 'LIKE', '%' . $term . '%');
                 });
             });
         })->get();
@@ -205,9 +207,11 @@ class CoffeePlotController extends Controller
     public function syncGisCoffeePlotItems(Request $request)
     {
         $fields = $request->validate([
-            'category_id' => 'required|string'
+            'category_id' => 'required|integer',
+            'data_source_id' => 'required|integer',
         ]);
         $mCategoryId = $fields['category_id'];
+        $mDataSourceId = $fields['data_source_id'];
 
         $mToken = $this->authGIS();
         if(!$mToken){
@@ -224,14 +228,33 @@ class CoffeePlotController extends Controller
         // ];
         // return response($response, 201);
 
+        // TODO
+        // CoffeePlot::truncate();
+        CoffeePlot::where('data_source_id', $mDataSourceId)->delete();
         $base_url = config('app.ARC_GIS.base_url');
         $url=null;
-        if($mCategoryId==1){//GreaterThan4ha
-            $url = $base_url."/server/rest/services/Hosted/Kericho_County_Coffee_Farms/FeatureServer/1/query"; //GreaterThan4H
-        }else{//LessThan4ha
-            $url = $base_url."/server/rest/services/Hosted/Kericho_County_Coffee_Farms/FeatureServer/0/query"; //LessThan4H
+        if($mDataSourceId==1){//GPS Surveys
+            if($mCategoryId==1){//GreaterThan4ha
+                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/5/query"; //GreaterThan4H
+            }else{//LessThan4ha
+                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/4/query"; //LessThan4H
+            }
+
+        }elseif($mDataSourceId==2){//Remote Sensing
+            if($mCategoryId==1){//GreaterThan4ha
+                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/9/query"; //GreaterThan4H
+            }else{//LessThan4ha
+                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/10/query"; //GreaterThan4H
+            }
+        }else{
+            $response = [
+                'status' => 'failed',
+                'message' => 'Unknown data source',
+            ];
+            return response($response, 201);
         }
 
+        // Get
         $response = Http::withOptions([
             'verify' => false,
         ])->accept('application/json')->get($url, [
@@ -242,71 +265,72 @@ class CoffeePlotController extends Controller
         ]);
         // return $response;
         $mData = $response->json();
-        // return $mData;
-
-        $mFeatures = $mData['features'];
-        $mRows = [];
-        foreach ($mFeatures as $mFeature) {
+        $mFeatures=$mData['features'];
+        $mRows=[];
+        foreach($mFeatures as $mFeature) {
             $mAttributes = $mFeature['attributes'];
+            $farmerId = $mAttributes['uuid'];
             $mGeometry   = $mFeature['geometry'];
             // return $mGeometry['rings'][0];
             // $mRings = $mGeometry['rings'][0];
-            $mUuid = $mAttributes['uuid'];
 
-            $mGeoJsonGeometry = json_encode([
-                'type' => 'Polygon',
-                'coordinates' => $mGeometry['rings']
-            ]);
+            $mGeoJsonGeometry = null;
+            if(isset($mGeometry['rings'])) {
+                // Polygon
+                $mGeoJsonGeometry = [
+                    'type' => 'Polygon',
+                    'coordinates' => $mGeometry['rings'],
+                ];
+            }elseif(isset($mGeometry['x'], $mGeometry['y'])) {
+                // Point
+                $mGeoJsonGeometry = [
+                    'type' => 'Point',
+                    'coordinates' => [
+                        $mGeometry['x'],
+                        $mGeometry['y'],
+                    ],
+                ];
+            }else{
+                // Unsupported_geometry
+                continue;
+            }
 
             $mRows[] = [
-                'id' => $mAttributes['uuid'],
-                'size' => $mAttributes['SHAPE__Area'],
-                'latitude' => $mAttributes['latitude'],
-                'longitude' => $mAttributes['longitude'],
-                'number_of_coffee_trees' => $mAttributes['trees_brea'],
-                // 'rings' => json_encode($mRings), // safer for DB storage
-                'geo_json_geometry' => $mGeoJsonGeometry,
-                // 'created_at' => now(),
-                // 'updated_at' => now(),
+                'farmer_id' => $farmerId,
+                'object_id' => $mAttributes['OBJECTID'],//GIS
+                'farm_id' => $mAttributes['fid'],//GIS
+                'size' => $mAttributes['area_ha'],
+                'tree_count' => $mAttributes['TreeCount'],
+                // 'latitude' => $mAttributes['latitude'] ?? null,
+                // 'longitude' => $mAttributes['longitude'] ?? null,
+                'data_source_id' => $mDataSourceId,
+                'risk_level_id' => $mAttributes['risk_score'] ?? null,
+                'geo_json_geometry' => json_encode($mGeoJsonGeometry),
             ];
         }
 
-        // 'id',
-        // 'owner_id',
-        // 'size',
-        // 'soil_profile',
-        // 'number_of_coffee_trees',
-        // 'coffee_species_id',
-        // 'cooperative_society_id',
-        // 'country_id',
-        // 'county_id',
-        // 'latitude',
-        // 'longitude',
-        // 'geo_json_geometry',
-        // 'greater_than_4ha',
-        // 'deforestation_free',
-        // 'legal_compliance_status_id',
-        // 'status_id',
+        if(!empty($mRows)) {
+            // Atomic_UPSERT_prevents_duplicates_and_race_conditions
+            CoffeePlot::upsert($mRows,  ['object_id', 'farm_id'], [
+                'farmer_id',
+                // 'object_id',
+                // 'farm_id',
+                'size',
+                'tree_count',
+                'data_source_id',
+                // 'latitude',
+                // 'longitude',
+                'risk_level_id',
+                'geo_json_geometry',
+            ]);
+        }
 
-        // 'created_at',
-        // 'updated_at',
-
-        // Atomic_UPSERT_prevents_duplicates_and_race_conditions
-        CoffeePlot::upsert($mRows, ['id'], [
-            'id',
-            'size',
-            'latitude',
-            'longitude',
-            'number_of_coffee_trees',
-            'geo_json_geometry',
-            // 'rings',
-            // 'updated_at'
-        ]);
         $response = [
             'status' => 'success',
             'message' => count($mRows).' plots synchronized successfully',
         ];
         return response($response, 201);
+
     }
 
 

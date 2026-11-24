@@ -47,12 +47,12 @@ class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,Wi
     */
     public function chunkSize(): int
     {
-        return 500;
+        return 2000;
     }
 
     public function batchSize(): int
     {
-        return 500;
+        return 2000;
     }
 
 
@@ -110,38 +110,56 @@ class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,Wi
         $mIDNumber = trim($row[5] ?? '');
         $mUUID = trim($row[12] ?? '');
 
-        // Skip invalid records
-        if ($mName === '' || $mUUID === '') {
+        // Skip_invalids
+        if($mName==='' || $mUUID==='') {
             return null;
         }
-        $mEmail = $mIDNumber !== '' ? $mIDNumber.'@email.com' : $mUUID.'@email.com';
+        $mEmail=$mIDNumber!=='' ? $mIDNumber.'@email.com' : $mUUID.'@email.com';
         // Skip_duplicates
         $mExists = User::where('id',$mUUID)->orWhere('email', $mEmail)->when($mIDNumber!=='', fn($q)=>$q->orWhere('id_number', $mIDNumber))->exists();
-
         if($mExists){
             return null;
         }
 
-        $mCountyName = $row[6];
-        $mCounty = $this->mCounties->where('name','LIKE','%'.$mCountyName.'%')->first(); //County,i.e.,Kiambu;
-        $mSubCountyName = $row[7];
-        $mSubCounty = $this->mSubCounties->where('county_id',$mCounty->id)->where('name','LIKE','%'.$mSubCountyName.'%')->first();
-        $mWardName = $row[9];
+        // // Handle_missing_records_gracefully_to_avoid_breaking_the_import
+        $mCountyName = trim($row[0] ?? '');
+        // $mCounty = !empty($mCountyName) ? $this->mCounties->where('name', 'LIKE', '%'.$mCountyName.'%')->first() : null;
+        // $mCounty ??= $this->mCounties->latest()->first(); // If_null_get_most_recent_county
+
+        $mSubCountyName = trim($row[1] ?? '');
+        // $mSubCounty = !empty($mSubCountyName) && $mCounty ? $this->mSubCounties->where('county_id', $mCounty->id)->where('name', 'LIKE', '%'.$mSubCountyName.'%')->first() : null;
+        // $mSubCounty ??= $this->mSubCounties->where('county_id', $mCounty?->id)->latest()->first(); // Fallback_to_most_recent_sub-county_of_selected_county
+
+        $mWardName = trim($row[2] ?? '');
+        // $mWard = !empty($mWardName) && $mSubCounty ? $this->mWard::where('sub_county_id', $mSubCounty->id)->where('name', 'LIKE', '%'.$mWardName.'%') ->first() : null;
+        // $mWard ??= $this->mWard::where('sub_county_id', $mSubCounty?->id)->latest()->first(); //Fallback_to_most_recent_ward_belonging_to_selected_subcounty
+
         return new User([
             'id' => $mUUID,
             'id_number' => $mIDNumber ?: null,
             'name' => $mName,
             'phone' => $row[6] ?? null,
+            'gender_id' => !empty($row[7]) ? (strtolower(trim($row[7])) === 'male' ? 1 : 2) : null,
             'email' => $mEmail,
             'role_id' => 11,
             'password' => $this->mRandomPassword,
 
             // Also
             'country_id' => 110, //Kenya
-            'region_id' => $mCounty->region_id,
-            'county_id' => $mCounty->id,
-            'sub_county_id' => $mSubCounty->id,
-            'ward_id' =>  $this->mWard::where('sub_county_id',$mSubCounty->id)->where('name','LIKE','%'.$mWardName.'%')->first(),
+            // 'region_id' => $mCounty?->region_id,
+            // 'county_id' => $mCounty?->id,
+            // 'sub_county_id' => $mSubCounty?->id,
+            // 'ward_id' =>  $mWard?->id,
+
+            'county_name' =>  $mCountyName,
+            'sub_county_name' =>  $mCountyName,
+            'ward_name' =>  $mWardName,
+            'grower_type_id' => !empty($row[3]) ? (strtolower(trim($row[3])) === 'society' ? 1 : 2) : null,
+            // 'society_name' =>  $row[8],
+            // 'factory' =>  $row[9],
+            // 'grower_code' => $row[10],
+            // 'estate_name' => $row[13],
+            // 'estate_code' => $row[20],
         ]);
 
 

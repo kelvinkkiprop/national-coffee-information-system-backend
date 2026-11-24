@@ -17,9 +17,9 @@ class GrowerTypeSeeder extends Seeder
         // Default
         $items = [
             ["id"=>1, "name"=>"Co-operative Society", "alias"=>null, "created_at"=>now()],
-            ["id"=>2, "name"=>"Coffee Association", "alias"=>null, "created_at"=>now()],
-            ["id"=>3, "name"=>"Coffee Union", "alias"=>null, "created_at"=>now()],
-            ["id"=>4, "name"=>"Coffee Estate", "alias"=>null, "created_at"=>now()],
+            ["id"=>2, "name"=>"Estate", "alias"=>null, "created_at"=>now()],
+            ["id"=>3, "name"=>"Association", "alias"=>null, "created_at"=>now()],
+            ["id"=>4, "name"=>"Union", "alias"=>null, "created_at"=>now()],
         ];
         GrowerType::insert($items);
     }

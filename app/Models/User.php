@@ -88,10 +88,21 @@ class User extends Authenticatable
         'street_name',
         'building_name',
         'plot_number',
+        'gender_id',
 
         'grower_type_id',
         'dealership_id',
-        'dealership_registration_status_id'
+        'dealership_registration_status_id',
+
+        // Temporary
+        'county_name',
+        'sub_county_name',
+        'ward_name',
+        'society_name',
+        'factory',
+        'grower_code',
+        'estate_name',
+        'estate_code',
     ];
 
     /**
