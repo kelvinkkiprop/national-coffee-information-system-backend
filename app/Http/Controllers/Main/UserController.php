@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AlertMail;
 // import
 use App\Imports\ImportRegisteredFarmer;
-use Maatwebsite\Excel\Facades\Excel;
+// use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel;
 
 class UserController extends Controller
 {
