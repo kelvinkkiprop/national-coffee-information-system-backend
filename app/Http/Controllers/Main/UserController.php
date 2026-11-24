@@ -269,7 +269,8 @@ class UserController extends Controller
         // return response($response, 201);
 
         $path = $file->store('imports', 'local');
-        Excel::queueImport(new ImportRegisteredFarmer(), $path, 'local')->allOnQueue('imports');
+        // Excel::queueImport(new ImportRegisteredFarmer(), $path, 'local')->allOnQueue('imports');
+        Excel::import(new ImportRegisteredFarmer(), $path, 'local', \Maatwebsite\Excel\Excel::XLSX )->allOnQueue('imports');
 
         return response()->json([
             'message' => 'Farmer import has been queued successfully.',
