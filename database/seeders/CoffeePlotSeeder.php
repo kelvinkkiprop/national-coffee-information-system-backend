@@ -20,7 +20,7 @@ class CoffeePlotSeeder extends Seeder
         $items = [
             [
                 "id"=>Str::uuid(),
-                "owner_id"=>User::where('email','grower1@konza.go.ke')->first()->id,
+                "farmer_id"=>User::where('email','grower1@konza.go.ke')->first()->id,
                 "size"=>5.20,
                 "soil_profile"=>null,
                 "tree_count"=>null,
@@ -50,7 +50,7 @@ class CoffeePlotSeeder extends Seeder
             ],
             [
                 "id"=>Str::uuid(),
-                "owner_id"=>User::where('email','grower2@konza.go.ke')->first()->id,
+                "farmer_id"=>User::where('email','grower2@konza.go.ke')->first()->id,
                 "size"=>6.2,
                 "soil_profile"=>null,
                 "tree_count"=>null,
@@ -117,7 +117,7 @@ class CoffeePlotSeeder extends Seeder
             ],
             [
                 "id"=>Str::uuid(),
-                "owner_id"=>User::where('email','grower2@konza.go.ke')->first()->id,
+                "farmer_id"=>User::where('email','grower2@konza.go.ke')->first()->id,
                 "size"=>7.50,
                 "soil_profile"=>null,
                 "tree_count"=>null,

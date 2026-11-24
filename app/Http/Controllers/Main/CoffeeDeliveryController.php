@@ -203,7 +203,7 @@ class CoffeeDeliveryController extends Controller
      */
     public function filterFarmerPlots($farmer_id)
     {
-        return CoffeePlot::where('owner_id', $farmer_id)->orderBy('size', 'asc')->get();
+        return CoffeePlot::where('farmer_id', $farmer_id)->orderBy('size', 'asc')->get();
     }
 
 }
