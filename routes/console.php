@@ -19,4 +19,4 @@ Schedule::command('app:update-permit-status')->everyMinute();
 Schedule::command('app:update-license-status')->everyMinute();
 // php artisan queue:work database --queue=imports --timeout=1800 --tries=1 --memory=2048
 // Schedule::command('queue:work database --queue=imports --timeout=1800 --tries=1 --memory=2048')->everyMinute();
-Schedule::command('queue:work database --queue=imports --timeout=1800 --tries=1 --memory=2048 --stop-when-empty')->everyMinute()->withoutOverlapping();
+// Schedule::command('queue:work database --queue=imports --timeout=1800 --tries=1 --memory=2048 --stop-when-empty')->everyMinute()->withoutOverlapping();
