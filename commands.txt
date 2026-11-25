@@ -703,3 +703,62 @@ sudo ip route add 10.10.10.0/24 via 10.10.10.10
 
 sudo vim /etc/netplan/50-cloud-init.yaml
 ===================================./IP_ROUTE===================================
+
+
+
+
+===================================./APACHE_CONFIG===================================
+1. Create Apache configuration file:
+$ sudo vim /etc/apache2/sites-available/ncis_test.conf
+
+
+<VirtualHost *:80>
+
+  ServerName test-ncis.coffeeboard.go.ke
+  ServerAdmin kkiprop@konza.go.ke
+
+  # ==================================================
+  # Frontend
+  # ==================================================
+  DocumentRoot /var/www/html/national-coffee-information-system-frontend/dist/national-coffee-information-system-frontend/browser
+  <Directory "/var/www/html/national-coffee-information-system-frontend/dist/national-coffee-information-system-frontend/browser">
+    Options FollowSymLinks
+    AllowOverride All
+    Require all granted
+  </Directory>
+
+
+  # ==================================================
+  # Backend /api
+  # ==================================================
+  Alias /api /var/www/html/national-coffee-information-system-backend/public
+  <Directory "/var/www/html/national-coffee-information-system-backend/public">
+    Options FollowSymLinks
+    AllowOverride All
+    Require all granted
+  </Directory>
+
+
+  # ==================================================
+  # Logs
+  # ==================================================
+
+  ErrorLog ${APACHE_LOG_DIR}/ncis_test_error.log
+  CustomLog ${APACHE_LOG_DIR}/ncis_test_access.log combined
+
+</VirtualHost>
+
+
+4. Enable conf file:
+$ a2ensite ncis_test.conf
+
+5. Restart the apache service:
+sudo systemctl restart apache2
+
+11. Check Permissions
+sudo chown -R your-user:www-data /var/www/html/national-coffee-information-system-backend
+sudo chmod -R 775 /var/www/html/national-coffee-information-system-backend/storage
+sudo chmod -R 775 /var/www/html/national-coffee-information-system-backend/bootstrap/cache
+
+apt-get install libapache2-mod-php
+===================================./APACHE_CONFIG===================================

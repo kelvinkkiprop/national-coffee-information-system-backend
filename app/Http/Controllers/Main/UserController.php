@@ -21,8 +21,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AlertMail;
 // import
 use App\Imports\ImportRegisteredFarmer;
-// use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel;
+// use Maatwebsite\Excel\Excel;
 
 class UserController extends Controller
 {
@@ -269,12 +269,15 @@ class UserController extends Controller
         // return response($response, 201);
 
         $path = $file->store('imports', 'local');
-        // Excel::queueImport(new ImportRegisteredFarmer(), $path, 'local')->allOnQueue('imports');
-        Excel::import(new ImportRegisteredFarmer(), $path, 'local', \Maatwebsite\Excel\Excel::XLSX )->allOnQueue('imports');
+        Excel::queueImport(new ImportRegisteredFarmer(), $path, 'local')->allOnQueue('imports');
+        // Excel::import(new ImportRegisteredFarmer(), $path, 'local', \Maatwebsite\Excel\Excel::XLSX )->allOnQueue('imports');
 
-        return response()->json([
-            'message' => 'Farmer import has been queued successfully.',
-        ]);
+        $response = [
+            'status' => 'success',
+            'message' => 'Farmer data has been queued successfully for import',
+            'data' => null
+        ];
+        return response($response, 201);
     }
 
 
@@ -341,7 +344,7 @@ class UserController extends Controller
             'message' => 'Profile updated successfully',
             'data' => $item
         ];
-        return response($response, 200);
+        return response($response, 201);
     }
 
     /**

@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithColumnLimit;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
 // Add
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -23,7 +24,7 @@ use App\Models\Others\Ward;
 // use Log;
 
 // class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,WithBatchInserts
-class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,WithColumnLimit,ShouldQueue
+class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,WithBatchInserts,WithColumnLimit,WithSkipDuplicates,ShouldQueue
 {
 
     /**
@@ -47,12 +48,12 @@ class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,Wi
     */
     public function chunkSize(): int
     {
-        return 2000;
+        return 500;
     }
 
     public function batchSize(): int
     {
-        return 2000;
+        return 500;
     }
 
 
@@ -115,11 +116,6 @@ class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,Wi
             return null;
         }
         $mEmail=$mIDNumber!=='' ? $mIDNumber.'@email.com' : $mUUID.'@email.com';
-        // Skip_duplicates
-        $mExists = User::where('id',$mUUID)->orWhere('email', $mEmail)->when($mIDNumber!=='', fn($q)=>$q->orWhere('id_number', $mIDNumber))->exists();
-        if($mExists){
-            return null;
-        }
 
         // // Handle_missing_records_gracefully_to_avoid_breaking_the_import
         $mCountyName = trim($row[0] ?? '');
@@ -155,11 +151,11 @@ class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,Wi
             'sub_county_name' =>  $mCountyName,
             'ward_name' =>  $mWardName,
             'grower_type_id' => !empty($row[3]) ? (strtolower(trim($row[3])) === 'society' ? 1 : 2) : null,
-            // 'society_name' =>  $row[8],
-            // 'factory' =>  $row[9],
-            // 'grower_code' => $row[10],
-            // 'estate_name' => $row[13],
-            // 'estate_code' => $row[20],
+            'society_name' =>  $row[8],
+            'factory' =>  $row[9],
+            'grower_code' => $row[10],
+            'estate_name' => $row[13],
+            'estate_code' => $row[20],
         ]);
 
 

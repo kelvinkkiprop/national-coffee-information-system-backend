@@ -230,21 +230,21 @@ class CoffeePlotController extends Controller
 
         // TODO
         // CoffeePlot::truncate();
-        CoffeePlot::where('data_source_id', $mDataSourceId)->delete();
+        // CoffeePlot::where('data_source_id', $mDataSourceId)->where('greater_than_4ha',$mCategoryId)->delete();
         $base_url = config('app.ARC_GIS.base_url');
         $url=null;
         if($mDataSourceId==1){//GPS Surveys
             if($mCategoryId==1){//GreaterThan4ha
-                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/5/query"; //GreaterThan4H
+                $url=$base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/4/query"; //LessThan4H
             }else{//LessThan4ha
-                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/4/query"; //LessThan4H
+                $url=$base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/5/query"; //GreaterThan4H
             }
 
         }elseif($mDataSourceId==2){//Remote Sensing
-            if($mCategoryId==1){//GreaterThan4ha
-                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/9/query"; //GreaterThan4H
+            if($mCategoryId==1){
+                $url=$base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/9/query"; //Geodatabase
             }else{//LessThan4ha
-                $url = $base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/10/query"; //GreaterThan4H
+                $url=$base_url."/server/rest/services/Kenya_Coffee_Geospatial_Data_Map/MapServer/10/query"; //Centroids
             }
         }else{
             $response = [
@@ -273,6 +273,7 @@ class CoffeePlotController extends Controller
             $mGeometry   = $mFeature['geometry'];
             // return $mGeometry['rings'][0];
             // $mRings = $mGeometry['rings'][0];
+            $objectId = $mAttributes['OBJECTID'];
 
             $mGeoJsonGeometry = null;
             if(isset($mGeometry['rings'])) {
@@ -294,7 +295,6 @@ class CoffeePlotController extends Controller
                 // Unsupported_geometry
                 continue;
             }
-
             $mRows[] = [
                 'farmer_id' => $farmerId,
                 'object_id' => $mAttributes['OBJECTID'],//GIS
@@ -304,30 +304,46 @@ class CoffeePlotController extends Controller
                 // 'latitude' => $mAttributes['latitude'] ?? null,
                 // 'longitude' => $mAttributes['longitude'] ?? null,
                 'data_source_id' => $mDataSourceId,
-                'risk_level_id' => $mAttributes['risk_score'] ?? null,
+                'risk_level_id' => $mAttributes['risk_score'] ?? 1,
                 'geo_json_geometry' => json_encode($mGeoJsonGeometry),
             ];
         }
 
-        if(!empty($mRows)) {
-            // Atomic_UPSERT_prevents_duplicates_and_race_conditions
-            CoffeePlot::upsert($mRows,  ['object_id', 'farm_id'], [
-                'farmer_id',
-                // 'object_id',
-                // 'farm_id',
-                'size',
-                'tree_count',
-                'data_source_id',
-                // 'latitude',
-                // 'longitude',
-                'risk_level_id',
-                'geo_json_geometry',
-            ]);
+        if(!empty($mRows)){
+            // // Atomic_UPSERT_prevents_duplicates_and_race_conditions
+            // CoffeePlot::upsert($mRows,  ['farmer_id','data_source_id','object_id'], [
+            //     // 'farmer_id',
+            //     // 'object_id',
+            //     'farm_id',
+            //     'size',
+            //     'tree_count',
+            //     // 'data_source_id',
+            //     // 'latitude',
+            //     // 'longitude',
+            //     'risk_level_id',
+            //     'geo_json_geometry',
+            // ]);
+
+            foreach($mRows as $mRow){
+                $item = CoffeePlot::updateOrCreate([
+                    'farmer_id' => $mRow['farmer_id'],
+                    'data_source_id' => $mRow['data_source_id'],
+                    'object_id' => $mRow['object_id'],
+                ],[
+                    'farm_id' => $mRow['farm_id'],
+                    'size' => $mRow['size'],
+                    'tree_count' => $mRow['tree_count'],
+                    'risk_level_id' => $mRow['risk_level_id'],
+                    'geo_json_geometry' => $mRow['geo_json_geometry'],
+                ]);
+            }
+
         }
 
         $response = [
             'status' => 'success',
             'message' => count($mRows).' plots synchronized successfully',
+            'data' => $item,
         ];
         return response($response, 201);
 
