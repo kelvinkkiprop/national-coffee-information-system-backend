@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Add
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Main\CoffeePlot;
 use App\Models\Main\UserDealershipService;
@@ -295,6 +297,8 @@ class CoffeePlotController extends Controller
                 // Unsupported_geometry
                 continue;
             }
+            $mRandomPassword = Hash::make('NCIS@123');
+
             $mRows[] = [
                 'farmer_id' => $farmerId,
                 'object_id' => $mAttributes['OBJECTID'],//GIS
@@ -306,6 +310,21 @@ class CoffeePlotController extends Controller
                 'data_source_id' => $mDataSourceId,
                 'risk_level_id' => $mAttributes['risk_score'] ?? 1,
                 'geo_json_geometry' => json_encode($mGeoJsonGeometry),
+
+                // Farmer
+                'county_name' => $mAttributes['County'],
+                'sub_county_name' => $mAttributes['Subcounty'],
+                'ward_name' => $mAttributes['Ward'],
+                'grower_type' => $mAttributes['GrowerType'],
+                'farmer_name' => $mAttributes['FarmerName'],
+                'farmer_id_number' => $mAttributes['FarmerIdNumber'],
+                'farmer_phone_number' => $mAttributes['FarmerPhoneNumber'],
+                'farmer_gender' => $mAttributes['FarmerGender'],
+                'society_name' => $mAttributes['SocietyName'],
+                'factory' => $mAttributes['Factory'],
+                'grower_code' => $mAttributes['GrowerCode'],
+                'estate_name' => $mAttributes['EstateName'],
+                'estate_code' => $mAttributes['EstateCode'],
             ];
         }
 
@@ -325,6 +344,7 @@ class CoffeePlotController extends Controller
             // ]);
 
             foreach($mRows as $mRow){
+                // Plot
                 $item = CoffeePlot::updateOrCreate([
                     'farmer_id' => $mRow['farmer_id'],
                     'data_source_id' => $mRow['data_source_id'],
@@ -336,6 +356,35 @@ class CoffeePlotController extends Controller
                     'risk_level_id' => $mRow['risk_level_id'],
                     'geo_json_geometry' => $mRow['geo_json_geometry'],
                 ]);
+
+                // Farmer
+                $mEmail=$mRow['farmer_id_number'].'@email.com';
+                $item = User::updateOrCreate([
+                    'id' => $mRow['farmer_id'],
+                    // 'id_number' => $mRow['farmer_id_number'],
+                    // 'email' => $mEmail,
+                ],[
+                    'id' => $mRow['farmer_id'],
+                    'id_number' => $mRow['farmer_id_number'],
+                    'name' => $mRow['farmer_name'],
+                    'phone' => $mRow['farmer_phone_number'],
+                    'gender_id' => $mRow['farmer_gender']==='Male' ? 1 : 2,
+                    'email' => $mEmail,
+                    'role_id' => 11,
+                    'password' => $mRandomPassword,
+
+                    // Also
+                    'country_id' => 110, //Kenya
+                    'county_name' => $mRow['county_name'],
+                    'sub_county_name' => $mRow['sub_county_name'],
+                    'ward_name' => $mRow['ward_name'],
+                    'grower_type_id' => $mRow['grower_type']==='Society' ? 1 : 2,
+                    'society_name' => $mRow['society_name'],
+                    'factory' => $mRow['factory'],
+                    'grower_code' => $mRow['grower_code'],
+                    'estate_name' => $mRow['estate_name'],
+                    'estate_code' => $mRow['estate_code'],
+                ]);
             }
 
         }
@@ -343,7 +392,6 @@ class CoffeePlotController extends Controller
         $response = [
             'status' => 'success',
             'message' => count($mRows).' plots synchronized successfully',
-            'data' => $item,
         ];
         return response($response, 201);
 
