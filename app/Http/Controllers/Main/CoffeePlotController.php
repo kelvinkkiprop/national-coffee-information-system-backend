@@ -362,7 +362,7 @@ class CoffeePlotController extends Controller
                 $item = User::updateOrCreate([
                     'id' => $mRow['farmer_id'],
                     // 'id_number' => $mRow['farmer_id_number'],
-                    'email' => $mEmail,
+                    // 'email' => $mEmail,
                 ],[
                     'id' => $mRow['farmer_id'],
                     'id_number' => $mRow['farmer_id_number'],
