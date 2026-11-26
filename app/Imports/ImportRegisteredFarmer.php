@@ -48,12 +48,12 @@ class ImportRegisteredFarmer implements ToModel,WithStartRow,WithChunkReading,Wi
     */
     public function chunkSize(): int
     {
-        return 500;
+        return 100000;
     }
 
     public function batchSize(): int
     {
-        return 500;
+        return 100000;
     }
 
 
