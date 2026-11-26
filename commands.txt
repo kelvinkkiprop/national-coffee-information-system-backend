@@ -271,6 +271,30 @@ sudo supervisorctl start all
 
 Reference:
 https://laravel.com/docs/6.x/queues#supervisor-configuration
+
+
+- How to use supervisor to process jobs in Laravel in Linux Server
+$ sudo vim /etc/supervisor/conf.d/laravel-import-worker.conf
+[program:laravel-import-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/html/national-coffee-information-system-backend/artisan queue:work database --queue=imports --timeout=1800 --tries=1 --memory=2048 --sleep=3
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/var/www/html/national-coffee-information-system-backend/storage/logs/import-worker.log
+stopwaitsecs=1900
+
+- Update
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start laravel-import-worker:*
+sudo supervisorctl status
+
+
 ===================================./supervisor===================================
 
 
@@ -762,3 +786,47 @@ sudo chmod -R 775 /var/www/html/national-coffee-information-system-backend/boots
 
 apt-get install libapache2-mod-php
 ===================================./APACHE_CONFIG===================================
+
+
+===================================KNOW_ERRORS===================================
+-----------------------------------------------------------------------------------
+A. Zip member xl/worksheets/sheet1.xml expands to 204526278 bytes, over the limit
+- Do:
+cd /var/www/html/national-coffee-information-system-backend
+sudo vim vendor/maatwebsite/excel/src/Factories/ReaderFactory.php
+
+-Find this code around line 28:
+$reader = IOFactory::createReader(
+    $readerType ?: self::identify($file)
+);
+
+- Immediately after it, add:
+// Allow large trusted Excel worksheet XML files (300 MB)
+if ($reader instanceof \PhpOffice\PhpSpreadsheet\Reader\BaseReader) {
+    $reader->setMaxLength(300 * 1024 * 1024);
+}
+
+- Your code should now look like:
+$reader = IOFactory::createReader(
+    $readerType ?: self::identify($file)
+);
+
+// NCIS: Increase maximum expanded XLSX XML size
+if ($reader instanceof \PhpOffice\PhpSpreadsheet\Reader\BaseReader) {
+    $reader->setMaxLength(300 * 1024 * 1024);
+}
+
+$reader->setReadDataOnly(
+    config('excel.imports.read_only', true)
+    && !ColumnCollection::requiresStyleInformation($import)
+);
+
+Restart:
+systemctl restart apache2
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+
+sudo nano /etc/supervisor/conf.d/laravel-import-worker.conf
+
+-----------------------------------------------------------------------------------
+===================================./KNOW_ERRORS===================================
