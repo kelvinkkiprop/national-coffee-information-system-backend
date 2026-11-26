@@ -328,66 +328,150 @@ class CoffeePlotController extends Controller
             ];
         }
 
-        if(!empty($mRows)){
-            // // Atomic_UPSERT_prevents_duplicates_and_race_conditions
-            // CoffeePlot::upsert($mRows,  ['farmer_id','data_source_id','object_id'], [
-            //     // 'farmer_id',
-            //     // 'object_id',
-            //     'farm_id',
-            //     'size',
-            //     'tree_count',
-            //     // 'data_source_id',
-            //     // 'latitude',
-            //     // 'longitude',
-            //     'risk_level_id',
-            //     'geo_json_geometry',
-            // ]);
+        // if(!empty($mRows)){
+        //     // // Atomic_UPSERT_prevents_duplicates_and_race_conditions
+        //     // CoffeePlot::upsert($mRows,  ['farmer_id','data_source_id','object_id'], [
+        //     //     // 'farmer_id',
+        //     //     // 'object_id',
+        //     //     'farm_id',
+        //     //     'size',
+        //     //     'tree_count',
+        //     //     // 'data_source_id',
+        //     //     // 'latitude',
+        //     //     // 'longitude',
+        //     //     'risk_level_id',
+        //     //     'geo_json_geometry',
+        //     // ]);
 
-            foreach($mRows as $mRow){
-                // Plot
-                $item = CoffeePlot::updateOrCreate([
-                    'farmer_id' => $mRow['farmer_id'],
-                    'data_source_id' => $mRow['data_source_id'],
-                    'object_id' => $mRow['object_id'],
-                ],[
-                    'farm_id' => $mRow['farm_id'],
-                    'size' => $mRow['size'],
-                    'tree_count' => $mRow['tree_count'],
-                    'risk_level_id' => $mRow['risk_level_id'],
-                    'geo_json_geometry' => $mRow['geo_json_geometry'],
-                ]);
+        //     foreach($mRows as $mRow){
+        //         // Plot
+        //         $item = CoffeePlot::updateOrCreate([
+        //             'farmer_id' => $mRow['farmer_id'],
+        //             'data_source_id' => $mRow['data_source_id'],
+        //             'object_id' => $mRow['object_id'],
+        //         ],[
+        //             'farm_id' => $mRow['farm_id'],
+        //             'size' => $mRow['size'],
+        //             'tree_count' => $mRow['tree_count'],
+        //             'risk_level_id' => $mRow['risk_level_id'],
+        //             'geo_json_geometry' => $mRow['geo_json_geometry'],
+        //         ]);
 
-                // Farmer
-                $mEmail=$mRow['farmer_id'].'@email.com';
-                $item = User::updateOrCreate([
-                    'id' => $mRow['farmer_id'],
-                    // 'id_number' => $mRow['farmer_id_number'],
-                    // 'email' => $mEmail,
-                ],[
-                    'id' => $mRow['farmer_id'],
-                    'id_number' => $mRow['farmer_id_number'],
-                    'name' => $mRow['farmer_name'],
-                    'phone' => $mRow['farmer_phone_number'],
-                    'gender_id' => $mRow['farmer_gender']==='Male' ? 1 : 2,
-                    'email' => $mEmail,
-                    'role_id' => 11,
-                    'password' => $mRandomPassword,
+        //         // Farmer
+        //         $mEmail=$mRow['farmer_id'].'@email.com';
+        //         $item = User::updateOrCreate([
+        //             'id' => $mRow['farmer_id'],
+        //             // 'id_number' => $mRow['farmer_id_number'],
+        //             // 'email' => $mEmail,
+        //         ],[
+        //             'id' => $mRow['farmer_id'],
+        //             'id_number' => $mRow['farmer_id_number'],
+        //             'name' => $mRow['farmer_name'],
+        //             'phone' => $mRow['farmer_phone_number'],
+        //             'gender_id' => $mRow['farmer_gender']==='Male' ? 1 : 2,
+        //             'email' => $mEmail,
+        //             'role_id' => 11,
+        //             'password' => $mRandomPassword,
 
-                    // Also
-                    'country_id' => 110, //Kenya
-                    'county_name' => $mRow['county_name'],
-                    'sub_county_name' => $mRow['sub_county_name'],
-                    'ward_name' => $mRow['ward_name'],
-                    'grower_type_id' => $mRow['grower_type']==='Society' ? 1 : 2,
-                    'society_name' => $mRow['society_name'],
-                    'factory' => $mRow['factory'],
-                    'grower_code' => $mRow['grower_code'],
-                    'estate_name' => $mRow['estate_name'],
-                    'estate_code' => $mRow['estate_code'],
-                ]);
+        //             // Also
+        //             'country_id' => 110, //Kenya
+        //             'county_name' => $mRow['county_name'],
+        //             'sub_county_name' => $mRow['sub_county_name'],
+        //             'ward_name' => $mRow['ward_name'],
+        //             'grower_type_id' => $mRow['grower_type']==='Society' ? 1 : 2,
+        //             'society_name' => $mRow['society_name'],
+        //             'factory' => $mRow['factory'],
+        //             'grower_code' => $mRow['grower_code'],
+        //             'estate_name' => $mRow['estate_name'],
+        //             'estate_code' => $mRow['estate_code'],
+        //         ]);
+        //     }
+
+        // }
+
+            if (!empty($mRows)) {
+                $mPlots = [];
+                $mUsers = [];
+                $mNow = now();
+                foreach ($mRows as $mRow) {
+                    // PreparePlot
+                    $mPlots[] = [
+                        'farmer_id'       => $mRow['farmer_id'],
+                        'data_source_id'  => $mRow['data_source_id'],
+                        'object_id'       => $mRow['object_id'],
+                        'farm_id'         => $mRow['farm_id'],
+                        'size'             => $mRow['size'],
+                        'tree_count'       => $mRow['tree_count'],
+                        'risk_level_id'    => $mRow['risk_level_id'],
+                        'geo_json_geometry'=> $mRow['geo_json_geometry'],
+                        'created_at'       => $mNow,
+                        'updated_at'       => $mNow,
+                    ];
+                    // PrepareFarmer
+                    $mUsers[] = [
+                        'id'                => $mRow['farmer_id'],
+                        'id_number'          => $mRow['farmer_id_number'],
+                        'name'               => $mRow['farmer_name'],
+                        'phone'               => $mRow['farmer_phone_number'],
+                        'gender_id'           => $mRow['farmer_gender'] === 'Male' ? 1 : 2,
+                        'email'                => $mRow['farmer_id'] . '@email.com',
+                        'role_id'              => 11,
+                        // Other
+                        'password'              => $mRandomPassword,
+                        'country_id'           => 110,
+                        'county_name'          => $mRow['county_name'],
+                        'sub_county_name'     => $mRow['sub_county_name'],
+                        'ward_name'            => $mRow['ward_name'],
+                        'grower_type_id'      => $mRow['grower_type'] === 'Society' ? 1 : 2,
+                        'society_name'         => $mRow['society_name'],
+                        'factory'              => $mRow['factory'],
+                        'grower_code'          => $mRow['grower_code'],
+                        'estate_name'           => $mRow['estate_name'],
+                        'estate_code'           => $mRow['estate_code'],
+                        'created_at'           => $mNow,
+                        'updated_at'           => $mNow,
+                    ];
+                }
+
+                // Bulk upsert plots
+                CoffeePlot::upsert(
+                    $mPlots,
+                    ['farmer_id', 'data_source_id', 'object_id'],
+                    [
+                        'farm_id',
+                        'size',
+                        'tree_count',
+                        'risk_level_id',
+                        'geo_json_geometry',
+                        'updated_at',
+                    ]
+                );
+
+                // Bulk upsert farmers
+                User::upsert(
+                    $mUsers,
+                    ['id'],
+                    [
+                        'id_number',
+                        'name',
+                        'phone',
+                        'gender_id',
+                        'email',
+                        'role_id',
+                        'country_id',
+                        'county_name',
+                        'sub_county_name',
+                        'ward_name',
+                        'grower_type_id',
+                        'society_name',
+                        'factory',
+                        'grower_code',
+                        'estate_name',
+                        'estate_code',
+                        'updated_at',
+                    ]
+                );
             }
-
-        }
 
         $response = [
             'status' => 'success',
